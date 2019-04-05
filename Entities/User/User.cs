@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Entities
@@ -14,22 +16,34 @@ namespace Entities
         public User()
         {
             IsActive = true;
+            
         }
 
         #endregion Ctor
 
         #region Properties
 
-        [Required]
+        [DisplayName("نام و نام خانوادگی")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
         [StringLength(100)]
         public string FullName { get; set; }
 
-        public int Age { get; set; }
+        [DisplayName("جنسیت")]
         public GenderType Gender { get; set; }
+
+        [DisplayName("وضعیت")]
         public bool IsActive { get; set; }
+
+        [DisplayName("آخرین ورود")]
         public DateTimeOffset? LastLoginDate { get; set; }
 
         #endregion Properties
+
+        #region Relations
+
+
+
+        #endregion
     }
 
     #region Config
