@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,7 +15,6 @@ namespace Entities
         public User()
         {
             IsActive = true;
-            
         }
 
         #endregion Ctor
@@ -38,12 +36,6 @@ namespace Entities
         public DateTimeOffset? LastLoginDate { get; set; }
 
         #endregion Properties
-
-        #region Relations
-
-
-
-        #endregion
     }
 
     #region Config

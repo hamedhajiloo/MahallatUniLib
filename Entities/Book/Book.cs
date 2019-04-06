@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
-using Common;
 
 namespace Entities
 {
     public class Book : BaseEntity
     {
         #region Properties
+
         [DisplayName("نام کتاب")]
-        [Required(ErrorMessage =DataAnotations.EnterMessage)]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string Name { get; set; }
 
         [DisplayName("شناسه کتاب")]
@@ -42,16 +42,15 @@ namespace Entities
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public CourseType CourseType { get; set; }
 
-
-        #endregion
+        #endregion Properties
 
         #region Relations
-        public virtual List<Student> Students { get; set; }
-        public virtual List<Teacher> Teachers { get; set; }
-        public virtual List<Field> Fields { get; set; }
 
-        
-        #endregion
+        public virtual List<StudentBookList> StudentBookList { get; set; }
+        public virtual List<Teacher> TeacherBookList { get; set; }
+        public virtual List<FieldBookList> FieldBookList { get; set; }
 
+
+        #endregion Relations
     }
 }

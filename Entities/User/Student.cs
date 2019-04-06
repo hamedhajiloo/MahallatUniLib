@@ -9,11 +9,13 @@ namespace Entities
     public class Student : BaseEntity<string>
     {
         #region ctor
+
         public Student()
         {
             //EntryYear= az code daneshjoyi bayad bashe
         }
-        #endregion
+
+        #endregion ctor
 
         #region Properties
 
@@ -25,8 +27,7 @@ namespace Entities
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public int EntryYear { get; set; }
 
-
-        #endregion
+        #endregion Properties
 
         #region Relations
 
@@ -34,21 +35,18 @@ namespace Entities
         [DisplayName("کاربر")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string UserId { get; set; }
-        public virtual User User { get; set; }
 
+        public virtual User User { get; set; }
 
         [ForeignKey(nameof(Field))]
         [DisplayName("رشته")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public int FieldId { get; set; }
+
         public virtual Field Field { get; set; }
 
+        public virtual List<StudentBookList> StudentBookList { get; set; }
 
-        public virtual List<Book> Books { get; set; }
-
-
-
-        #endregion
-
+        #endregion Relations
     }
 }
