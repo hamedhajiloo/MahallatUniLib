@@ -3,6 +3,7 @@ using Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebFramework;
@@ -28,7 +29,11 @@ namespace Web
             services.AddDbContext(Configuration);
             services.AddCustomIdentity(_siteSetting.IdentitySettings);
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                //.ConfigureApiBehaviorOptions(options =>
+                //{
+                //    options.SuppressUseValidationProblemDetailsForInvalidModelStateResponses = true;
+                //});  
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

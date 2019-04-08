@@ -31,9 +31,9 @@ namespace Web.Controller
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(Book book)
+        public async Task<ActionResult> Create(Book book,CancellationToken cancellationToken)
         {
-            var cancellationToken = HttpContext.RequestAborted;
+            //var cancellationToken = HttpContext.RequestAborted;
           await repository.AddAsync(book, cancellationToken);
             return Ok();
         }
