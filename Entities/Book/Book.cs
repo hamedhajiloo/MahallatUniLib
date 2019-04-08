@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,15 +33,16 @@ namespace Entities
 
         [DisplayName("نوبت چاپ")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        [Range(minimum:1,maximum:1000000,ErrorMessage =DataAnotations.Range)]
         public int Edition { get; set; }
 
         [DisplayName("زبان")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public Language Language { get; set; }
+        public Language? Language { get; set; }
 
         [DisplayName("نوع درس")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public CourseType CourseType { get; set; }
+        public CourseType? CourseType { get; set; }
 
         #endregion Properties
 
