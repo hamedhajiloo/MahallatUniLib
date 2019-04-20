@@ -1,0 +1,14 @@
+﻿.m_table tbody tr td {
+    vertical-align: middle;
+}
+
+.m_table thead tr th {
+    vertical-align: middle;
+}
+
+.m_table tr {
+    border-bottom: 1px solid gray;
+}
+.m_dropdown {
+    float:left;
+}

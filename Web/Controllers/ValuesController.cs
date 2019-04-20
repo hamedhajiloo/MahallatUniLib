@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebFramework.Api;
 using WebFramework.Filters;
 
 namespace MyApi.Controllers
@@ -14,9 +15,10 @@ namespace MyApi.Controllers
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ApiResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return BadRequest();
+            //return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5

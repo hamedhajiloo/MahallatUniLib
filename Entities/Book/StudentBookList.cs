@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
     public class StudentBookList : BaseEntity
     {
-        [ForeignKey(nameof(Book))]
+        
         public int BookId { get; set; }
-
+        public string ISBN { get; set; }
         public virtual Book Book { get; set; }
 
         [ForeignKey(nameof(Student))]
@@ -14,4 +16,17 @@ namespace Entities
 
         public virtual Student Student { get; set; }
     }
+    #region Config
+
+    public class StudentBookListConfiguration : IEntityTypeConfiguration<StudentBookList>
+    {
+        public void Configure(EntityTypeBuilder<StudentBookList> builder)
+        {
+            builder.HasOne(c => c.Book)
+                .WithMany(c => c.StudentBookList)
+                .HasForeignKey(c => new { c.BookId});
+
+        }
+    }
+    #endregion
 }

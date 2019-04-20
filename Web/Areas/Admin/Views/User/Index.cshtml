@@ -1,0 +1,85 @@
+﻿@model IEnumerable<newsSite90tv.Models.ApplicationUsers>
+@using newsSite90tv.PublicClass
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+    <div class="panel panel-primary col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+
+        <div class="panel-body">
+            <div>
+                <a class="btn btn-primary" asp-controller="User" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن کاربر
+                </a>
+            </div>
+        </div>
+
+        <hr style="height:1px; background-color:gray;" />
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>@Html.DisplayNameFor(model => model.FirstName)</td>
+                        <td>@Html.DisplayNameFor(model => model.LastName)</td>
+                        <td>ایمیل</td>
+                        <td>نام کاربری</td>
+                        <td>@Html.DisplayNameFor(model => model.PhoneNumber)</td>
+                        <td>@Html.DisplayNameFor(model => model.gender)</td>
+                        <td>عملیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.Email</td>
+                        <td>@item.UserName</td>
+                        <td>@item.PhoneNumber</td>
+
+                        @if (item.gender == 1)
+                        {
+                            <td>آقا</td>
+                        }
+                        else
+                        {
+                            <td>خانم</td>
+                        }
+
+
+
+                            <td>
+
+                                <a class="btn btn-warning" asp-controller="Role" asp-action="AccessRight" asp-route-id="@item.Id">
+                                    <i class="glyphicon glyphicon-grain"></i>
+                                    دسترسی
+                                </a>
+
+                                <a class="btn btn-info" asp-controller="User" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    ویرایش
+                                </a>
+
+                                <a class="btn btn-danger" asp-controller="User" asp-action="Delete"
+                                   asp-route-id="@item.Id" data-toggle="modal" data-target="#modal-action-category">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                    حذف
+                                </a>
+                            </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new BootstrapModel { ID = "modal-action-category", Size = ModalSize.Medium })
+
+
+@section PanelScripts{
+    <script src="~/js/modal-js/category-index.js"></script>
+}

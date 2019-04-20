@@ -46,6 +46,17 @@ namespace WebFramework.Middlewares
             try
             {
                 await _next(context);
+
+                //if (context.Response.StatusCode==404)
+                //{
+                //    var result = new ApiResult(false,ApiResultStatusCode.NotFound);
+                //    var json = JsonConvert.SerializeObject(result);
+
+                //    context.Response.StatusCode = (int)httpStatusCode;
+                //    context.Response.ContentType = "application/json";
+                //    await context.Response.WriteAsync(json);
+                //}
+
             }
             catch (AppException exception)
             {

@@ -37,6 +37,8 @@ namespace Data.Migrations
                     b.Property<string>("ISBN")
                         .IsRequired();
 
+                    b.Property<string>("ImgeUrl");
+
                     b.Property<int>("Language");
 
                     b.Property<string>("Name")
@@ -77,6 +79,8 @@ namespace Data.Migrations
                     b.Property<int>("BookId");
 
                     b.Property<int>("FieldId");
+
+                    b.Property<string>("ISBN");
 
                     b.HasKey("Id");
 
@@ -148,6 +152,8 @@ namespace Data.Migrations
 
                     b.Property<int>("BookId");
 
+                    b.Property<string>("ISBN");
+
                     b.Property<string>("StudentId");
 
                     b.HasKey("Id");
@@ -164,16 +170,12 @@ namespace Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BookId");
-
                     b.Property<int>("FieldId");
 
                     b.Property<string>("UserId")
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
 
                     b.HasIndex("FieldId");
 
@@ -189,6 +191,8 @@ namespace Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BookId");
+
+                    b.Property<string>("ISBN");
 
                     b.Property<string>("TeacherId");
 
@@ -395,10 +399,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entities.Teacher", b =>
                 {
-                    b.HasOne("Entities.Book")
-                        .WithMany("TeacherBookList")
-                        .HasForeignKey("BookId");
-
                     b.HasOne("Entities.Field", "Field")
                         .WithMany("Teachers")
                         .HasForeignKey("FieldId")
@@ -413,7 +413,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Entities.TeacherBookList", b =>
                 {
                     b.HasOne("Entities.Book", "Book")
-                        .WithMany()
+                        .WithMany("TeacherBookList")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict);
 

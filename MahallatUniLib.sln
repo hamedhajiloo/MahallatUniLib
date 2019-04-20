@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{14698ABB-E941-4868-9532-61BB4E68AFB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{14698ABB-E941-4868-9532-61BB4E68AFB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{E03C0A86-2280-4282-B650-D982A82E1D63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{E03C0A86-2280-4282-B650-D982A82E1D63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{3B3297C5-0EC4-4DAC-B9F5-610B21523303}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{3B3297C5-0EC4-4DAC-B9F5-610B21523303}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{91C63208-8479-4369-AE91-B1874C7B2A43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{91C63208-8479-4369-AE91-B1874C7B2A43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebFramework", "WebFramework\WebFramework.csproj", "{2032FAF4-066B-4806-BD69-53D4A9047D3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFramework", "WebFramework\WebFramework.csproj", "{2032FAF4-066B-4806-BD69-53D4A9047D3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{B6B3A18F-6CF6-4B67-BDB1-337AA9AA1AE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{B6B3A18F-6CF6-4B67-BDB1-337AA9AA1AE1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{568EB755-A101-4877-A0A8-25E20569D587}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E03C0A86-2280-4282-B650-D982A82E1D63} = {568EB755-A101-4877-A0A8-25E20569D587}
+		{3B3297C5-0EC4-4DAC-B9F5-610B21523303} = {568EB755-A101-4877-A0A8-25E20569D587}
+		{91C63208-8479-4369-AE91-B1874C7B2A43} = {568EB755-A101-4877-A0A8-25E20569D587}
+		{2032FAF4-066B-4806-BD69-53D4A9047D3B} = {568EB755-A101-4877-A0A8-25E20569D587}
+		{B6B3A18F-6CF6-4B67-BDB1-337AA9AA1AE1} = {568EB755-A101-4877-A0A8-25E20569D587}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B9A36FB-C926-476F-BC44-FCC88DF51F1D}
