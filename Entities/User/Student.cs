@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Enums;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -26,6 +27,15 @@ namespace Entities
         [DisplayName("سال ورود")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public int EntryYear { get; set; }
+
+
+        [DisplayName("روزانه / شبانه")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public StudentStatus StudentStatus { get; set; }
+
+        [DisplayName("مبلغ جریمه")]
+        public decimal PenaltyAmount { get; set; }
+
 
         #endregion Properties
 

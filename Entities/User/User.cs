@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -36,6 +37,10 @@ namespace Entities
         public DateTimeOffset? LastLoginDate { get; set; }
 
         #endregion Properties
+
+        #region Relations
+        public virtual List<Penalty> Penalties { get; set; }
+        #endregion
     }
 
     #region Config

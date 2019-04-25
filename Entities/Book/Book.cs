@@ -70,6 +70,8 @@ namespace Entities
         public virtual List<StudentBookList> StudentBookList { get; set; }
         public virtual List<TeacherBookList> TeacherBookList { get; set; }
         public virtual List<FieldBookList> FieldBookList { get; set; }
+        public virtual List<Penalty> Penalties { get; set; }
+
 
 
         #endregion Relations

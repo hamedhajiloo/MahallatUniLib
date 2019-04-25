@@ -53,5 +53,13 @@ namespace Common.Utilities.Validation
             }
             return false;
         }
+
+        public static bool StudentNumber(string value)
+        {
+            var _value = value.Trim();
+            if (Regex.IsMatch(_value, @"9[0-9]{9}"))  return true;
+            
+            return false;
+        }
     }
 }
