@@ -1,0 +1,231 @@
+﻿@font-face {
+  font-family: 'irsans';
+  src: url('../fonts/persian/irsans.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'badr';
+  src: url('../fonts/persian/BBadr.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BBadr.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BBadr.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'baran';
+  src: url('../fonts/persian/BBaran.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BBaran.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BBaran.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'bardiya';
+  src: url('../fonts/persian/BBardiya.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BBardiya.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BBardiya.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'compset';
+  src: url('../fonts/persian/BCompset.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BCompset.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BCompset.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'davat';
+  src: url('../fonts/persian/BDavat.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BDavat.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BDavat.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'elham';
+  src: url('../fonts/persian/BElham.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BElham.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BElham.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'esfehan';
+  src: url('../fonts/persian/BEsfehanBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BEsfehanBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BEsfehanBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'fantezy';
+  src: url('../fonts/persian/BFantezy.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BFantezy.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BFantezy.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'farnaz';
+  src: url('../fonts/persian/BFarnaz.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BFarnaz.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BFarnaz.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'ferdosi';
+  src: url('../fonts/persian/BFerdosi.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BFerdosi.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BFerdosi.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'hamid';
+  src: url('../fonts/persian/BHamid.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BHamid.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BHamid.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'helal';
+  src: url('../fonts/persian/BHelal.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BHelal.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BHelal.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'homa';
+  src: url('../fonts/persian/BHoma.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BHoma.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BHoma.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'jadid';
+  src: url('../fonts/persian/BJadidBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BJadidBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BJadidBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'jalal';
+  src: url('../fonts/persian/BJalal.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BJalal.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BJalal.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'koodak';
+  src: url('../fonts/persian/BKoodakBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BKoodakBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BKoodakBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'kourosh';
+  src: url('../fonts/persian/BKourosh.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BKourosh.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BKourosh.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'lotus';
+  src: url('../fonts/persian/BLotus.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BLotus.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BLotus.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'mahsa';
+  src: url('../fonts/persian/BMahsa.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BMahsa.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BMahsa.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}@font-face {
+  font-family: 'mehr';
+  src: url('../fonts/persian/BMehrBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BMehrBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BMehrBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'mitra';
+  src: url('../fonts/persian/BMitra.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BMitra.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BMitra.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'morvarid';
+  src: url('../fonts/persian/BMorvarid.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BMorvarid.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BMorvarid.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'narm';
+  src: url('../fonts/persian/BNarm.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BNarm.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BNarm.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'nasim';
+  src: url('../fonts/persian/BNasimBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BNasimBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BNasimBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'nazanin';
+  src: url('../fonts/persian/BNazanin.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BNazanin.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BNazanin.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'roya';
+  src: url('../fonts/persian/BRoya.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BRoya.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BRoya.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'setareh';
+  src: url('../fonts/persian/BSetarehBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BSetarehBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BSetarehBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'sina';
+  src: url('../fonts/persian/BSinaBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BSinaBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BSinaBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'tabassom';
+  src: url('../fonts/persian/BTabassom.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BTabassom.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BTabassom.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'tehran';
+  src: url('../fonts/persian/BTehran.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BTehran.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BTehran.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'titr';
+  src: url('../fonts/persian/BTitrBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BTitrBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BTitrBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'titrTGE';
+  src: url('../fonts/persian/BTitrTGEBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BTitrTGEBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BTitrTGEBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'traffic';
+  src: url('../fonts/persian/BTraffic.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BTraffic.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BTraffic.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'vahid';
+  src: url('../fonts/persian/BVahidBold.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BVahidBold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BVahidBold.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'yas';
+  src: url('../fonts/persian/BYas.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BYas.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BYas.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'yekan';
+  src: url('../fonts/persian/BYekan.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BYekan.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BYekan.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'zar';
+  src: url('../fonts/persian/BZar.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BZar.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BZar.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+@font-face {
+  font-family: 'ziba';
+  src: url('../fonts/persian/BZiba.eot?#') format('eot'),  /* IE6–8 */
+       url('../fonts/persian/BZiba.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('../fonts/persian/BZiba.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}

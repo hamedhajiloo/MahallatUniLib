@@ -28,6 +28,8 @@ namespace Data.Migrations
                     b.Property<string>("AuthorName")
                         .IsRequired();
 
+                    b.Property<int>("BookStatus");
+
                     b.Property<int>("CourseType");
 
                     b.Property<int>("Edition");
@@ -37,14 +39,14 @@ namespace Data.Migrations
                     b.Property<string>("ISBN")
                         .IsRequired();
 
-                    b.Property<string>("ImgeUrl");
+                    b.Property<string>("ImageUrl");
 
                     b.Property<int>("Language");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<DateTimeOffset>("PublishDate");
+                    b.Property<int>("PublishYear");
 
                     b.Property<string>("Publisher")
                         .IsRequired();

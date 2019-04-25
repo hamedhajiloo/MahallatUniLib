@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.CustomMapping;
 using Services.Dto;
+using Services.Services.Utilities;
 using WebFramework;
 using WebFramework.Configuration;
 using WebFramework.Middlewares;
@@ -36,7 +37,9 @@ namespace Web
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IImageService, ImageService>();
             services.AddMvc();
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

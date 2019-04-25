@@ -1,0 +1,541 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- Start slider area -->
+<div class="slider-area">
+    <div id="slider" class="nivoSlider" style="height:500px;">
+        <img style="display:none;height:500px;" src="~/site/img/slider/3.jpg" data-thumb="~/site/img/slider/3.jpg" alt="" title="#htmlcaption3" />
+        <img style="display:none;height:500px;" src="~/site/img/slider/4.jpg" data-thumb="~/site/img/slider/4.jpg" alt="" title="#htmlcaption4" />
+    </div>
+</div>
+<!-- End slider area -->
+<!-- Start categori area -->
+<div class="categori-area">
+    <div class="container">
+        <div class="row">
+            <!-- Start categori menu -->
+            <div class="col-xs-12 col-sm-3 col-md-3 pull-right">
+                <div class="categori-menu">
+                    <div class="sidebar-menu-title">
+                        <h2><i class="fa fa-th-list"></i>رشته های مورد نظر  </h2>
+                    </div>
+                    <div class="sidebar-menu">
+                        <ul>
+                            <li><a href="shop-grid.html" class="single-menu">(مهندسی کامپیوتر ( نرم افزار </a></li>
+                            <li><a href="shop-grid.html" class="single-menu">علوم کامپیوتر</a></li>
+                            <li><a href="shop-grid.html" class="single-menu">مهندسی صنایع</a></li>
+                            <li><a href="shop-grid.html" class="single-menu">مهندسی مکانیک</a></li>
+                            <li><a href="shop-grid.html" class="single-menu">مهندسی عمران</a></li>
+                            <li><a href="shop-grid.html" class="single-menu">معماری</a></li>
+                            <li><a href="shop-grid.html" class="single-menu">عمومی</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- End categori menu -->
+
+            <div class="purches-progress-area col-xs-12 col-sm-9 col-md-9 pull-left">
+
+
+                <div class="col-xs-12 col-sm-12">
+                    <div class="area-title">
+                        <h3>مراحل رزرو کتاب</h3>
+                    </div>
+                </div>
+                <div class="progress-area">
+                    <div class="col-sm-3">
+                        <div class="progrtee-box icon">
+                            <h4>مرحله چهارم</h4>
+                            <p>  نهایی کردن و تحویل گرفتن کتاب </p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="progrtee-box icon1">
+                            <h4>مرحله سوم</h4>
+                            <p>رزرو کردن</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="progrtee-box icon2">
+                            <h4>مرحله دوم</h4>
+                            <p>اطمینان از آزاد بودن کتاب</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="progrtee-box icon3">
+                            <h4>مرحله اول</h4>
+                            <p>انتخاب کتاب</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row alert alert-success" style="margin-top:60px;">
+                    <h3>برای اطمینان می توانید هر کتاب را به لیست علاقه مندی های خود اضافه کنید </h3>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End categori area -->
+<!-- Start featured product -->
+<div class="featured-product-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="area-title">
+                    <h3>مهندسی کامپیوتر - نرم افزار</h3>
+                </div>
+            </div>
+            <div class="featured-product">
+                <div class="featured-item">
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">ریاضی 1</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">فیزیک 1</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End featured product -->
+<!-- Start featured product -->
+<div class="featured-product-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="area-title">
+                    <h3>علوم کامپیوتر </h3>
+                </div>
+            </div>
+            <div class="featured-product">
+                <div class="featured-item">
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End featured product -->
+<!-- Start featured product -->
+<div class="featured-product-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="area-title">
+                    <h3>مهندسی صنایع</h3>
+                </div>
+            </div>
+            <div class="featured-product">
+                <div class="featured-item">
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End featured product -->
+<!-- Start featured product -->
+<div class="featured-product-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="area-title">
+                    <h3>مهندسی مکانیک</h3>
+                </div>
+            </div>
+            <div class="featured-product">
+                <div class="featured-item">
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End featured product -->
+<!-- Start featured product -->
+<div class="featured-product-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="area-title">
+                    <h3>مهندسی عمران</h3>
+                </div>
+            </div>
+            <div class="featured-product">
+                <div class="featured-item">
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End featured product -->
+<!-- Start featured product -->
+<div class="featured-product-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="area-title">
+                    <h3>معماری</h3>
+                </div>
+            </div>
+            <div class="featured-product">
+                <div class="featured-item">
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End featured product -->
+<!-- Start featured product -->
+<div class="featured-product-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="area-title">
+                    <h3>عمومی</h3>
+                </div>
+            </div>
+            <div class="featured-product">
+                <div class="featured-item">
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a href="single-product.html">
+                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="featured-info">
+                                    <a href="single-product.html">نام کتاب</a>
+                                    <div class="featured-button">
+                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End featured product -->
+<!-- Start blog area -->
+<div class="blog-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="area-title">
+                    <h3>تازه ترین خبرها</h3>
+                </div>
+            </div>
+            <div class="blog-box featured-product-area">
+                <div class="col-xs-12 col-sm-4">
+                    <a href="single-blog.html"><img src="~/site/img/blog/4-home-default.jpg" alt=""></a>
+                    <span class="blog-date">1394-08-12 04:40:21</span>
+                    <div class="blog-info">
+                        <h3><a href="single-blog.html">عنوان خبر</a></h3>
+                        <p>لورم ایپسوم متنی است که ساختگی برای طراحی و چاپ آن مورد است. صنعت چاپ زمانی لازم بود شرایطی شما باید فکر ثبت نام و طراحی، لازمه خروج می باشد. در ضمن قاعده همفکری ها جوابگوی سئوالات زیاد شاید باشد، آنچنان که لازم بود طراحی گرافیکی خوب بود. کتابهای زیادی شرایط سخت ، دشوار و کمی در سالهای دور لازم است.</p>
+                        <a href="single-blog.html" class="readmore">ادامه مطلب<i class="fa fa-arrow-left"></i></a>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <a href="single-blog.html"><img src="~/site/img/blog/3-home-default.jpg" alt=""></a>
+                    <span class="blog-date">1394-08-12 04:40:21</span>
+                    <div class="blog-info">
+                        <h3><a href="single-blog.html">عنوان خبر</a></h3>
+                        <p>لورم ایپسوم متنی است که ساختگی برای طراحی و چاپ آن مورد است. صنعت چاپ زمانی لازم بود شرایطی شما باید فکر ثبت نام و طراحی، لازمه خروج می باشد. در ضمن قاعده همفکری ها جوابگوی سئوالات زیاد شاید باشد، آنچنان که لازم بود طراحی گرافیکی خوب بود. کتابهای زیادی شرایط سخت ، دشوار و کمی در سالهای دور لازم است.</p>
+                        <a href="single-blog.html" class="readmore">ادامه مطلب<i class="fa fa-arrow-left"></i></a>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <a href="single-blog.html"><img src="~/site/img/blog/2-home-default.jpg" alt=""></a>
+                    <span class="blog-date">1394-08-12 04:40:21</span>
+                    <div class="blog-info">
+                        <h3><a href="single-blog.html">عنوان خبر</a></h3>
+                        <p>لورم ایپسوم متنی است که ساختگی برای طراحی و چاپ آن مورد است. صنعت چاپ زمانی لازم بود شرایطی شما باید فکر ثبت نام و طراحی، لازمه خروج می باشد. در ضمن قاعده همفکری ها جوابگوی سئوالات زیاد شاید باشد، آنچنان که لازم بود طراحی گرافیکی خوب بود. کتابهای زیادی شرایط سخت ، دشوار و کمی در سالهای دور لازم است.</p>
+                        <a href="single-blog.html" class="readmore">ادامه مطلب<i class="fa fa-arrow-left"></i></a>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <a href="single-blog.html"><img src="~/site/img/blog/1-home-default.jpg" alt=""></a>
+                    <span class="blog-date">1394-08-12 04:40:21</span>
+                    <div class="blog-info">
+                        <h3><a href="single-blog.html">عنوان خبر</a></h3>
+                        <p>لورم ایپسوم متنی است که ساختگی برای طراحی و چاپ آن مورد است. صنعت چاپ زمانی لازم بود شرایطی شما باید فکر ثبت نام و طراحی، لازمه خروج می باشد. در ضمن قاعده همفکری ها جوابگوی سئوالات زیاد شاید باشد، آنچنان که لازم بود طراحی گرافیکی خوب بود. کتابهای زیادی شرایط سخت ، دشوار و کمی در سالهای دور لازم است.</p>
+                        <a href="single-blog.html" class="readmore">ادامه مطلب<i class="fa fa-arrow-left"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End blog area -->

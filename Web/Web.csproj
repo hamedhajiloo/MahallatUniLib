@@ -681,6 +681,7 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\fonts\iransans\" />
+    <Folder Include="wwwroot\upload\image\book\thumbnailimage\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -1723,6 +1724,24 @@
     <None Include="wwwroot\js\npm.js" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\js\site.min.js" />
+    <None Include="wwwroot\lib\toastr\toastr.js.map" />
+    <None Include="wwwroot\lib\toastr\toastr.min.js" />
+    <None Include="wwwroot\site\fonts\fontawesome-webfont93e3.svg" />
+    <None Include="wwwroot\site\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\site\js\bootstrap.min.js" />
+    <None Include="wwwroot\site\js\countUp.js" />
+    <None Include="wwwroot\site\js\jquery.fancybox.js" />
+    <None Include="wwwroot\site\js\jquery.meanmenu.js" />
+    <None Include="wwwroot\site\js\jquery.nivo.slider.pack.js" />
+    <None Include="wwwroot\site\js\jquery.scrollUp.min.js" />
+    <None Include="wwwroot\site\js\jqueryui.js" />
+    <None Include="wwwroot\site\js\main.js" />
+    <None Include="wwwroot\site\js\owl.carousel.min.js" />
+    <None Include="wwwroot\site\js\plugins.js" />
+    <None Include="wwwroot\site\js\quantty.js" />
+    <None Include="wwwroot\site\js\vendor\jquery-1.11.3.min.js" />
+    <None Include="wwwroot\site\js\vendor\modernizr-2.8.3.min.js" />
+    <None Include="wwwroot\site\js\wow.js" />
   </ItemGroup>
 
   <ItemGroup>

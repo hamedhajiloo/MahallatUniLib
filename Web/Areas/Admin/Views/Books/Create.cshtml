@@ -1,0 +1,192 @@
+﻿@model Services.Dto.BookDto
+
+@{
+    
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+
+}
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h2>افزودن کتاب</h2>
+    </div>
+    <div class="panel-body">
+        <style>
+            .circleInput {
+                border-radius: 3px;
+            }
+        </style>
+
+        <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+            <div class="col-md-4 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+                <form asp-area="Admin" asp-controller="Books" asp-action="Create" method="post">
+
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                    @* نام کتاب *@
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    @*ISBN *@
+                    <div class="form-group">
+                        <label asp-for="ISBN" class="control-label"></label>
+                        <input asp-for="ISBN" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="ISBN" class="text-danger"></span>
+                    </div>
+
+                    @*نویسنده *@
+                    <div class="form-group">
+                        <label asp-for="AuthorName" class="control-label"></label>
+                        <input asp-for="AuthorName" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="AuthorName" class="text-danger"></span>
+                    </div>
+
+
+                    @*ناشر *@
+                    <div class="form-group">
+                        <label asp-for="Publisher" class="control-label"></label>
+                        <input asp-for="Publisher" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="Publisher" class="text-danger"></span>
+                    </div>
+
+                    @* سال انتشار*@
+                    <div class="form-group">
+                        <label asp-for="PublishYear" class="control-label"></label>
+                        <input asp-for="PublishYear" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="PublishYear" class="text-danger"></span>
+                    </div>
+
+
+                    @* ویراست*@
+                    <div class="form-group">
+                        <label asp-for="Edition" class="control-label"></label>
+                        <input asp-for="Edition" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="Edition" class="text-danger"></span>
+                    </div>
+
+
+
+
+                    @* زبان *@
+                    <div class="form-group">
+                        <label asp-for="Language" class="control-label"></label>
+                        <select asp-for="Language" class="form-control circleInput">
+                            <option value="1">فارسی</option>
+                            <option value="2">انگلیسی</option>
+                        </select>
+                        <span asp-validation-for="Language" class="text-danger"></span>
+                    </div>
+
+                    @* نوع درس *@
+                    <div class="form-group">
+                        <label asp-for="CourseType" class="control-label"></label>
+                        <select asp-for="CourseType" class="form-control circleInput">
+                            <option value="1">عمومی</option>
+                            <option value="2">اختصاصی</option>
+                        </select>
+                        <span asp-validation-for="CourseType" class="text-danger"></span>
+                    </div>
+
+                    @* تصویر *@
+                    <div class="form-group">
+                        <label asp-for="ImageUrl" class="control-label"></label>
+                        <div class="form-horizontal">
+                            <input asp-for="ImageUrl" type="file" id="files" name="files" />
+                            <input type="button" onclick="UploadImage()" id="btnupload" class="btn btn-info" value="آپلود و نمایش تصویر" />
+                        </div>
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <input type="submit" value="ایجاد" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+                    </div>
+
+                    <input type="text" class="hidden" id="imagename" name="imagename" />
+
+                </form>
+
+                @if (ViewBag.SuccessMessage != "")
+                {
+                    <span style="color:green;">
+                        @ViewBag.SuccessMessage
+                    </span>
+                }
+
+
+            </div>
+
+            <div class="col-md-4" style="margin-top:25px; margin-bottom:25px;">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="box box-widget widget-user">
+                        <div class="widget-user-header bg-light-blue-active text-center">
+                            <h3 class="widget-user-username">تصویر کتاب</h3>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <img id="imgbook" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                             src="~/upload/image/book/normalimage/defaultbookimage.png" alt="BookImage"
+                             style="height:350px;" />
+                    </div>
+
+                    <div id="divmessage" class="text-center hidden" style="color:green;">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section PanelScripts {
+    <script>
+        var UploadImage = function () {
+            var data = new FormData;
+            var file = $("#files").get(0);
+            var files = file.files;
+
+            for (var i = 0; i < files.length; i++) {
+                data.append('files', files[i]);
+            }
+
+            $.ajax({
+                type: "post",
+                url: '@Url.Action("UploadImage", "Books", new { area = "Admin"})',
+                data: data,
+                contentType: false,
+                processData: false,
+            }).done(function (result) {
+                if (result.status == "success") {
+                   // var imageurl = "\\upload\\image\\normalimage\\" + result.imagename;
+                    $("#imgbook").attr('src', "\\upload\\image\\\\book\\normalimage\\" + result.imagename);
+
+                    $("#divmessage").removeClass('hidden');
+                    $("#divmessage").text("تصویر با موفقیت آپلود شد");
+                    $("#imagename").val(result.imagename);
+
+                    }
+                }).fail(function (result) {
+                    if (result.status != "success") {
+                        $("#divmessage").removeClass('hidden');
+                        $("#divmessage").text("در هنگام آپلود مشکلی رخ داد");
+
+                    }
+                });
+
+        }
+
+    </script>
+    
+}

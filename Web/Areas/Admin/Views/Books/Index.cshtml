@@ -4,115 +4,274 @@
 }
 
 
-<div class="panel panel-info">
-    <div class="panel-heading"></div>
-    <div class="panel-body">
-        <form action="Search" method="post">
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+
+
+    <div class="panel panel-success col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+        <div class="panel-heading">
+            <h3 class="text-center">لیست کتاب ها</h3>
+        </div>
+
+
+
+        <div class="panel-body">
+            <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                <a class="btn btn-primary" asp-controller="Books" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن کتاب
+                </a>
+                <a class="btn btn-success" onclick="Search()">جستجو <i class="glyphicon glyphicon-search"></i></a>
+            </div>
             <div class="form-row">
-                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                    <input type="text" class="form-control" placeholder="جستجو">
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                    <div class="dropdown m_dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            نوع درس
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li><a href="#">عمومی</a></li>
-                            <li><a href="#">اختصاصی</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#">هر دو</a></li>
-                        </ul>
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                    @* متن جستجو *@
+                    <div class="form-group">
+                        <label class="control-label">متن جستجو</label>
+                        <input type="text" name="search" value=" " class="form-control circleInput search" />
                     </div>
                 </div>
-                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           رشته
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <li><a href="#">نرم افزار</a></li>
-                            <li><a href="#">علوم کامپیوتر</a></li>
-                            <li><a href="#">صنایع</a></li>
-                            <li><a href="#">معماری</a></li>
-                            <li><a href="#">مکانیک</a></li>
-                        </ul>
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                    @* زبان *@
+                    <div class="form-group">
+                        <label class="control-label">زبان</label>
+                        <select name="lan" class="form-control circleInput lan" onchange="Search()">
+                            <option value="0"> ___ </option>
+                            <option value="1">فارسی</option>
+                            <option value="2">انگلیسی</option>
+                        </select>
                     </div>
                 </div>
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                    @* نوع درس *@
+                    <div class="form-group">
+                        <label class="control-label">نوع درس</label>
+                        <select name="ctype" class="form-control circleInput ctype" onchange="Search()">
+                            <option value="0"> ___ </option>
+                            <option value="1">عمومی</option>
+                            <option value="2">اختصاصی</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                    @* وضعیت کتاب *@
+                    <div class="form-group">
+                        <label class="control-label"> وضعیت کتاب</label>
+                        <select name="bstatus" class="form-control circleInput bstatus" onchange="Search()">
+                            <option value="0"> ___ </option>
+                            <option value="1">آزاد</option>
+                            <option value="2">رزرو شده</option>
+                            <option value="3">امانت داده شده </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                    @*رشته*@
+                    <div class="form-group">
+                        <label class="control-label">رشته</label>
+                        <select name="field" class="form-control circleInput field" onchange="Search()">
+                            <option value="0"> ___ </option>
+                            <option value="1">نرم افزار</option>
+                            <option value="2">علوم کامپیوتر</option>
+                            <option value="3"> صنایع</option>
+                            <option value="4"> معماری</option>
+                            <option value="5"> مکانیک</option>
+                        </select>
+                    </div>
+                </div>
+
             </div>
 
-        </form>
+        </div>
+
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center books">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>@Html.DisplayNameFor(model => model[0].Name)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].AuthorName)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].Edition)</td>
+                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].PublishYear)</td>
+                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].CourseType)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].BookStatus)</td>
+                        <td>عملیات</td>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.AuthorName</td>
+                            <td>@item.Edition</td>
+                            <td class="hidden-xs">@item.PublishYear</td>
+                            <td class="hidden-xs">@item.CourseType</td>
+
+                            @if (item.BookStatus == Common.Enums.BookStatus.None)
+                            {
+                                <td style="color:indianred">@item.BookStatusNum</td>
+                            }
+                            @if (item.BookStatus == Common.Enums.BookStatus.Free)
+                            {
+                                <td style="color:green">@item.BookStatusNum</td>
+                            }
+                            else if (item.BookStatus == Common.Enums.BookStatus.Reserved)
+                            {
+                                <td style="color:yellow">@item.BookStatusNum</td>
+                            }
+                            else if (item.BookStatus == Common.Enums.BookStatus.Borrowed)
+                            {
+                                <td style="color:red">@item.BookStatusNum</td>
+                            }
+
+
+                            <td>
+                                <a class="btn btn-sm btn-warning" asp-controller="Books" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
+                                <a class="btn btn-sm btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
+                                <a class="btn btn-sm btn-info" asp-controller="Books" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>
+                                <input type="hidden" name="bookid" value=@item.Id id="r_@item.Id" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
     </div>
-</div>
+    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">حذف کتاب</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>آیا برای حذف این کتاب اطمینان دارید؟</h3>
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="Delete" asp-controller="Books" method="post">
+                        <input type="hidden" name="gbookid" id="gbookid" value="" />
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">انصراف</button>
 
-<div class="panel panel-info">
-
-    <div class="panel-heading">
-        <h3 class="">لیست کتاب ها</h3>
-        <div class="" dir="ltr">
-        <a class="btn btn-success" asp-controller="" asp-action="">افزودن کتاب</a>
+                        <button type="submit" class="btn btn-danger">حذف</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="panel-body">
-        <table class="table table-hover table-responsive table-condensed m_table">
-            <thead>
-                <tr>
-                    <th> نام کتاب</th>
-                    <th>ویراست</th>
-                    <th>نام نویسنده</th>
-                    <th>نوع درس</th>
-                    <th>شابک</th>
-                    <th>ناشر</th>
-                    <th>عملیات</th>
-                    <th>زبان</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var i in Model)
-                {
-                    <tr>
-                        <td>@i.Name</td>
-                        <td>@i.Edition</td>
-                        <td>@i.AuthorName</td>
-                        <td>@i.CourseType</td>
-                        <td>@i.ISBN </td>
-                        <td>@i.Publisher </td>
-                        <td>@i.Language </td>
-                        <td>
-                            <span><a asp-controller="Book" asp-action="Edit" @*asp-id=i.id*@ class="btn btn-sm btn-warning">ویرایش</a></span>
-                            <span><a asp-controller="Book" asp-action="Detail" @*asp-id=i.id*@ class="btn btn-sm btn-success">جزئیات</a></span>
-                            <span><a asp-controller="Book" asp-action="Delete" @*asp-id=i.id*@ class="btn btn-sm btn-danger">حذف</a></span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="panel panel-footer">
-        <nav aria-label="">
-            <ul class="pagination">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">قبلی</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item"><a class="page-link" href="#">6</a></li>
-                <li class="page-item"><a class="page-link" href="#">7</a></li>
-                <li class="page-item"><a class="page-link" href="#">8</a></li>
-                <li class="page-item"><a class="page-link" href="#">9</a></li>
-
-                <li class="page-item">
-                    <a class="page-link" href="#">بعدی</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
 </div>
+
+@section PanelScripts{
+    <script>
+
+        var DeleteAlarm = function (obj) {
+            var bookid = $(obj).val();
+
+            $('#gbookid').val(bookid);
+
+        }
+        var Search = function () {
+
+            var search = $('.search').val();
+            var lan = $('.lan').val();
+            var ctype = $('.ctype').val();
+            var bstatus = $('.bstatus').val();
+            var field = $('.field').val();
+            var str = '';
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Books/Search?lan=" + lan + "&&search=" + search + "&&ctype=" + ctype + "&&bstatus=" + bstatus + "&&field=" + field + "",
+                contentType: "application/json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                dataType: "json",
+                success: function (response) {
+                    var dvItems = $(".books tbody");
+                    dvItems.empty();
+                    $.each((response.data), function (i, item) {
+                        if (item.bookStatus == 0) {
+                            str += '<tr>' +
+                                '<td>' + item.name + '</td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td style="color:indianred">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
+                                '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-sm btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
+                        if (item.bookStatus == 1) {
+                            str += '<tr>' +
+                                '<td>' + item.name + '</td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td style="color:green">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
+                                '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-sm btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
+
+                        if (item.bookStatus == 2) {
+                            str += '<tr>' +
+                                '<td>' + item.name + '</td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td style="color:yellow">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
+                                '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-sm btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
+
+                        if (item.bookStatus == 3) {
+                            str += '<tr>' +
+                                '<td>' + item.name + '</td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td style="color:red">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
+                                '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-sm btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
+
+
+
+
+
+                    });
+                    dvItems.html('').append(str);
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+        }
+
+    </script>
+}

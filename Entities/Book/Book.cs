@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Enums;
 using Common.Utilities.Attributes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,15 +13,21 @@ namespace Entities
 {
     public class Book : BaseEntity
     {
+        public Book()
+        {
+            Language = Language.Persion;
+            CourseType = CourseType.General;
+            BookStatus = BookStatus.Free;
+        }
         #region Properties
         
-        [DisplayName("شناسه کتاب")]
+       
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string ISBN { get; set; }
 
 
         [Display(Name ="تصویر")]
-        public string ImgeUrl { get; set; }
+        public string ImageUrl { get; set; }
 
 
         [DisplayName("نام کتاب")]
@@ -35,9 +42,9 @@ namespace Entities
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string Publisher { get; set; }
 
-        [DisplayName("تاریخ انتشار")]
+        [DisplayName("سال انتشار")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public DateTimeOffset PublishDate { get; set; }
+        public int PublishYear { get; set; }
 
         [DisplayName("نوبت چاپ")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
@@ -46,11 +53,15 @@ namespace Entities
 
         [DisplayName("زبان")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public Language? Language { get; set; }
+        public Language Language { get; set; }
 
         [DisplayName("نوع درس")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public CourseType CourseType { get; set; }
+
+        [DisplayName("وضعیت کتاب")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public BookStatus BookStatus { get; set; }
 
         #endregion Properties
 

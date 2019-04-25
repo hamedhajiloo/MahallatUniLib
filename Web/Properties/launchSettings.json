@@ -17,6 +17,7 @@
     },
     "Web": {
       "commandName": "Project",
+      "launchUrl": "admin/books",
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {

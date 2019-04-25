@@ -35,11 +35,11 @@ namespace Web.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Create(BookDto bookDto, [FromHeader]CancellationToken cancellationToken)
-        {
-         var result= await _bookService.AddBookAsync(bookDto, cancellationToken);
-            return Ok(result);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult> Create(BookDto bookDto, [FromHeader]CancellationToken cancellationToken)
+        //{
+        // var result= await _bookService.AddBookAsync(bookDto, cancellationToken);
+        //    return Ok(result);
+        //}
     }
 }

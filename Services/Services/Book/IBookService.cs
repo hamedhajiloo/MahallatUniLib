@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Enums;
 using Services.Dto;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,11 @@ namespace Services
     {
         Task<BookSelectDto> AddBookAsync(BookDto bookDto,CancellationToken cancellationToken);
         Task<List<BookSelectDto>> GetAllBookAsync(CancellationToken cancellationToken);
+        Task<List<BookSelectDto>> GetAllBookAsync(CancellationToken cancellationToken,CourseType courseType,BookStatus bookStatus,Language language,int Field, string search = "");
+        Task<bool> BookExists(BookDto bookDto, CancellationToken cancellationToken);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
+        Task<BookSelectDto> FindBookByIdAsync(int id, CancellationToken cancellationToken);
+        Task<BookDto> FindBookById4EditAsync(int id, CancellationToken cancellationToken);
+        Task<bool> EditAsync( BookDto bookDto, CancellationToken cancellationToken);
     }
 }
