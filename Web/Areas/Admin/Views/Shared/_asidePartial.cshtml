@@ -29,22 +29,23 @@
         <!-- /.search form -->
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">تیتر</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a asp-controller="News" asp-action="Index"><i class="fa fa-link"></i> <span>مدیریت اخبار</span></a></li>
-            <li class="treeview">
+            <li class="treeview active">
                 <a href="#">
-                    <i class="fa fa-link"></i> <span>مدیریت سیستم</span>
+                    <i class="fa fa-assistive-listening-systems"></i> <span>مدیریت سیستم</span>
                     <span class="pull-left-container">
                         <i class="fa fa-angle-right pull-left"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#">مدیریت کاربران</a></li>
-                    <li><a asp-controller="Category" asp-action="Index">مدیریت دسته بندی</a></li>
-                    <li><a asp-controller="Books" asp-action="Index">مدیریت کتاب ها</a></li>
+                    <li><a href="#"><i class="fa fa-user"></i>مدیریت کاربران</a></li>
+                    <li><a asp-controller="Category" asp-action="Index">  <i class="fa fa-file-archive-o"></i>مدیریت دسته بندی </a></li>
+                    <li><a asp-controller="Books" asp-action="Index"><i class="fa fa-book"></i> مدیریت کتاب ها</a></li>
                 </ul>
             </li>
+            <li><a asp-controller="News" asp-action="Index"><i class="fa fa-newspaper-o"></i> <span>مدیریت اخبار</span></a></li>
+            <li><a asp-controller="Setting" asp-action="Index"><i class="ion ion-settings"></i> <span>تنظیمات</span></a></li>
+
         </ul>
         <!-- /.sidebar-menu -->
     </section>

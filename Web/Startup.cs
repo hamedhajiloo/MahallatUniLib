@@ -38,6 +38,7 @@ namespace Web
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<ISettingService, SettingService>();
             services.AddMvc();
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
         }
