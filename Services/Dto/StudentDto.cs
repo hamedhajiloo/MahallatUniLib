@@ -13,7 +13,7 @@ namespace Services.Dto
 {
     public class StudentDto : BaseDto<StudentDto, Student, string>,IValidatableObject
     {
-        [DisplayName("کد دانشجویی")]
+        [DisplayName("شماره دانشجویی")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string Code { get; set; }
 
@@ -48,7 +48,7 @@ namespace Services.Dto
     }
     public class StudentSelectDto : BaseDto<StudentSelectDto, Student, string>
     {
-        [DisplayName("کد دانشجویی")]
+        [DisplayName("شماره دانشجویی")]
         public string Code { get; set; }
 
 
@@ -62,7 +62,7 @@ namespace Services.Dto
         [DisplayName("شناسه رشته")]
         public int FieldId { get; set; }
 
-        [DisplayName(" نام و نام خانوادگی دانشجو")]
+        [DisplayName(" نام و نام خانوادگی")]
         public string StudentFullName { get; set; }
 
         [DisplayName("رشته تحصیلی")]

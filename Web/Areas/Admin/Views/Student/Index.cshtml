@@ -1,0 +1,224 @@
+﻿@model List<StudentSelectDto>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+}
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+
+
+    <div class="panel panel-success col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+        <div class="panel-heading">
+            <h3 class="text-center">لیست دانشجویان</h3>
+        </div>
+
+
+
+        <div class="panel-body">
+            <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                <a class="btn btn-primary" asp-controller="Student" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن دانشجو
+                </a>
+                <a class="btn btn-success" onclick="Search()">جستجو <i class="glyphicon glyphicon-search"></i></a>
+            </div>
+            <div class="form-row">
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                    @* متن جستجو *@
+                    <div class="form-group">
+                        <label class="control-label">متن جستجو</label>
+                        <input type="text" name="search" value=" " class="form-control circleInput search" />
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                    @* زبان *@
+                    <div class="form-group">
+                        <label class="control-label">زبان</label>
+                        <select name="StudentStatus" class="form-control circleInput lan" onchange="Search()">
+                            <option value="0"> ___ </option>
+                            <option value="1">روزانه</option>
+                            <option value="2">شبانه</option>
+                        </select>
+                    </div>
+                </div>
+              
+
+            </div>
+
+        </div>
+
+
+        <div class="box box-body table-responsive no-padding">
+
+            <table class="table table-responsive text-center books">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>@Html.DisplayNameFor(model => model[0].Code)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].StudentFullName)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].FiledName)</td>
+                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].PenaltyAmount)</td>
+                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].StudentStatus)</td>
+                       
+                        <td>عملیات</td>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+                            <td>@item.Code</td>
+                            <td>@item.StudentFullName</td>
+                            <td>@item.FiledName</td>
+                            <td class="hidden-xs">@item.PenaltyAmount</td>
+                            <td class="hidden-xs">@item.StudentStatus</td>
+
+                          
+                            <td>
+                                <a class="btn btn-sm btn-warning" asp-controller="Student" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
+                                <a class="btn btn-sm btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
+                                <a class="btn btn-sm btn-info" asp-controller="Student" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>
+                                <input type="hidden" name="studentid" value=@item.Id id="r_@item.Id" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">حذف کتاب</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>آیا برای حذف این کتاب اطمینان دارید؟</h3>
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="Delete" asp-controller="Student" method="post">
+                        <input type="hidden" name="gstudentid" id="gstudentid" value="" />
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">انصراف</button>
+
+                        <button type="submit" class="btn btn-danger">حذف</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PanelScripts{
+    <script>
+
+        var DeleteAlarm = function (obj) {
+            var studentid = $(obj).val();
+
+            $('#gstudentid').val(studentid);
+
+        }
+        var Search = function () {
+
+            var search = $('.search').val();
+            var lan = $('.lan').val();
+            var ctype = $('.ctype').val();
+            var bstatus = $('.bstatus').val();
+            var field = $('.field').val();
+            var str = '';
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Books/Search?lan=" + lan + "&&search=" + search + "&&ctype=" + ctype + "&&bstatus=" + bstatus + "&&field=" + field + "",
+                contentType: "application/json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                dataType: "json",
+                success: function (response) {
+                    var dvItems = $(".books tbody");
+                    dvItems.empty();
+                    $.each((response.data), function (i, item) {
+                        if (item.bookStatus == 0) {
+                            str += '<tr>' +
+                                '<td>' + item.name + '</td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td style="color:indianred">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
+                                '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-sm btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="studentid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
+                        if (item.bookStatus == 1) {
+                            str += '<tr>' +
+                                '<td>' + item.name + '</td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td style="color:green">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
+                                '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-sm btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="studentid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
+
+                        if (item.bookStatus == 2) {
+                            str += '<tr>' +
+                                '<td>' + item.name + '</td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td style="color:yellow">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
+                                '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-sm btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="studentid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
+
+                        if (item.bookStatus == 3) {
+                            str += '<tr>' +
+                                '<td>' + item.name + '</td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td style="color:red">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
+                                '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-sm btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="studentid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
+
+
+
+
+
+                    });
+                    dvItems.html('').append(str);
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+        }
+
+    </script>
+}

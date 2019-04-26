@@ -38,7 +38,18 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-user"></i>مدیریت کاربران</a></li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-user"></i><span>مدیریت کاربران</span>
+                            <span class="pull-left-container">
+                                <i class="fa fa-angle-right pull-left"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a asp-controller="Student" asp-action="Index">  <i class="ion ion-university"></i>دانشجو </a></li>
+                            <li><a asp-controller="Teacher" asp-action="Index">  <i class="fa fa-university"></i>استاد </a></li>
+                        </ul>
+                    </li>
                     <li><a asp-controller="Category" asp-action="Index">  <i class="fa fa-file-archive-o"></i>مدیریت دسته بندی </a></li>
                     <li><a asp-controller="Books" asp-action="Index"><i class="fa fa-book"></i> مدیریت کتاب ها</a></li>
                 </ul>
