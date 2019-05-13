@@ -10,6 +10,7 @@ using Services;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("Admin/Setting/[action]")]
     public class SettingController : Controller
     {
         private readonly ISettingService _settingService;

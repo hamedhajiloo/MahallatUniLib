@@ -39,14 +39,6 @@ namespace Services
 
         public async Task<List<BookSelectDto>> GetAllBookAsync(CancellationToken cancellationToken)
         {
-            //Expression<Func<Book, bool>> expression = p =>
-            //   p.AuthorName.Contains(pagable.Search) &&
-            //                     p.Edition.ToString().Contains(pagable.Search) &&
-            //                     p.Publisher.Contains(pagable.Search) &&
-            //                     p.Name.Contains(pagable.Search) &&
-            //                     p.ISBN.Contains(pagable.Search);
-
-            //var model = await _baseService.GetAllAsync<BookSelectDto>(cancellationToken,pagable,expression);
             var result = await _repository.TableNoTracking.OrderByDescending(c => c.Id).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
             return result;
         }
@@ -112,7 +104,7 @@ namespace Services
         {
             var models = _repository.TableNoTracking;
 
-        
+
             if (search != null)
                 models = models.Where(p => (p.AuthorName.Contains(search) ||
                                   p.Edition.ToString().Contains(search) ||

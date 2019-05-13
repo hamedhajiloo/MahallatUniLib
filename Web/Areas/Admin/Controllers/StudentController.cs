@@ -11,6 +11,7 @@ using Services;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("[area]/[controller]/[action]")]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;

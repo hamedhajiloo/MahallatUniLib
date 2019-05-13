@@ -11,5 +11,10 @@ namespace Services.Dto
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         [StringLength(100)]
         public string FullName { get; set; }
+
+        [DisplayName("نام کاربری")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        [StringLength(100)]
+        public string UserName { get; set; }
     }
 }

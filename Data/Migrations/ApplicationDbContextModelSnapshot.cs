@@ -136,6 +136,9 @@ namespace Data.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
 
+                    b.Property<string>("RoleLevel")
+                        .IsRequired();
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
@@ -171,9 +174,6 @@ namespace Data.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .IsRequired();
 
                     b.Property<int>("EntryYear");
 

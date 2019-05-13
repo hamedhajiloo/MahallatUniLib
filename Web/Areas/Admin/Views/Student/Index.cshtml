@@ -53,7 +53,7 @@
             <table class="table table-responsive text-center books">
                 <thead>
                     <tr style="font-size:15px; font-weight:600;">
-                        <td>@Html.DisplayNameFor(model => model[0].Code)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].UserName)</td>
                         <td>@Html.DisplayNameFor(model => model[0].StudentFullName)</td>
                         <td>@Html.DisplayNameFor(model => model[0].FiledName)</td>
                         <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].PenaltyAmount)</td>
@@ -66,7 +66,7 @@
                     {
 
                         <tr>
-                            <td>@item.Code</td>
+                            <td>@item.UserName</td>
                             <td>@item.StudentFullName</td>
                             <td>@item.FiledName</td>
                             <td class="hidden-xs">@item.PenaltyAmount</td>

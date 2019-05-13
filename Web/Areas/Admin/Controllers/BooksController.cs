@@ -12,8 +12,10 @@ using WebFramework.Filters;
 
 namespace Web.Areas.Admin.Controllers
 {
+    [Route("[area]/[controller]/[action]")]
     [Area("Admin")]
     [Controller]
+    [ShowErrorPageType]
     public class BooksController : Controller
     {
         private readonly IBookService _bookService;
@@ -24,11 +26,11 @@ namespace Web.Areas.Admin.Controllers
             _bookService = bookService;
             _imageService = imageService;
         }
-
+        [HttpGet]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var model = await _bookService.GetAllBookAsync(cancellationToken);
-            return View(model);
+            var models = await _bookService.GetAllBookAsync(cancellationToken);
+            return View(models);
         }
 
         [HttpGet]

@@ -33,10 +33,11 @@ namespace Data.Repositories
 
         public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true)
         {
-            Assert.NotNull(entity, nameof(entity));
-            await Entities.AddAsync(entity, cancellationToken).ConfigureAwait(false);
-            if (saveNow)
-                await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            
+                Assert.NotNull(entity, nameof(entity));
+                await Entities.AddAsync(entity, cancellationToken).ConfigureAwait(false);
+                if (saveNow)
+                    await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true)

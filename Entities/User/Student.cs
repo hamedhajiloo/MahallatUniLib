@@ -20,10 +20,6 @@ namespace Entities
 
         #region Properties
 
-        [DisplayName("کد دانشجویی")]
-        [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public string Code { get; set; }
-
         [DisplayName("سال ورود")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public int EntryYear { get; set; }

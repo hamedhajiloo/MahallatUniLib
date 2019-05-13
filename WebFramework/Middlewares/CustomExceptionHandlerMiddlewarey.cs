@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Common;
+using Common.Exceptions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Common;
 using System.Net;
-using Common.Exceptions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 using WebFramework.Api;
 
 namespace WebFramework.Middlewares
@@ -46,17 +46,6 @@ namespace WebFramework.Middlewares
             try
             {
                 await _next(context);
-
-                //if (context.Response.StatusCode==404)
-                //{
-                //    var result = new ApiResult(false,ApiResultStatusCode.NotFound);
-                //    var json = JsonConvert.SerializeObject(result);
-
-                //    context.Response.StatusCode = (int)httpStatusCode;
-                //    context.Response.ContentType = "application/json";
-                //    await context.Response.WriteAsync(json);
-                //}
-
             }
             catch (AppException exception)
             {

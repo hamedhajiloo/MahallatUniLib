@@ -4,6 +4,7 @@ using Data.Repositories;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Services.Dto;
+using Services.Enum.Student;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,20 +22,20 @@ namespace Services
             _repository = repository;
         }
 
-        public async Task<string> AddAsync(CancellationToken cancellationToken, StudentDto studentDto)
+        public async Task<AddAsyncStatus> AddAsync(CancellationToken cancellationToken, StudentDto studentDto)
         {
             try
             {
-                var model = await _repository.TableNoTracking.Where(c => c.Id == studentDto.Id || c.Code == studentDto.Code).SingleOrDefaultAsync(cancellationToken);
+                var model = await _repository.TableNoTracking.Where(c => c.Id == studentDto.Id || c.User.UserName == studentDto.UserName).SingleOrDefaultAsync(cancellationToken);
                 if (model != null)
-                    return "Exists";
+                    return AddAsyncStatus.Exists;
                 var student = studentDto.ToEntity();
                 await _repository.AddAsync(student, cancellationToken);
-                return "Ok";
+                return AddAsyncStatus.Ok;
             }
-            catch
+            catch (Exception ex)
             {
-                return "Bad";
+                return AddAsyncStatus.Bad;
             }
         }
 
@@ -54,8 +55,7 @@ namespace Services
 
         public async Task<StudentSelectDto> GetByStudentNumberAsync(CancellationToken cancellationToken, string code)
         {
-            var model= await _repository.TableNoTracking.Where(c => c.Code == code.Trim()).ProjectTo<StudentSelectDto>().SingleOrDefaultAsync(cancellationToken);
-            if (model == null) throw new BadRequestException("دانشجوی مورد نظر یافت نشد");
+            var model= await _repository.TableNoTracking.Where(c => c.User.UserName == code.Trim()).ProjectTo<StudentSelectDto>().SingleOrDefaultAsync(cancellationToken);
             return model;
 
         }

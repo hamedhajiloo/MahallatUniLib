@@ -1,16 +1,13 @@
 ﻿using Common;
-using Data.Repositories;
-using Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Services;
 using Services.CustomMapping;
-using Services.Dto;
-using Services.Services.Utilities;
+using System;
+using System.Text;
 using WebFramework;
 using WebFramework.Configuration;
 using WebFramework.Middlewares;
@@ -21,6 +18,8 @@ namespace Web
     {
         private readonly SiteSettings _siteSetting;
         public IConfiguration Configuration { get; }
+        //private static readonly byte[] _homePayload = Encoding.UTF8.GetBytes("Endpoint Routing sample endpoints:" + Environment.NewLine + "/plaintext");
+
 
         public Startup(IConfiguration configuration)
         {
@@ -34,41 +33,36 @@ namespace Web
             services.Configure<SiteSettings>(Configuration.GetSection(nameof(SiteSettings)));
             services.AddDbContext(Configuration);
             services.AddCustomIdentity(_siteSetting.IdentitySettings);
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
-            services.AddScoped<IBookService, BookService>();
-            services.AddScoped<IImageService, ImageService>();
-            services.AddScoped<ISettingService, SettingService>();
-            services.AddScoped<IPenaltyService, PenaltyService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IStudentService, StudentService>();
-            services.AddMvc();
-            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+            services.AddMyServicesAndRepositories();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddHttpContextAccessor();
+            //services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+            services.AddJwtAuthentication(_siteSetting.JwtSettings);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //app.UseStatusCodePagesWithRedirects("/Error/Index/{0}");
-            app.UseCustomExceptionHandler();
+
+            app.UseWhen(c => c.Request.Path.StartsWithSegments("/api"), conf =>
+            {
+                conf.UseCustomExceptionHandler();
+                conf.UseMvc();
+            });
+
+            app.UseWhen(c => !c.Request.Path.StartsWithSegments("/api"), conf =>
+            {
+                if (env.IsDevelopment()) conf.UseDeveloperExceptionPage();
+                else { conf.UseStatusCodePagesWithReExecute("/Error/{0}"); }
+                conf.UseMvc();
+            });
+
             // app.UseHsts(env);
             app.UseStaticFiles();
+
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
-
-
-            //For Area
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                  name: "Admin",
-                  template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                );
-            });
-
         }
     }
 }

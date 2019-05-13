@@ -13,7 +13,7 @@ using WebFramework.Filters;
 
 namespace Web.Controllers
 {
-   
+   [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         private readonly IBookService _bookService;

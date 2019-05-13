@@ -1,40 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using newsSite90tv.Models;
-using newsSite90tv.Models.UnitOfWork;
-using newsSite90tv.Models.ViewModels;
+using Services;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
-namespace newsSite90tv.Areas.AdminPanel.Controllers
+namespace Web.Areas.Admin.Controllers
 {
-    [Area("AdminPanel")]
+    [Area("Admin")]
     [Authorize(Roles = "User")]
     public class UserController : Controller
     {
-        private readonly IUnitOfWork _context;
         private readonly IHostingEnvironment _appEnvironment;
-        private readonly UserManager<ApplicationUsers> _userManager;
+        private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
 
-        public UserController(IUnitOfWork context,
-            IHostingEnvironment appEnvironment,
-            UserManager<ApplicationUsers> userManager)
+        public UserController(IHostingEnvironment appEnvironment, UserManager<User> userManager,IUserService userService)
         {
-            _context = context;
             _appEnvironment = appEnvironment;
             _userManager = userManager;
+            _userService = userService;
         }
 
         public IActionResult Index()
         {
             ViewBag.ViewTitle = "لیست کاربران";
-            var model = _context.userManagerUW.Get();
+            var model=await _userService.
             return View(model);
         }
 
@@ -138,7 +134,7 @@ namespace newsSite90tv.Areas.AdminPanel.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditUserViewModel model, string id,
-            string imagename,string chkinput)
+            string imagename, string chkinput)
         {
             if (ModelState.IsValid)
             {
@@ -152,9 +148,9 @@ namespace newsSite90tv.Areas.AdminPanel.Controllers
                     user.Email = model.Email;
                     user.gender = model.gender;
                     user.BirthDayDate = model.BirthDayDate;
-              //      if (imagename == null) user.UserImagePath = "defaultuserImage.png";
+                    //      if (imagename == null) user.UserImagePath = "defaultuserImage.png";
                     if (imagename != null) user.UserImagePath = imagename;
-                    
+
                     if (chkinput == "on")
                     {
                         //Reset Password

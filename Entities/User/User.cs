@@ -16,6 +16,7 @@ namespace Entities
         public User()
         {
             IsActive = true;
+            Gender = GenderType.Male;
         }
 
         #endregion Ctor

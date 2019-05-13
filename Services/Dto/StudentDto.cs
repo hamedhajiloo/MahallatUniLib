@@ -1,21 +1,26 @@
 ﻿using AutoMapper;
 using Common;
 using Common.Enums;
+using Common.Utilities;
 using Common.Utilities.Validation;
 using Entities;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Services.Dto
 {
-    public class StudentDto : BaseDto<StudentDto, Student, string>,IValidatableObject
+    public class StudentDto : BaseDto<StudentDto, Student, string>, IValidatableObject
     {
+
+        [DisplayName("نام و نام خانوادگی")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        [StringLength(100)]
+        public string FullName { get; set; }
+
         [DisplayName("شماره دانشجویی")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public string Code { get; set; }
+        public string UserName { get; set; }
 
         [DisplayName("سال ورود")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
@@ -28,32 +33,26 @@ namespace Services.Dto
 
 
         [DisplayName("کاربر")]
-        [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string UserId { get; set; }
 
         [DisplayName("رشته")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public int FieldId { get; set; }
 
-        public override void CustomMappings(IMappingExpression<Student, StudentDto> mapping)
-        {
-            mapping.ForMember(des => des.EntryYear, opt => opt.MapFrom(src=>int.Parse(src.Code.Substring(0, 2))));
-        }
-
         public IEnumerable<ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
         {
-            if (!Validation.StudentNumber(Code))
-                yield return new ValidationResult("کد دانشجویی را صحیح وارد کنید", new[] { nameof(Code) });
+            if (!Validation.StudentNumber(UserName))
+                yield return new ValidationResult("کد دانشجویی را صحیح وارد کنید", new[] { nameof(UserName) });
         }
     }
     public class StudentSelectDto : BaseDto<StudentSelectDto, Student, string>
     {
         [DisplayName("شماره دانشجویی")]
-        public string Code { get; set; }
+        public string UserName { get; set; }
 
 
         [DisplayName("روزانه / شبانه")]
-        public StudentStatus StudentStatus { get; set; }
+        public string StudentStatus { get; set; }
 
 
         [DisplayName("شناسه کاربر")]
@@ -74,6 +73,9 @@ namespace Services.Dto
         public override void CustomMappings(IMappingExpression<Student, StudentSelectDto> mapping)
         {
             mapping.ForMember(des => des.StudentFullName, opt => opt.MapFrom(src => src.User.FullName));
+            mapping.ForMember(des => des.UserName, opt => opt.MapFrom(src => src.User.UserName));
+            mapping.ForMember(des => des.StudentStatus, opt => opt.MapFrom(src => src.StudentStatus.ToDisplay(DisplayProperty.Name)));
+            mapping.ForMember(des => des.FiledName, opt => opt.MapFrom(src => src.Field.Name));
         }
 
 
