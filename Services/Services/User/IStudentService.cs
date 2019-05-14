@@ -1,5 +1,5 @@
 ﻿using Services.Dto;
-using Services.Enum.Student;
+using Services.Enum.ServicesResult.Student;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,5 +14,7 @@ namespace Services
         Task<AddAsyncStatus> AddAsync(CancellationToken cancellationToken, StudentDto studentDto);
         Task<StudentSelectDto> GetByStudentNumberAsync(CancellationToken cancellationToken, string code);
         Task<StudentSelectDto> GetByIdAsync(CancellationToken cancellationToken, string id);
+        Task<DeleteAsyncStatus> DeleteAsync(string studentId, CancellationToken cancellationToken);
+        Task<ServiceResult<StudentSelectDto>> FindByIdAsync(string id, CancellationToken cancellationToken);
     }
 }

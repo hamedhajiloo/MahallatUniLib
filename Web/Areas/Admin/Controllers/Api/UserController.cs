@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.Dto;
-using Services.Enum.Student;
+using Services.Enum.ServicesResult.Student;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Filters;

@@ -70,6 +70,7 @@ namespace Services.Dto
         [DisplayName("مبلغ جریمه")]
         public decimal PenaltyAmount { get; set; }
 
+
         public override void CustomMappings(IMappingExpression<Student, StudentSelectDto> mapping)
         {
             mapping.ForMember(des => des.StudentFullName, opt => opt.MapFrom(src => src.User.FullName));
