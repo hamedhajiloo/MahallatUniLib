@@ -39,13 +39,14 @@ namespace Services
 
         public async Task<List<BookSelectDto>> GetAllBookAsync(CancellationToken cancellationToken)
         {
-            var result = await _repository.TableNoTracking.OrderByDescending(c => c.Id).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
+            var result = await _repository.TableNoTracking.Where(c => c.IsDeleted == false).OrderByDescending(c => c.Id).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
             return result;
         }
 
         public async Task<List<BookSelectDto>> GetAllBook4AnyField(CancellationToken cancellationToken, Pagable pagable, int FieldId)
         {
             Expression<Func<Book, bool>> expression = p =>
+              p.IsDeleted == false &&
               p.AuthorName.Contains(pagable.Search.Trim()) &&
                                 p.Edition.ToString().Contains(pagable.Search.Trim()) &&
                                 p.Publisher.Contains(pagable.Search.Trim()) &&
@@ -62,7 +63,7 @@ namespace Services
         public async Task<bool> BookExists(BookDto bookDto, CancellationToken cancellationToken)
         {
             return await _repository.TableNoTracking
-                .Where(c => (c.AuthorName == bookDto.AuthorName &&
+                .Where(c =>c.IsDeleted==false&& (c.AuthorName == bookDto.AuthorName &&
                             c.Edition == bookDto.Edition &&
                             c.ISBN == bookDto.ISBN &&
                             c.Language == bookDto.Language &&
@@ -74,14 +75,14 @@ namespace Services
         {
             var model = await _repository.TableNoTracking.Where(c => c.Id == id).SingleOrDefaultAsync(cancellationToken);
             if (model == null) return false;
-
-            await _repository.DeleteAsync(model, cancellationToken);
+            model.IsDeleted = true;
+            await _repository.UpdateAsync(model, cancellationToken);
             return true;
         }
 
         public async Task<BookSelectDto> FindBookByIdAsync(int id, CancellationToken cancellationToken)
         {
-            var model = await _repository.TableNoTracking.Where(c => c.Id == id).ProjectTo<BookSelectDto>().SingleOrDefaultAsync(cancellationToken);
+            var model = await _repository.TableNoTracking.Where(c => c.Id == id&&c.IsDeleted==false).ProjectTo<BookSelectDto>().SingleOrDefaultAsync(cancellationToken);
             return model;
         }
 
@@ -96,7 +97,7 @@ namespace Services
 
         public async Task<BookDto> FindBookById4EditAsync(int id, CancellationToken cancellationToken)
         {
-            var model = await _repository.Table.Where(c => c.Id == id).ProjectTo<BookDto>().SingleOrDefaultAsync(cancellationToken);
+            var model = await _repository.Table.Where(c => c.Id == id&&c.IsDeleted==false).ProjectTo<BookDto>().SingleOrDefaultAsync(cancellationToken);
             return model;
         }
 
@@ -106,7 +107,7 @@ namespace Services
 
 
             if (search != null)
-                models = models.Where(p => (p.AuthorName.Contains(search) ||
+                models = models.Where(p =>p.IsDeleted==false&& (p.AuthorName.Contains(search) ||
                                   p.Edition.ToString().Contains(search) ||
                                   p.Publisher.Contains(search) ||
                                   p.Name.Contains(search) ||
@@ -115,7 +116,7 @@ namespace Services
                                   (language != Language.None ? p.Language == language : true) &&
                                   (bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true));
             else if (search == null)
-                models = models.Where(p => (courseType != CourseType.None ? p.CourseType == courseType : true) &&
+                models = models.Where(p => p.IsDeleted == false && (courseType != CourseType.None ? p.CourseType == courseType : true) &&
                                   (language != Language.None ? p.Language == language : true) &&
                                   (bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true));
 

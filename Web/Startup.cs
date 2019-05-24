@@ -51,7 +51,7 @@ namespace Web
 
             app.UseWhen(c => !c.Request.Path.StartsWithSegments("/api"), conf =>
             {
-                if (env.IsDevelopment()) conf.UseDeveloperExceptionPage();
+                if (!env.IsDevelopment()) conf.UseDeveloperExceptionPage();
                 else { conf.UseStatusCodePagesWithReExecute("/Error/{0}"); }
                 conf.UseMvc();
             });

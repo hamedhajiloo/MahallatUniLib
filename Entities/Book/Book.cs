@@ -18,6 +18,7 @@ namespace Entities
             Language = Language.Persion;
             CourseType = CourseType.General;
             BookStatus = BookStatus.Free;
+            IsDeleted = false;
         }
         #region Properties
         
@@ -25,6 +26,7 @@ namespace Entities
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string ISBN { get; set; }
 
+        public bool IsDeleted { get; set; }
 
         [Display(Name ="تصویر")]
         public string ImageUrl { get; set; }
