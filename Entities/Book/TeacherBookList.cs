@@ -7,9 +7,9 @@ namespace Entities
     public class TeacherBookList : BaseEntity
     {
       
-        public int BookId { get; set; }
+        public int BookListId { get; set; }
         public string ISBN { get; set; }
-        public virtual Book Book { get; set; }
+        public virtual BookList BookList { get; set; }
 
         [ForeignKey(nameof(Teacher))]
         public string TeacherId { get; set; }
@@ -22,9 +22,9 @@ namespace Entities
     {
         public void Configure(EntityTypeBuilder<TeacherBookList> builder)
         {
-            builder.HasOne(c => c.Book)
+            builder.HasOne(c => c.BookList)
                 .WithMany(c => c.TeacherBookList)
-                .HasForeignKey(c => new { c.BookId});
+                .HasForeignKey(c => new { c.BookListId});
         }
     }
     #endregion

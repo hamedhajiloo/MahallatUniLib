@@ -28,9 +28,9 @@ namespace Entities
 
         [DisplayName("کتاب")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        [ForeignKey(nameof(Book))]
-        public int BookId { get; set; }
-        public virtual Book Book { get; set; }
+        [ForeignKey(nameof(BookList))]
+        public int BookListId { get; set; }
+        public virtual BookList BookList { get; set; }
 
     }
 }

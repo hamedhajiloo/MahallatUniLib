@@ -6,9 +6,9 @@ namespace Entities
 {
     public class FieldBookList : BaseEntity
     {
-        public int BookId { get; set; }
+        public int BookListId { get; set; }
         public string ISBN { get; set; }
-        public virtual Book Book { get; set; }
+        public virtual BookList BookList { get; set; }
 
 
         [ForeignKey(nameof(Field))]
@@ -20,9 +20,9 @@ namespace Entities
     {
         public void Configure(EntityTypeBuilder<FieldBookList> builder)
         {
-            builder.HasOne(c => c.Book)
+            builder.HasOne(c => c.BookList)
                 .WithMany(c => c.FieldBookList)
-                .HasForeignKey(c => new { c.BookId});
+                .HasForeignKey(c => new { c.BookListId});
         }
     }
 }

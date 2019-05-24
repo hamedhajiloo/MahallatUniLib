@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Services.Dto
 {
-    public class BookDto : BaseDto<BookDto, Book>/*, IValidatableObject*/
+    public class BookDto : BaseDto<BookDto, BookList>/*, IValidatableObject*/
     {
         public BookDto()
         {
@@ -23,7 +23,7 @@ namespace Services.Dto
 
         [DisplayName("شناسه کتاب")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public string ISBN { get; set; }
+        public List<string> BooksISBN { get; set; }
 
         [DisplayName("نویسنده")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
@@ -59,19 +59,18 @@ namespace Services.Dto
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public BookStatus BookStatus { get; set; }
 
+        
+
         //public IEnumerable<ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
         //{
         //    if (!Validation.ISBN(ISBN))
         //        yield return new ValidationResult("شابک را صحیح وارد نمایید", new[] { nameof(ISBN) });
         //}
     }
-    public class BookSelectDto : BaseDto<BookSelectDto, Book>
+    public class BookSelectDto : BaseDto<BookSelectDto, BookList>
     {
         [DisplayName("نام کتاب")]
         public string Name { get; set; }
-
-        [DisplayName("شابک")]
-        public string ISBN { get; set; }
 
         [DisplayName("نویسنده")]
         public string AuthorName { get; set; }
@@ -107,7 +106,7 @@ namespace Services.Dto
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string BookStatusNum { get; set; }
 
-        public override void CustomMappings(IMappingExpression<Book, BookSelectDto> mapping)
+        public override void CustomMappings(IMappingExpression<BookList, BookSelectDto> mapping)
         {
             mapping.ForMember(des => des.CourseType, opt => opt.MapFrom(src => src.CourseType.ToDisplay(DisplayProperty.Name)));
             mapping.ForMember(des => des.Language, opt => opt.MapFrom(src => src.Language.ToDisplay(DisplayProperty.Name)));
