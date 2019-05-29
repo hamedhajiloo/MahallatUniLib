@@ -84,27 +84,29 @@
         </div>
 
 
-        <div class="box box-body table-responsive no-padding">
+        <div class="box table-responsive box-body no-padding">
 
-            <table class="table table-responsive text-center books">
+            <table class="table table-responsive  text-center books">
                 <thead>
                     <tr style="font-size:15px; font-weight:600;">
-                        <td>@Html.DisplayNameFor(model => model[0].Name)</td>
-                        <td>@Html.DisplayNameFor(model => model[0].AuthorName)</td>
-                        <td>@Html.DisplayNameFor(model => model[0].Edition)</td>
-                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].PublishYear)</td>
-                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].CourseType)</td>
-                        <td>@Html.DisplayNameFor(model => model[0].BookStatus)</td>
-                        <td>عملیات</td>
+                        <td >@Html.DisplayNameFor(model => model[0].Name)</td>
+                        <td >@Html.DisplayNameFor(model => model[0].AuthorName)</td>
+                        <td >@Html.DisplayNameFor(model => model[0].Edition)</td>
+                        <td >@Html.DisplayNameFor(model => model[0].Count)</td>
+                        <td  class="hidden-xs">@Html.DisplayNameFor(model => model[0].PublishYear)</td>
+                        <td  class="hidden-xs">@Html.DisplayNameFor(model => model[0].CourseType)</td>
+                        <td >@Html.DisplayNameFor(model => model[0].BookStatus)</td>
+                        <td style="min-width:250px" scope="col">عملیات</td>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
 
                         <tr>
-                            <td>@item.Name</td>
-                            <td>@item.AuthorName</td>
+                            <td>@(item.Name.Length > 10 ? item.Name.Remove(10) + "...." : item.Name)</td>
+                            <td>@(item.AuthorName.Length > 10 ? item.AuthorName.Remove(10) + "...." : item.AuthorName)</td>
                             <td>@item.Edition</td>
+                            <td>@item.Count</td>
                             <td class="hidden-xs">@item.PublishYear</td>
                             <td class="hidden-xs">@item.CourseType</td>
 
@@ -127,9 +129,9 @@
 
 
                             <td>
-                                <a class="btn btn-sm btn-warning" asp-controller="Books" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
-                                <a class="btn btn-sm btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
-                                <a class="btn btn-sm btn-info" asp-controller="Books" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>
+                                <a class="btn btn-xs btn-warning" asp-controller="Books" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
+                                <a class="btn btn-xs btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
+                                <a class="btn btn-xs btn-info" asp-controller="Books" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>
                                 <input type="hidden" name="bookid" value=@item.Id id="r_@item.Id" />
                             </td>
                         </tr>

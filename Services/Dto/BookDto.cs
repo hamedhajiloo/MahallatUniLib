@@ -106,11 +106,16 @@ namespace Services.Dto
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string BookStatusNum { get; set; }
 
+        [DisplayName("تعداد کتاب")]
+        public int Count { get; set; }
+
+
         public override void CustomMappings(IMappingExpression<BookList, BookSelectDto> mapping)
         {
             mapping.ForMember(des => des.CourseType, opt => opt.MapFrom(src => src.CourseType.ToDisplay(DisplayProperty.Name)));
             mapping.ForMember(des => des.Language, opt => opt.MapFrom(src => src.Language.ToDisplay(DisplayProperty.Name)));
             mapping.ForMember(des => des.BookStatusNum, opt => opt.MapFrom(src => src.BookStatus.ToDisplay(DisplayProperty.Name)));
+            mapping.ForMember(des => des.Count, opt => opt.MapFrom(src => src.Books.Count));
         }
 
     }

@@ -1,7 +1,7 @@
 ﻿@model Services.Dto.BookDto
 
 @{
-    
+
     Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
 
 }
@@ -17,8 +17,8 @@
         </style>
 
         <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
-            <form asp-area="Admin" asp-controller="Books" asp-action="Create" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form id="formId" asp-area="Admin" asp-controller="Books" asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="col-md-4 col-lg-4" style="margin-bottom:15px; margin-top:15px;">
                     <div class="form-group">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="col-md-4  col-lg-4" style="margin-bottom:15px; margin-top:15px;">
-                    
+
                     @* نام کتاب *@
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
@@ -40,10 +40,10 @@
 
                     @*ISBN *@
                     @*<div class="form-group">
-                <label asp-for="ISBN" class="control-label"></label>
-                <input asp-for="ISBN" class="form-control circleInput" placeholder="" />
-                <span asp-validation-for="ISBN" class="text-danger"></span>
-            </div>*@
+                            <label asp-for="ISBN" class="control-label"></label>
+                            <input asp-for="ISBN" class="form-control circleInput" placeholder="" />
+                            <span asp-validation-for="ISBN" class="text-danger"></span>
+                        </div>*@
 
                     @*نویسنده *@
                     <div class="form-group">
@@ -111,7 +111,7 @@
 
 
                     <div class="form-group">
-                        <input type="submit" value="ایجاد" class="btn btn-success" />
+                        <input type="submit" value="ایجاد" class="btn btn-success formSubmit" />
                         <a asp-action="Index" class="btn btn-danger">بازگشت</a>
                     </div>
 
@@ -123,8 +123,8 @@
                             @ViewBag.SuccessMessage
                         </span>
                     }
-
                 </div>
+               
             </form>
             <div class="col-md-4 col-lg-4" style="margin-top:25px; margin-bottom:25px;">
                 <div class="col-md-10 col-md-offset-1">
@@ -148,7 +148,7 @@
                 </div>
             </div>
         </div>
-       
+
     </div>
 </div>
 
@@ -156,58 +156,85 @@
 
 
 @section PanelScripts {
+    <script src="~/lib/toastr/toastr.min.js"></script>
     <script>
         var UploadImage = function () {
-            var data = new FormData;
-            var file = $("#files").get(0);
-            var files = file.files;
-
-            for (var i = 0; i < files.length; i++) {
-                data.append('files', files[i]);
-            }
-
-            $.ajax({
-                type: "post",
-                url: '@Url.Action("UploadImage", "Books", new { area = "Admin"})',
-                data: data,
-                contentType: false,
-                processData: false,
-            }).done(function (result) {
-                if (result.status == "success") {
-                   // var imageurl = "\\upload\\image\\normalimage\\" + result.imagename;
-                    $("#imgbook").attr('src', "\\upload\\image\\\\book\\normalimage\\" + result.imagename);
-
-                    $("#divmessage").removeClass('hidden');
-                    $("#divmessage").text("تصویر با موفقیت آپلود شد");
-                    $("#imagename").val(result.imagename);
-
-                    }
-                }).fail(function (result) {
-                    if (result.status != "success") {
-                        $("#divmessage").removeClass('hidden');
-                        $("#divmessage").text("در هنگام آپلود مشکلی رخ داد");
-
-                    }
-                });
-
-            }
-
-    var create_isbn_input = function () {
-        var count = parseInt($("#isbncount").val());
-        document.getElementById("isbntag").innerHTML = "";
-        for (var i = 1; i <= count; i++) {
-            var input = ' <input type="text" name="isbn'+i+'" id="isbn'+i+'" class="form-control circleInput" value="" onchange="f()" />';
-            var message = "شابک کتاب " + i + " ";
-            var lable = '<lable for="isbn' + i + '">' + message + '</lable>';
-            $("#isbntag").append(lable);
-            $("#isbntag").append(input);
+        var data = new FormData();
+        var file = $('#files').get(0);
+        var files = file.files;
+        for (var i = 0; i < files.length; i++) {
+            data.append('files', files[i]);
         }
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("UploadImage", "Books", new { area = "Admin" })',
+            data: data,
+            contentType: false,
+            processData: false
+        })
+            .done(function(result) {
+            if (result.status == 'success') {
+                // var imageurl = "\\upload\\image\\normalimage\\" + result.imagename;
+                $('#imgbook').attr('src', '\\upload\\image\\\\book\\normalimage\\' + result.imagename);
+                $('#divmessage').removeClass('hidden');
+                $('#divmessage').text('تصویر با موفقیت آپلود شد');
+                $('#imagename').val(result.imagename);
+            }
+            })
+            .fail(function(result) {
+            if (result.status != 'success') {
+                $('#divmessage').removeClass('hidden');
+                $('#divmessage').text('در هنگام آپلود مشکلی رخ داد');
+            }
+            });
+        };
+        var create_isbn_input = function() {
+        var count = parseInt($('#isbncount').val());
+        document.getElementById('isbntag').innerHTML = '';
+        for (var i = 1; i <= count; i++) {
+                var message = 'شابک کتاب ' + i + ' ';
+                var input = ' <input type="text" data-message="' + message + '" id="isbn' + i + '" class="form-control circleInput" value="" name="BooksISBN[]" onchange="f()"  />';
+                var lable = '<lable for="isbn' + i + '">' + message + '</lable>';
+                $('#isbntag').append(lable);
+                $('#isbntag').append(input);
+            }
+        };
 
-    }
+    //*************************************************************************************
+     //این کد برای بررسی صحت شابک است . در صورت عدم صحت پیام خطایی نمایش داده می شود
+        $(document).on('blur', '#isbntag input', function(e) {
+        var ISBN = $(this).val();
+           var message = $(this).attr("data-message");
+            console.log(message);
+            console.log(ISBN);
 
-    var f = function () {
-      
-    }
+        if (ISBN.length < 5) {
+            toastr.error(message + ' را وارد کنید ');
+        }
+        });
+    //*************************************************************************************
+
+
+
+    //*************************************************************************************
+  $('.formSubmit').click(function (e) {
+      e.preventDefault();
+      var ISBNs = new Array();
+      var validation = true;
+      $('#isbntag input').each(function (index, value) {
+        var v = $(this).val();
+        ISBNs.push(v);
+        var message = $(this).attr('data-message');
+        if (v.length < 5) {
+          validation = false;
+          toastr.error(message + ' را وارد کنید ');
+        }
+      });
+      if (validation) {
+        $('#formId').submit();
+      }
+    });
+
+
     </script>
-    
 }
