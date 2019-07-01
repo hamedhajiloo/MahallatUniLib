@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Services;
+using Services.DataInitializer;
 using Services.Services.Utilities;
 using System;
 using System.Linq;
@@ -170,6 +171,9 @@ namespace WebFramework
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IDataInitializer, CategoryDataInitializer>();
+            services.AddScoped<IDataInitializer, FieldDataInitializer>();
+            services.AddScoped<IDataInitializer, TestDataInitializer>();
         }
 
     }

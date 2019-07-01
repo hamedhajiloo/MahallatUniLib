@@ -1,4 +1,4 @@
-﻿
+﻿@model Web.Model.HomeIndexVM
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,12 +26,10 @@
                     </div>
                     <div class="sidebar-menu">
                         <ul>
-                            <li><a href="shop-grid.html" class="single-menu">(مهندسی کامپیوتر ( نرم افزار </a></li>
-                            <li><a href="shop-grid.html" class="single-menu">علوم کامپیوتر</a></li>
-                            <li><a href="shop-grid.html" class="single-menu">مهندسی صنایع</a></li>
-                            <li><a href="shop-grid.html" class="single-menu">مهندسی مکانیک</a></li>
-                            <li><a href="shop-grid.html" class="single-menu">مهندسی عمران</a></li>
-                            <li><a href="shop-grid.html" class="single-menu">معماری</a></li>
+                            @foreach (var item in Model.Fields)
+                            {
+                                <li><a href="shop-grid.html" class="single-menu">@item.Name</a></li>
+                            }
                             <li><a href="shop-grid.html" class="single-menu">عمومی</a></li>
                         </ul>
                     </div>
@@ -82,29 +80,29 @@
     </div>
 </div>
 <!-- End categori area -->
-<!-- Start featured product -->
+<!-- Start featured product   مهندسی کامپیوتر-->
 <div class="featured-product-area">
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-12">
                 <div class="area-title">
-                    <h3>مهندسی کامپیوتر - نرم افزار</h3>
+                    <h3>مهندسی کامپیوتر</h3>
                 </div>
             </div>
             <div class="featured-product">
                 <div class="featured-item">
-                    @for (int i = 0; i < 10; i++)
+                    @foreach (var item in Model.ComputerBooks)
                     {
                         <!-- Start featured item -->
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
                                     <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
                                     </a>
                                 </div>
                                 <div class="featured-info">
-                                    <a href="single-product.html">ریاضی 1</a>
+                                    <a href="single-product.html">@item.Name</a>
                                     <div class="featured-button">
                                         <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
                                         <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
@@ -114,25 +112,7 @@
                             </div>
                         </div>
                         <!-- End featured item -->
-                        <!-- Start featured item -->
-                        <div class="col-sm-3">
-                            <div class="featured-inner">
-                                <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="featured-info">
-                                    <a href="single-product.html">فیزیک 1</a>
-                                    <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End featured item -->
+
                     }
                 </div>
             </div>
@@ -140,29 +120,29 @@
     </div>
 </div>
 <!-- End featured product -->
-<!-- Start featured product -->
+<!-- Start featured product   علوم کامپیوتر-->
 <div class="featured-product-area">
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-12">
                 <div class="area-title">
-                    <h3>علوم کامپیوتر </h3>
+                    <h3>علوم کامپیوتر</h3>
                 </div>
             </div>
             <div class="featured-product">
                 <div class="featured-item">
-                    @for (int i = 0; i < 10; i++)
+                    @foreach (var item in Model.UlomBooks)
                     {
                         <!-- Start featured item -->
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
                                     <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
                                     </a>
                                 </div>
                                 <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
+                                    <a href="single-product.html">@item.Name</a>
                                     <div class="featured-button">
                                         <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
                                         <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
@@ -172,25 +152,7 @@
                             </div>
                         </div>
                         <!-- End featured item -->
-                        <!-- Start featured item -->
-                        <div class="col-sm-3">
-                            <div class="featured-inner">
-                                <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
-                                    <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End featured item -->
+
                     }
                 </div>
             </div>
@@ -198,7 +160,7 @@
     </div>
 </div>
 <!-- End featured product -->
-<!-- Start featured product -->
+<!-- Start featured product   مهندسی صنایع-->
 <div class="featured-product-area">
     <div class="container">
         <div class="row">
@@ -209,18 +171,18 @@
             </div>
             <div class="featured-product">
                 <div class="featured-item">
-                    @for (int i = 0; i < 10; i++)
+                    @foreach (var item in Model.SanayeBooks)
                     {
                         <!-- Start featured item -->
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
                                     <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
                                     </a>
                                 </div>
                                 <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
+                                    <a href="single-product.html">@item.Name</a>
                                     <div class="featured-button">
                                         <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
                                         <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
@@ -230,25 +192,7 @@
                             </div>
                         </div>
                         <!-- End featured item -->
-                        <!-- Start featured item -->
-                        <div class="col-sm-3">
-                            <div class="featured-inner">
-                                <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
-                                    <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End featured item -->
+
                     }
                 </div>
             </div>
@@ -256,7 +200,7 @@
     </div>
 </div>
 <!-- End featured product -->
-<!-- Start featured product -->
+<!-- Start featured product   مهندسی مکانیک-->
 <div class="featured-product-area">
     <div class="container">
         <div class="row">
@@ -267,18 +211,18 @@
             </div>
             <div class="featured-product">
                 <div class="featured-item">
-                    @for (int i = 0; i < 10; i++)
+                    @foreach (var item in Model.MechanickBooks)
                     {
                         <!-- Start featured item -->
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
                                     <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
                                     </a>
                                 </div>
                                 <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
+                                    <a href="single-product.html">@item.Name</a>
                                     <div class="featured-button">
                                         <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
                                         <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
@@ -288,25 +232,7 @@
                             </div>
                         </div>
                         <!-- End featured item -->
-                        <!-- Start featured item -->
-                        <div class="col-sm-3">
-                            <div class="featured-inner">
-                                <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
-                                    <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End featured item -->
+
                     }
                 </div>
             </div>
@@ -314,7 +240,7 @@
     </div>
 </div>
 <!-- End featured product -->
-<!-- Start featured product -->
+<!-- Start featured product   مهندسی عمران-->
 <div class="featured-product-area">
     <div class="container">
         <div class="row">
@@ -325,18 +251,18 @@
             </div>
             <div class="featured-product">
                 <div class="featured-item">
-                    @for (int i = 0; i < 10; i++)
+                    @foreach (var item in Model.OmranBooks)
                     {
                         <!-- Start featured item -->
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
                                     <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
                                     </a>
                                 </div>
                                 <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
+                                    <a href="single-product.html">@item.Name</a>
                                     <div class="featured-button">
                                         <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
                                         <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
@@ -346,25 +272,7 @@
                             </div>
                         </div>
                         <!-- End featured item -->
-                        <!-- Start featured item -->
-                        <div class="col-sm-3">
-                            <div class="featured-inner">
-                                <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
-                                    <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End featured item -->
+
                     }
                 </div>
             </div>
@@ -372,7 +280,7 @@
     </div>
 </div>
 <!-- End featured product -->
-<!-- Start featured product -->
+<!-- Start featured product   معماری-->
 <div class="featured-product-area">
     <div class="container">
         <div class="row">
@@ -383,18 +291,18 @@
             </div>
             <div class="featured-product">
                 <div class="featured-item">
-                    @for (int i = 0; i < 10; i++)
+                    @foreach (var item in Model.Memary)
                     {
                         <!-- Start featured item -->
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
                                     <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
+                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
                                     </a>
                                 </div>
                                 <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
+                                    <a href="single-product.html">@item.Name</a>
                                     <div class="featured-button">
                                         <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
                                         <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
@@ -404,25 +312,7 @@
                             </div>
                         </div>
                         <!-- End featured item -->
-                        <!-- Start featured item -->
-                        <div class="col-sm-3">
-                            <div class="featured-inner">
-                                <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
-                                    <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End featured item -->
+
                     }
                 </div>
             </div>

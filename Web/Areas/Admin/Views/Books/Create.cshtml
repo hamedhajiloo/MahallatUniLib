@@ -124,7 +124,7 @@
                         </span>
                     }
                 </div>
-               
+
             </form>
             <div class="col-md-4 col-lg-4" style="margin-top:25px; margin-bottom:25px;">
                 <div class="col-md-10 col-md-offset-1">
@@ -193,13 +193,68 @@
         document.getElementById('isbntag').innerHTML = '';
         for (var i = 1; i <= count; i++) {
                 var message = 'شابک کتاب ' + i + ' ';
-                var input = ' <input type="text" data-message="' + message + '" id="isbn' + i + '" class="form-control circleInput" value="" name="BooksISBN[]" onchange="f()"  />';
+                var input = ' <input type="text" data-message="' + message + '" id="isbn' + i + '" class="form-control circleInput" value="" name="BooksISBN[]"   />';
                 var lable = '<lable for="isbn' + i + '">' + message + '</lable>';
                 $('#isbntag').append(lable);
                 $('#isbntag').append(input);
             }
-        };
+    };
+    var ISBNValidation = function(value) {
+        //var _value = value;
+        //var validate = _value.match("[0-9]{13}|[0-9]{10}");
+        //if (validate)
+        //    {
+        //        var count = _value.length;
+        //        //var cArray = _value.split('').join(',');
+        //        var cArray = _value;
+        //        if (count == 10)
+        //        {
+        //            var s = 0;
+        //            for (var i = 10; i >= 1; i--)
+        //            {
+        //                s += parseInt(i * cArray[10 - i]);
+        //            }
+        //            if (s % 11 == 0)
+        //                return true;
+        //            else
+        //                return false;
+        //        }
+        //        else if (count == 13)
+        //        {
+        //            var s = 0;
+        //            for (var i = 12; i >= 1; i--)
+        //            {
+        //                //console.log(cArray[i]);
+        //                //console.log(parseInt(cArray[i]));
+        //                //console.log(s);
+        //                //console.log('__________***************___________');
 
+        //                if (i % 2 == 0)
+        //                    s += parseInt(cArray[12-i]);
+        //                else
+        //                    s += parseInt((3 * cArray[12 - i]));
+        //            }
+        //            s -= parseInt(cArray[12]);
+        //            //console.log('__________+++++++++++++++++___________');
+        //            //console.log(s);
+        //            if (s % 10 == 0)
+        //                return true;
+        //            else if (s % 10 != 0)
+        //                return false;
+
+        //        }
+        //        else
+        //            return false;
+
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //    return false;
+
+        return true;
+    }
     //*************************************************************************************
      //این کد برای بررسی صحت شابک است . در صورت عدم صحت پیام خطایی نمایش داده می شود
         $(document).on('blur', '#isbntag input', function(e) {
@@ -208,8 +263,8 @@
             console.log(message);
             console.log(ISBN);
 
-        if (ISBN.length < 5) {
-            toastr.error(message + ' را وارد کنید ');
+        if (!ISBNValidation(ISBN)) {
+            toastr.error(message + ' را با فرمت صحیح وارد کنید ');
         }
         });
     //*************************************************************************************
@@ -225,9 +280,9 @@
         var v = $(this).val();
         ISBNs.push(v);
         var message = $(this).attr('data-message');
-        if (v.length < 5) {
+        if (!ISBNValidation(v)) {
           validation = false;
-          toastr.error(message + ' را وارد کنید ');
+          toastr.error(message + ' را با فرمت صحیح وارد کنید ');
         }
       });
       if (validation) {

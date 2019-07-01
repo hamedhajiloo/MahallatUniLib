@@ -42,6 +42,7 @@ namespace Web
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.IntializeDatabase();
 
             app.UseWhen(c => c.Request.Path.StartsWithSegments("/api"), conf =>
             {

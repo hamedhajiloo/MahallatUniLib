@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Services.Dto
 {
@@ -16,6 +17,7 @@ namespace Services.Dto
         public BookDto()
         {
             BookStatus = BookStatus.Free;
+            BooksISBN = new List<string>();
         }
         [DisplayName("نام کتاب")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
@@ -23,7 +25,7 @@ namespace Services.Dto
 
         [DisplayName("شناسه کتاب")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public List<string> BooksISBN { get; set; }
+        public IList<string> BooksISBN { get; set; }
 
         [DisplayName("نویسنده")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
@@ -59,8 +61,11 @@ namespace Services.Dto
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public BookStatus BookStatus { get; set; }
 
-        
+        //public override void CustomMappings(IMappingExpression<BookList, BookDto> mapping)
+        //{
+        //    mapping.ForMember(des => des.BooksISBN, opt => opt.MapFrom(src => src.Books.Select(c=>c.ISBN).ToList()));
 
+        //}
         //public IEnumerable<ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
         //{
         //    if (!Validation.ISBN(ISBN))

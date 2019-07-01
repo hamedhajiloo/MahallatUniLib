@@ -1,7 +1,7 @@
 ﻿@model Services.Dto.BookDto
 
 @{
-   
+
     Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
 
 }
@@ -17,12 +17,22 @@
         </style>
 
         <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
-            <div class="col-md-4 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+            <div class="col-md-4 col-lg-4 col-sm-4">
+                @foreach (var item in Model.BooksISBN)
+                {
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        <input name="BooksISBN"  class="form-control circleInput" placeholder="" value="@item" />
+                    </div>
+                }
+            </div>
+            <div class="col-md-4 col-lg-4 col-sm-4 " style="margin-bottom:15px; margin-top:15px;">
                 <form asp-area="Admin" asp-controller="Books" asp-action="Edit" method="post">
                     
 
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" name="bookid" value="@Model.Id" />
+                    <input type="hidden" name="id" value="@Model.Id" />
 
                     @* نام کتاب *@
                     <div class="form-group">
@@ -123,7 +133,7 @@
 
             </div>
 
-            <div class="col-md-4" style="margin-top:25px; margin-bottom:25px;">
+            <div class="col-md-4 col-lg-4 col-sm-4" style="margin-top:25px; margin-bottom:25px;">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="box box-widget widget-user">
                         <div class="widget-user-header bg-light-blue-active text-center">

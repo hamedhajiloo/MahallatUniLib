@@ -14,7 +14,7 @@ namespace Entities
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string Name { get; set; }
 
-        public virtual List<Book> Books { get; set; }
+        public virtual List<FieldBookList> FieldBookLists { get; set; }
         public virtual List<Student> Students { get; set; }
         public virtual List<Teacher> Teachers { get; set; }
 

@@ -19,5 +19,6 @@ namespace Services
         Task<BookSelectDto> FindBookByIdAsync(int id, CancellationToken cancellationToken);
         Task<BookDto> FindBookById4EditAsync(int id, CancellationToken cancellationToken);
         Task<bool> EditAsync( BookDto bookDto, CancellationToken cancellationToken);
+        Task<List<BookSelectDto>> GetAllBook4AnyField(CancellationToken cancellationToken, Pagable pagable, int FieldId);
     }
 }

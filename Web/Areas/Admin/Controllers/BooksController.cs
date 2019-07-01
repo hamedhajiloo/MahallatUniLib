@@ -1,11 +1,16 @@
 ﻿using Common;
 using Common.Enums;
+using Data.Repositories;
+using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Dto;
 using Services.Services.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Filters;
@@ -20,11 +25,15 @@ namespace Web.Areas.Admin.Controllers
     {
         private readonly IBookService _bookService;
         private readonly IImageService _imageService;
+        private readonly IRepository<BookList> _repository;
+        private readonly IRepository<Book> _bRepository;
 
-        public BooksController(IBookService bookService, IImageService imageService)
+        public BooksController(IBookService bookService, IImageService imageService, IRepository<BookList> repository, IRepository<Book> bRepository)
         {
             _bookService = bookService;
             _imageService = imageService;
+            _repository = repository;
+            _bRepository = bRepository;
         }
         [HttpGet]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -97,6 +106,13 @@ namespace Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit([FromHeader]CancellationToken cancellationToken, BookDto bookDto, string imagename)
         {
+            foreach (var modelState in ViewData.ModelState.Values)
+            {
+                foreach (ModelError error in modelState.Errors)
+                {
+                    TempData["Error"] = error.ErrorMessage;
+                }
+            }
             if (ModelState.IsValid)
             {
                 if (imagename != null)
@@ -115,18 +131,55 @@ namespace Web.Areas.Admin.Controllers
             return View(bookDto);
         }
 
-        [HttpGet]
+
+        [HttpGet("id:int")]
+        public async Task<IActionResult> DeleteOneBook([FromHeader]CancellationToken cancellationToken, int id)
+        {
+            var exists = await _repository.Table.Where(c => c.Id == id).Include(c => c.Books).FirstOrDefaultAsync(cancellationToken);
+
+            if (exists == null)
+            {
+                TempData["Error"] = "این کتاب در سیستم وجود ندارد";
+                return RedirectToAction(nameof(Index));
+            }
+            var bookCount = exists.Books.Count;
+            if (bookCount > 1)
+            {
+                var deletBook = await _bRepository.Table.FirstOrDefaultAsync(c => c.BookListId == id, cancellationToken);
+                await _bRepository.DeleteAsync(deletBook, cancellationToken);
+            }
+            else
+            {
+                try
+                {
+                    var deletBook = await _bRepository.Table.FirstOrDefaultAsync(c => c.BookListId == id, cancellationToken);
+                    await _bRepository.DeleteAsync(deletBook, cancellationToken);
+                    await _bookService.DeleteAsync(exists.Id, cancellationToken);
+                }
+                catch (System.Exception)
+                {
+
+                    throw;
+                }
+            }
+            TempData["Success"] = "کتاب با موفقیت حذف شد";
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpGet("id:int")]
         public async Task<IActionResult> Details(int id, [FromHeader]CancellationToken cancellationToken)
         {
             var model = await _bookService.FindBookByIdAsync(id, cancellationToken);
             return View(model);
         }
 
-        [ApiResultFilter]
+    
         public async Task<IActionResult> Search(CancellationToken cancellationToken, Language lan, CourseType ctype, int field, BookStatus bstatus, Pagable pagable)
         {
             var model = await _bookService.GetAllBookAsync(cancellationToken, ctype, bstatus, lan, field, pagable.Search);
-            return Ok(model);
+            //return Ok(model);
+            return View(nameof(Index),model);
         }
     }
 }

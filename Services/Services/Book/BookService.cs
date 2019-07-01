@@ -62,7 +62,7 @@ namespace Services
                                 p.PublishYear.ToString().Contains(pagable.Search.Trim()) &&
                                 p.Name.Contains(pagable.Search.Trim()) &&
                                 p.Language.ToString().Contains(pagable.Search.Trim()) &&
-                                p.FieldBookList.Select(c => c.FieldId).Equals(FieldId)).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
+                                p.FieldBookList.Select(c => c.FieldId).Contains(FieldId)).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
             return model;
         }
 
@@ -94,23 +94,23 @@ namespace Services
 
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            var model = await _repository.TableNoTracking.Where(c => c.Id == id).SingleOrDefaultAsync(cancellationToken);
+            var model = await _bookList.Table.Where(c => c.Id == id).SingleOrDefaultAsync(cancellationToken);
             if (model == null) return false;
-            model.BookIsDeleted = true;
-            await _repository.UpdateAsync(model, cancellationToken);
+            model.BookListIsDeleted = true;
+            await _bookList.UpdateAsync(model, cancellationToken);
             return true;
         }
 
         public async Task<BookSelectDto> FindBookByIdAsync(int id, CancellationToken cancellationToken)
         {
-            var model = await _repository.TableNoTracking.Where(c => c.Id == id && c.BookIsDeleted == false).ProjectTo<BookSelectDto>().SingleOrDefaultAsync(cancellationToken);
+            var model = await _bookList.TableNoTracking.Where(c => c.Id == id && c.BookListIsDeleted == false).ProjectTo<BookSelectDto>().SingleOrDefaultAsync(cancellationToken);
             return model;
         }
 
         public async Task<bool> EditAsync(BookDto bookDto, CancellationToken cancellationToken)
         {
-            var exists = await BookExists(bookDto, cancellationToken);
-            if (exists == true) return false;
+            var exists = await _bookList.Table.Where(c => c.Id == bookDto.Id).AnyAsync(cancellationToken);
+            if (exists != true) return false;
             var bookList = bookDto.ToEntity();
             await _bookList.UpdateAsync(bookList, cancellationToken);
             return true;
@@ -118,7 +118,27 @@ namespace Services
 
         public async Task<BookDto> FindBookById4EditAsync(int id, CancellationToken cancellationToken)
         {
-            var model = await _repository.Table.Where(c => c.Id == id && c.BookIsDeleted == false).ProjectTo<BookDto>().SingleOrDefaultAsync(cancellationToken);
+            var model = await _bookList.Table.Where(c => c.Id == id && c.BookListIsDeleted == false).ProjectTo<BookDto>().SingleOrDefaultAsync(cancellationToken);
+            var books = await _repository.Table.Where(c=>c.BookListId==id).ToListAsync(cancellationToken);
+            var isbns = books.Select(c => c.ISBN);
+            try
+            {
+                //IList<string> isbnList = new List<string>();
+                //foreach (var item in isbns)
+                //{
+                //    isbnList.Add(item);
+                //}
+                //foreach (var item in isbns)
+                //{
+                //    model.BooksISBN.Add(item);
+                //}
+                model.BooksISBN = isbns.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
             return model;
         }
 
@@ -127,7 +147,8 @@ namespace Services
             var models = _bookList.TableNoTracking;
 
 
-            if (search != null)
+            if (search != null) { 
+                search = search.Trim();
                 models = models.Where(p => p.BookListIsDeleted == false && (p.AuthorName.Contains(search) ||
                                   p.Edition.ToString().Contains(search) ||
                                   p.Publisher.Contains(search) ||
@@ -135,6 +156,7 @@ namespace Services
                                   (courseType != CourseType.None ? p.CourseType == courseType : true) &&
                                   (language != Language.None ? p.Language == language : true) &&
                                   (bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true));
+            }
             else if (search == null)
                 models = models.Where(p => p.BookListIsDeleted == false && (courseType != CourseType.None ? p.CourseType == courseType : true) &&
                                   (language != Language.None ? p.Language == language : true) &&

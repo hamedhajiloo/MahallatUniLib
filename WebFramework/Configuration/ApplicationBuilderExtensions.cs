@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Services.DataInitializer;
 //using Services.DataInitializer;
 using System;
 using System.Collections.Generic;
@@ -22,21 +23,21 @@ namespace WebFramework.Configuration
                 app.UseHsts();
         }
 
-        //public static void IntializeDatabase(this IApplicationBuilder app)
-        //{
-        //    using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-        //    {
-        //        var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>(); //Service locator
+        public static void IntializeDatabase(this IApplicationBuilder app)
+        {
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>(); //Service locator
 
-        //        //Dos not use Migrations, just Create Database with latest changes
-        //        //dbContext.Database.EnsureCreated();
-        //        //Applies any pending migrations for the context to the database like (Update-Database)
-        //        dbContext.Database.Migrate();
+                //Dos not use Migrations, just Create Database with latest changes
+                //dbContext.Database.EnsureCreated();
+                //Applies any pending migrations for the context to the database like (Update-Database)
+                dbContext.Database.Migrate();
 
-        //        var dataInitializers = scope.ServiceProvider.GetServices<IDataInitializer>();
-        //        foreach (var dataInitializer in dataInitializers)
-        //            dataInitializer.InitializeData();
-        //    }
-        //}
+                var dataInitializers = scope.ServiceProvider.GetServices<IDataInitializer>();
+                foreach (var dataInitializer in dataInitializers)
+                    dataInitializer.InitializeData();
+            }
+        }
     }
 }
