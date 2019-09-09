@@ -26,7 +26,7 @@ namespace Entities
 
         public virtual Field Field { get; set; }
 
-        public virtual List<TeacherBookList> TeacherBookList { get; set; }
+        public virtual List<TeacherBook> TeacherBook { get; set; }
 
         #endregion Relations
     }

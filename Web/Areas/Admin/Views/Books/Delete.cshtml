@@ -1,0 +1,200 @@
+﻿@model Services.Dto.BookSelectDto
+
+@{
+
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+
+}
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h2 class="text-center">حذف کتاب</h2>
+    </div>
+    <div class="panel-body">
+        <style>
+            .circleInput {
+                border-radius: 3px;
+            }
+        </style>
+
+        <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+            <div class="col-md-4 col-lg-4 col-sm-4">
+                <h3>شابک ها</h3>
+                <hr />
+                <br />
+                @for (int i = 0; i < Model.Isbns.Count(); i++)
+                {
+                    var myclass = "isbn" + i;
+                    <div class="divisbn form-group isbn">
+                        @*<label class="control-label">شابک @(i + 1)</label>*@
+                        <a class="btn btn-xs btn-danger" onclick='DeleteAlarm("r_@Model.Isbns[i].Id")' data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>
+                        <input type="text" disabled class="form-control circleInput @myclass" value="@Model.Isbns[i].Value" />
+                        <input type="hidden" id="r_@Model.Isbns[i].Id" value="@Model.Isbns[i].Id" />
+                    </div>
+
+
+                }
+            </div>
+            <h3>مشخصات کتاب</h3>
+            <hr />
+
+            <div class="col-md-4 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+
+                <dl class="dl-horizontal">
+                    @*
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ISBN)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.ISBN)
+                        </dd>*@
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.AuthorName)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.AuthorName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Publisher)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Publisher)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PublishYear)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.PublishYear)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Edition)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Edition)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Language)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Language)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CourseType)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.CourseType)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Count)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Count)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BookStatus)
+                    </dt>
+
+                    @{
+                        if (Model.BookStatus == Common.Enums.BookStatus.Free)
+                        {
+                            <dd style="color:forestgreen">@Model.BookStatusNum</dd>
+                        }
+                        else if (Model.BookStatus == Common.Enums.BookStatus.Reserved)
+                        {
+                            <dd style="color:yellow">@Model.BookStatusNum</dd>
+                        }
+                        else if (Model.BookStatus == Common.Enums.BookStatus.Borrowed)
+                        {
+                            <dd style="color:red">@Model.BookStatusNum</dd>
+                        }
+                    }
+
+                </dl>
+                <a asp-action="Details" asp-route-id="@Model.Id">جزئیات</a> |
+                <a asp-action="Index">بازگشت</a>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">حذف کتاب</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>آیا برای حذف این کتاب اطمینان دارید؟</h3>
+                </div>
+                <div class="modal-footer">
+                    <form>
+                        <input type="hidden" name="isbnId" id="isbnId" value="" />
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">انصراف</button>
+
+                        <button type="button" class="deleteisbn btn btn-danger">حذف</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<input type="hidden" id="bookId" value="@Model.Id" />
+
+@section PanelScripts{
+    <script>
+        function DeleteAlarm(obj) {
+            var isbnId = $("#" + obj).val();
+            $('#isbnId').val(isbnId);
+        }
+        $('.deleteisbn').click(function () {
+            var id = $('#isbnId').val();
+            var bookId = $('#bookId').val();
+
+             var returnurl = "/Admin/Books/Delete/".concat(bookId);
+            var url = "/Admin/Books/DeleteOne?isbnId=" + id + "";
+            $.ajax({
+                type: "GET",
+                url: url,
+                contentType: "application/json",
+                processData: false,
+                dataType: "json",
+                success: function (response) {
+                    //var dvItems = $(".divisbn");
+                    //var str = "";
+                    //dvItems.empty();
+                    //var c = 0;
+                    //$.each(response, function (index, value) {
+
+                    //    c++;
+                    //    var myclass = "isbn" + c;
+                    //    var id = 'r_'.concat(value.Id);
+                    //    str += "<a class='btn btn-xs btn-danger' onclick='DeleteAlarm("+id+")' data-toggle='modal' data-target='#deletemodal' style='margin-right:5px;margin-left:14px;'><i class='glyphicon glyphicon-trash'></i> حذف</a>" +
+                    //        " <input type='text' disabled class='form-control circleInput '+myclass+'' value='" + value.Value + "' />" +
+                    //        "<input type='hidden' id='r_" + value.Id + "' value='" + value.Id + "' />";
+
+
+                    //});
+
+                    //dvItems.append(str);
+                    window.location.replace(returnurl);
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+
+        });
+
+    </script>
+
+}

@@ -27,7 +27,7 @@
                     @* متن جستجو *@
                     <div class="form-group">
                         <label class="control-label">متن جستجو</label>
-                        <input type="text" name="search" value=" " class="form-control circleInput search" />
+                        <input type="text" name="search" value="" class="form-control circleInput search" onkeydown="Search()" />
                     </div>
                 </div>
                 <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
@@ -95,12 +95,15 @@
                         <td>@Html.DisplayNameFor(model => model[0].Count)</td>
                         <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].PublishYear)</td>
                         <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].CourseType)</td>
+                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].Language)</td>
                         <td>@Html.DisplayNameFor(model => model[0].BookStatus)</td>
                         <td style="min-width:250px" scope="col">عملیات</td>
                 </thead>
+                
                 <tbody>
                     @foreach (var item in Model)
                     {
+                        var isbn = item.Isbns.FirstOrDefault()?.Value ?? "";
 
                         <tr>
                             <td>
@@ -108,9 +111,10 @@
                             </td>
                             <td>@(item.AuthorName.Length > 10 ? item.AuthorName.Remove(10) + "...." : item.AuthorName)</td>
                             <td>@item.Edition</td>
-                            <td>@item.Count</td>
+                            <td>@item.Isbns.Count</td>
                             <td class="hidden-xs">@item.PublishYear</td>
                             <td class="hidden-xs">@item.CourseType</td>
+                            <td class="hidden-xs">@item.Language</td>
 
                             @if (item.BookStatus == Common.Enums.BookStatus.None)
                             {
@@ -132,9 +136,8 @@
 
                             <td>
                                 <a class="btn btn-xs btn-warning" asp-controller="Books" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
-                                <a class="btn btn-xs btn-primary" asp-controller="Books" asp-action="DeleteOneBook" asp-route-id="@item.Id"><i class="glyphicon glyphicon-minus-sign"></i> کاهش تعداد کتاب</a>
-                                <a class="btn btn-xs btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
-                                <input type="hidden" name="bookid" value=@item.Id id="r_@item.Id" />
+                                @*<a class="btn btn-xs btn-primary" asp-controller="Books" asp-action="DeleteOneBook" asp-route-isbn="@isbn"><i class="glyphicon glyphicon-minus-sign"></i> کاهش تعداد کتاب</a>*@
+                                <a class="btn btn-xs btn-danger" asp-action="Delete" asp-route-gbookid="@item.Id" ><i class="glyphicon glyphicon-trash"></i> حذف</a>
                             </td>
                         </tr>
                     }
@@ -143,7 +146,7 @@
         </div>
 
     </div>
-    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
+    @*<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -163,18 +166,18 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>*@
 </div>
 
 @section PanelScripts{
     <script>
 
-        var DeleteAlarm = function (obj) {
-            var bookid = $(obj).val();
-            console.log(bookid);
-            $('#gbookid').val(bookid);
+        //var DeleteAlarm = function (obj) {
+        //    var bookid = $(obj).val();
+        //    console.log(bookid);
+        //    $('#gbookid').val(bookid);
 
-        }
+        //}
         var Search = function () {
 
             var search = $('.search').val();
@@ -184,106 +187,107 @@
             var field = $('.field').val();
             var str = '';
             var url = "/Admin/Books/Search?lan=" + lan + "&&search=" + search + "&&ctype=" + ctype + "&&bstatus=" + bstatus + "&&field=" + field + "";
-            window.location.replace(url);
-            //$.ajax({
-            //    type: "POST",
-            //    url: url,
-            //    contentType: "application/json",
-            //    beforeSend: function (xhr) {
-            //        xhr.setRequestHeader("XSRF-TOKEN",
-            //            $('input:hidden[name="__RequestVerificationToken"]').val());
-            //    },
-            //    dataType: "json",
-            //    success: function (response) {
-            //        var dvItems = $(".books tbody");
-            //        dvItems.empty();
-                  
-            //        $.each((response.data), function (i, item) {
-            //            console.log(item.Count);
-            //            if (item.bookStatus == 0) {
-            //                str += '<tr>' +
-            //                    '<td><a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
-            //                    '<td>' + item.authorName + '</td>' +
-            //                    '<td>' + item.edition + '</td>' +
-            //                    ' <td>' + parseInt(item.Count) + '</td>' +
-            //                    '<td class="hidden-xs">' + item.publishYear + '</td>' +
-            //                    '<td class="hidden-xs">' + item.courseType + '</td>' +
-            //                    '<td style="color:indianred">' + item.bookStatusNum + '</td>' +
-            //                    '<td>' +
-            //                    '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
-            //                    '<a class="btn btn-xs btn-primary"href="Books/DeleteOneBook/'+item.Id+'"><i class="glyphicon glyphicon-minus-sign"></i> کاهش تعداد کتاب</a>'+
-            //                    '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-            //                    '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
-            //                    '</td>' +
-            //                    '</tr>';
-            //            }
-            //            if (item.bookStatus == 1) {
-            //                str += '<tr>' +
-            //                    '<td><a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
-            //                    '<td>' + item.authorName + '</td>' +
-            //                    '<td>' + item.edition + '</td>' +
-            //                    ' <td>' + parseInt(item.Count) + '</td>' +
-            //                    '<td class="hidden-xs">' + item.publishYear + '</td>' +
-            //                    '<td class="hidden-xs">' + item.courseType + '</td>' +
-            //                    '<td style="color:green">' + item.bookStatusNum + '</td>' +
-            //                    '<td>' +
-            //                    '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
-            //                    '<a class="btn btn-xs btn-primary"href="Books/DeleteOneBook/' + item.Id + '"><i class="glyphicon glyphicon-minus-sign"></i> کاهش تعداد کتاب</a>' +
-            //                    '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + parseInt(item.Id) + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-            //                    '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
-            //                    '</td>' +
-            //                    '</tr>';
-            //            }
+            //window.location.replace(url);
+            $.ajax({
+                type: "POST",
+                url: url,
+                contentType: "application/json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                dataType: "json",
+                success: function (response) { 
+                    var dvItems = $(".books tbody");
+                    dvItems.empty();
 
-            //            if (item.bookStatus == 2) {
-            //                str += '<tr>' +
-            //                    '<td><a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
-            //                    '<td>' + item.authorName + '</td>' +
-            //                    '<td>' + item.edition + '</td>' +
-            //                    ' <td>' + parseInt(item.Count) + '</td>' +
-            //                    '<td class="hidden-xs">' + item.publishYear + '</td>' +
-            //                    '<td class="hidden-xs">' + item.courseType + '</td>' +
-            //                    '<td style="color:yellow">' + item.bookStatusNum + '</td>' +
-            //                    '<td>' +
-            //                    '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
-            //                    '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-            //                   '<a class="btn btn-xs btn-primary"href="Books/DeleteOneBook/'+item.Id+'"><i class="glyphicon glyphicon-minus-sign"></i> کاهش تعداد کتاب</a>'+
-            //                    '<a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
-            //                    '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
-            //                    '</td>' +
-            //                    '</tr>';
-            //            }
+                    $.each((response.data), function (i, item) {
+                        console.table(item);
+                        //console.log(item.Count);
+                        if (item.bookStatus == 0) {
+                            str += '<tr>' +
+                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                ' <td>' + parseInt(item.isbns.length) + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td class="hidden-xs">'+item.language+'</td>'+
+                                '<td style="color:indianred">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
+                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
+                        if (item.bookStatus == 1) {
+                            str += '<tr>' +
+                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                ' <td>' + parseInt(item.isbns.length)  + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td class="hidden-xs">'+item.language+'</td>'+
+                                '<td style="color:green">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
+                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + parseInt(item.Id) + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
 
-            //            if (item.bookStatus == 3) {
-            //                str += '<tr>' +
-            //                    '<td><a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
-            //                    '<td>' + item.authorName + '</td>' +
-            //                    '<td>' + item.edition + '</td>' +
-            //                    ' <td>' + parseInt(item.Count) + '</td>' +
-            //                    '<td class="hidden-xs">' + item.publishYear + '</td>' +
-            //                    '<td class="hidden-xs">' + item.courseType + '</td>' +
-            //                    '<td style="color:red">' + item.bookStatusNum + '</td>' +
-            //                    '<td>' +
-            //                    '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
-            //                    '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-            //                   '<a class="btn btn-xs btn-primary"href="Books/DeleteOneBook/'+item.Id+'"><i class="glyphicon glyphicon-minus-sign"></i> کاهش تعداد کتاب</a>'+
-            //                    '<a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
-            //                    '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
-            //                    '</td>' +
-            //                    '</tr>';
-            //            }
+                        if (item.bookStatus == 2) {
+                            str += '<tr>' +
+                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                ' <td>' + parseInt(item.isbns.length)  + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td class="hidden-xs">'+item.language+'</td>'+
+                                '<td style="color:yellow">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
+                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
 
-
-
+                        if (item.bookStatus == 3) {
+                            str += '<tr>' +
+                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                ' <td>' + parseInt(item.isbns.length)  + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.courseType + '</td>' +
+                                '<td class="hidden-xs">'+item.language+'</td>'+
+                                '<td style="color:red">' + item.bookStatusNum + '</td>' +
+                                '<td>' +
+                                '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
+                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
+                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                        }
 
 
-            //        });
-            //        dvItems.html('').append(str);
-            //    },
-            //    failure: function (response) {
-            //        alert(response);
-            //    }
-            //});
+
+
+
+                    });
+                    dvItems.html('').append(str);
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
 
         }
 

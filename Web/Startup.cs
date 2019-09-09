@@ -36,7 +36,7 @@ namespace Web
             services.AddMyServicesAndRepositories();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpContextAccessor();
-            //services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
             services.AddJwtAuthentication(_siteSetting.JwtSettings);
         }
 
@@ -52,8 +52,8 @@ namespace Web
 
             app.UseWhen(c => !c.Request.Path.StartsWithSegments("/api"), conf =>
             {
-                if (!env.IsDevelopment()) conf.UseDeveloperExceptionPage();
-                else { conf.UseStatusCodePagesWithReExecute("/Error/{0}"); }
+                if (env.IsDevelopment()) conf.UseDeveloperExceptionPage();
+                //else { conf.UseStatusCodePagesWithReExecute("/Error/{0}"); }
                 conf.UseMvc();
             });
 

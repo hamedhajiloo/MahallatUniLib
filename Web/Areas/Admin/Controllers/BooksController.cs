@@ -20,20 +20,27 @@ namespace Web.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]")]
     [Area("Admin")]
     [Controller]
-    [ShowErrorPageType]
+    //[ShowErrorPageType]
     public class BooksController : Controller
     {
         private readonly IBookService _bookService;
+        private readonly IRepository<Isbn> _isbnRepository;
         private readonly IImageService _imageService;
-        private readonly IRepository<BookList> _repository;
+
+        private readonly IRepository<Book> _repository;
         private readonly IRepository<Book> _bRepository;
 
-        public BooksController(IBookService bookService, IImageService imageService, IRepository<BookList> repository, IRepository<Book> bRepository)
+        public BooksController(IBookService bookService,
+                               IRepository<Isbn> isbnRepository,
+                               IImageService imageService,
+                               IRepository<Book> repository,
+                               IRepository<Book> bRepository)
         {
-            _bookService = bookService;
-            _imageService = imageService;
-            _repository = repository;
-            _bRepository = bRepository;
+            _bookService = bookService ?? throw new System.ArgumentNullException(nameof(bookService));
+            this._isbnRepository = isbnRepository ?? throw new System.ArgumentNullException(nameof(isbnRepository));
+            _imageService = imageService ?? throw new System.ArgumentNullException(nameof(imageService));
+            _repository = repository ?? throw new System.ArgumentNullException(nameof(repository));
+            _bRepository = bRepository ?? throw new System.ArgumentNullException(nameof(bRepository));
         }
         [HttpGet]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -76,17 +83,36 @@ namespace Web.Areas.Admin.Controllers
             return Json(new { status = "success", message = "تصویر با موفقیت آپلود شد.", imagename = filename });
         }
 
-        [HttpPost]
+
+        [HttpGet("{gbookid:int}")]
         public async Task<IActionResult> Delete(int gbookid, [FromHeader] CancellationToken cancellationToken)
         {
-            var res = await _bookService.DeleteAsync(gbookid, cancellationToken);
-            if (res == true)
+            var book = await _bookService.FindBookByIdAsync(gbookid, cancellationToken);
+            if (book == null)
             {
-                TempData["War"] = "کتاب مورد نظر حذف شد";
-                return RedirectToAction(nameof(Index));
+                TempData["Error"] = "کتاب مورد نظر یافت نشد";
+                //return RedirectToAction(actionName: "Index", controllerName: "Home", new { area = "Admin" });
             }
-            TempData["Error"] = "کتاب مورد نظر یافت نشد";
-            return RedirectToAction(nameof(Index));
+            return View(book);
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> DeleteOne(int isbnId, [FromHeader] CancellationToken cancellationToken)
+        {
+            var isbn = await _isbnRepository.Table.Where(c => c.Id == isbnId).SingleOrDefaultAsync(cancellationToken);
+            if (isbn == null)
+            {
+                TempData["Error"] = "کتاب مورد نظر یافت نشد";
+                //return RedirectToAction(actionName: "Index", controllerName: "Home", new { area = "Admin" });
+            }
+
+            isbn.IsDeleted = true;
+            await _isbnRepository.UpdateAsync(isbn, cancellationToken);
+
+            var result = await _isbnRepository.TableNoTracking.Where(c => c.BookId == isbn.BookId&&c.IsDeleted==false).ToListAsync(cancellationToken);
+
+            return new JsonResult(result);
         }
 
         [HttpGet]
@@ -132,54 +158,45 @@ namespace Web.Areas.Admin.Controllers
         }
 
 
-        [HttpGet("id:int")]
-        public async Task<IActionResult> DeleteOneBook([FromHeader]CancellationToken cancellationToken, int id)
+        [HttpGet("isbn:minlength(10)")]
+        public async Task<IActionResult> DeleteOneBook([FromHeader]CancellationToken cancellationToken, string isbn)
         {
-            var exists = await _repository.Table.Where(c => c.Id == id).Include(c => c.Books).FirstOrDefaultAsync(cancellationToken);
+            var res = await _bookService.DeleteOneBookAsync(isbn, cancellationToken);
 
-            if (exists == null)
+            if (res)
             {
-                TempData["Error"] = "این کتاب در سیستم وجود ندارد";
+                TempData["Success"] = "کتاب با موفقیت حذف شد";
                 return RedirectToAction(nameof(Index));
             }
-            var bookCount = exists.Books.Count;
-            if (bookCount > 1)
-            {
-                var deletBook = await _bRepository.Table.FirstOrDefaultAsync(c => c.BookListId == id, cancellationToken);
-                await _bRepository.DeleteAsync(deletBook, cancellationToken);
-            }
-            else
-            {
-                try
-                {
-                    var deletBook = await _bRepository.Table.FirstOrDefaultAsync(c => c.BookListId == id, cancellationToken);
-                    await _bRepository.DeleteAsync(deletBook, cancellationToken);
-                    await _bookService.DeleteAsync(exists.Id, cancellationToken);
-                }
-                catch (System.Exception)
-                {
 
-                    throw;
-                }
-            }
-            TempData["Success"] = "کتاب با موفقیت حذف شد";
+            TempData["Error"] = "این کتاب در سیستم وجود ندارد";
             return RedirectToAction(nameof(Index));
 
         }
 
-        [HttpGet("id:int")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> Details(int id, [FromHeader]CancellationToken cancellationToken)
         {
             var model = await _bookService.FindBookByIdAsync(id, cancellationToken);
             return View(model);
         }
 
-    
+
+        [HttpPost]
         public async Task<IActionResult> Search(CancellationToken cancellationToken, Language lan, CourseType ctype, int field, BookStatus bstatus, Pagable pagable)
         {
             var model = await _bookService.GetAllBookAsync(cancellationToken, ctype, bstatus, lan, field, pagable.Search);
+            //ViewBag.Text = pagable.Search;
+            //ViewBag.CType = ctype;
+            //ViewBag.BStatus = bstatus;
+            //ViewBag.Lan = lan;
+            //ViewBag.Field = field;
+
+
+
+            return this.Json(new { data = model });
             //return Ok(model);
-            return View(nameof(Index),model);
+            //return View(nameof(Index), model);
         }
     }
 }

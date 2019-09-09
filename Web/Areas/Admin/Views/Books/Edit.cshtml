@@ -18,17 +18,25 @@
 
         <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
             <div class="col-md-4 col-lg-4 col-sm-4">
-                @foreach (var item in Model.BooksISBN)
-                {
+                <h3>شابک ها</h3>
+                <hr />
+                <br />
+               @for (int i = 0; i < Model.BooksISBN.Count(); i++)
+               {
                     <div class="form-group">
-                        <label class="control-label"></label>
-                        <input name="BooksISBN"  class="form-control circleInput" placeholder="" value="@item" />
+                        <label class="control-label">شابک @(i+1)</label>
+                        <input name="BooksISBN[i]" disabled class="form-control circleInput" placeholder="" value="@Model.BooksISBN[i]" />
                     </div>
-                }
+               
+
+               }
             </div>
+            <h3>مشخصات کتاب</h3>
+            <hr />
             <div class="col-md-4 col-lg-4 col-sm-4 " style="margin-bottom:15px; margin-top:15px;">
+
                 <form asp-area="Admin" asp-controller="Books" asp-action="Edit" method="post">
-                    
+
 
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" name="bookid" value="@Model.Id" />
@@ -43,10 +51,10 @@
 
                     @*ISBN *@
                     @*<div class="form-group">
-                        <label asp-for="ISBN" class="control-label"></label>
-                        <input asp-for="ISBN" class="form-control circleInput" placeholder="" />
-                        <span asp-validation-for="ISBN" class="text-danger"></span>
-                    </div>*@
+                    <label asp-for="ISBN" class="control-label"></label>
+                    <input asp-for="ISBN" class="form-control circleInput" placeholder="" />
+                    <span asp-validation-for="ISBN" class="text-danger"></span>
+                </div>*@
 
                     @*نویسنده *@
                     <div class="form-group">

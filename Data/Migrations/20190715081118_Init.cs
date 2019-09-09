@@ -53,12 +53,12 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookLists",
+                name: "Books",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BookListIsDeleted = table.Column<bool>(nullable: false),
+                    BookIsDeleted = table.Column<bool>(nullable: false),
                     ImageUrl = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     AuthorName = table.Column<string>(nullable: false),
@@ -71,7 +71,7 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookLists", x => x.Id);
+                    table.PrimaryKey("PK_Books", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,6 +211,26 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Isbns",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Value = table.Column<string>(nullable: true),
+                    BookId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Isbns", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Isbns_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Penalties",
                 columns: table => new
                 {
@@ -219,15 +239,15 @@ namespace Data.Migrations
                     PenaltyType = table.Column<int>(nullable: false),
                     Amount = table.Column<decimal>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
-                    BookListId = table.Column<int>(nullable: false)
+                    BookId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Penalties", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Penalties_BookLists_BookListId",
-                        column: x => x.BookListId,
-                        principalTable: "BookLists",
+                        name: "FK_Penalties_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -239,54 +259,25 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "FieldBooks",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ISBN = table.Column<string>(nullable: false),
-                    BookIsDeleted = table.Column<bool>(nullable: false),
-                    BookListId = table.Column<int>(nullable: false),
-                    FieldId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Books", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Books_BookLists_BookListId",
-                        column: x => x.BookListId,
-                        principalTable: "BookLists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Books_Fields_FieldId",
-                        column: x => x.FieldId,
-                        principalTable: "Fields",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FieldBookLists",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BookListId = table.Column<int>(nullable: false),
-                    ISBN = table.Column<string>(nullable: true),
+                    BookId = table.Column<int>(nullable: false),
                     FieldId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FieldBookLists", x => x.Id);
+                    table.PrimaryKey("PK_FieldBooks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FieldBookLists_BookLists_BookListId",
-                        column: x => x.BookListId,
-                        principalTable: "BookLists",
+                        name: "FK_FieldBooks_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_FieldBookLists_Fields_FieldId",
+                        name: "FK_FieldBooks_Fields_FieldId",
                         column: x => x.FieldId,
                         principalTable: "Fields",
                         principalColumn: "Id",
@@ -347,26 +338,25 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StudentBookLists",
+                name: "StudentBooks",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BookListId = table.Column<int>(nullable: false),
-                    ISBN = table.Column<string>(nullable: true),
+                    BookId = table.Column<int>(nullable: false),
                     StudentId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentBookLists", x => x.Id);
+                    table.PrimaryKey("PK_StudentBooks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentBookLists_BookLists_BookListId",
-                        column: x => x.BookListId,
-                        principalTable: "BookLists",
+                        name: "FK_StudentBooks_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_StudentBookLists_Students_StudentId",
+                        name: "FK_StudentBooks_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
@@ -374,26 +364,25 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherBookLists",
+                name: "TeacherBooks",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BookListId = table.Column<int>(nullable: false),
-                    ISBN = table.Column<string>(nullable: true),
+                    BookId = table.Column<int>(nullable: false),
                     TeacherId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherBookLists", x => x.Id);
+                    table.PrimaryKey("PK_TeacherBooks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeacherBookLists_BookLists_BookListId",
-                        column: x => x.BookListId,
-                        principalTable: "BookLists",
+                        name: "FK_TeacherBooks_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_TeacherBookLists_Teachers_TeacherId",
+                        name: "FK_TeacherBooks_Teachers_TeacherId",
                         column: x => x.TeacherId,
                         principalTable: "Teachers",
                         principalColumn: "Id",
@@ -440,29 +429,24 @@ namespace Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_BookListId",
-                table: "Books",
-                column: "BookListId");
+                name: "IX_FieldBooks_BookId",
+                table: "FieldBooks",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_FieldId",
-                table: "Books",
+                name: "IX_FieldBooks_FieldId",
+                table: "FieldBooks",
                 column: "FieldId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FieldBookLists_BookListId",
-                table: "FieldBookLists",
-                column: "BookListId");
+                name: "IX_Isbns_BookId",
+                table: "Isbns",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FieldBookLists_FieldId",
-                table: "FieldBookLists",
-                column: "FieldId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Penalties_BookListId",
+                name: "IX_Penalties_BookId",
                 table: "Penalties",
-                column: "BookListId");
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Penalties_UserId",
@@ -470,13 +454,13 @@ namespace Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentBookLists_BookListId",
-                table: "StudentBookLists",
-                column: "BookListId");
+                name: "IX_StudentBooks_BookId",
+                table: "StudentBooks",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentBookLists_StudentId",
-                table: "StudentBookLists",
+                name: "IX_StudentBooks_StudentId",
+                table: "StudentBooks",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
@@ -490,13 +474,13 @@ namespace Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherBookLists_BookListId",
-                table: "TeacherBookLists",
-                column: "BookListId");
+                name: "IX_TeacherBooks_BookId",
+                table: "TeacherBooks",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherBookLists_TeacherId",
-                table: "TeacherBookLists",
+                name: "IX_TeacherBooks_TeacherId",
+                table: "TeacherBooks",
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
@@ -528,10 +512,10 @@ namespace Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "FieldBooks");
 
             migrationBuilder.DropTable(
-                name: "FieldBookLists");
+                name: "Isbns");
 
             migrationBuilder.DropTable(
                 name: "Penalties");
@@ -540,10 +524,10 @@ namespace Data.Migrations
                 name: "Settings");
 
             migrationBuilder.DropTable(
-                name: "StudentBookLists");
+                name: "StudentBooks");
 
             migrationBuilder.DropTable(
-                name: "TeacherBookLists");
+                name: "TeacherBooks");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -552,7 +536,7 @@ namespace Data.Migrations
                 name: "Students");
 
             migrationBuilder.DropTable(
-                name: "BookLists");
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Teachers");

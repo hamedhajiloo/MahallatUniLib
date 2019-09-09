@@ -22,9 +22,9 @@ namespace Web.Controllers
     {
         private readonly IBookService _bookService;
         private readonly IRepository<Field> _fieldRepository;
-        private readonly IRepository<BookList> _bookRepository;
+        private readonly IRepository<Book> _bookRepository;
 
-        public HomeController(IBookService bookService,IRepository<Field> fieldRepository,IRepository<BookList> bookRepository)
+        public HomeController(IBookService bookService,IRepository<Field> fieldRepository,IRepository<Book> bookRepository)
         {
             _bookService = bookService;
             _fieldRepository = fieldRepository;
@@ -42,12 +42,12 @@ namespace Web.Controllers
             var vm = new HomeIndexVM();
 
             vm.Fields = await _fieldRepository.TableNoTracking.ToListAsync(cancellationToken);
-            vm.ComputerBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBookList.Select(a=>a.FieldId).Contains(1) &&c.BookListIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.UlomBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBookList.Select(a => a.FieldId).Contains(2) && c.BookListIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.SanayeBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBookList.Select(a => a.FieldId).Contains(3) && c.BookListIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.MechanickBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBookList.Select(a => a.FieldId).Contains(4) && c.BookListIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.OmranBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBookList.Select(a => a.FieldId).Contains(5) && c.BookListIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.Memary = await _bookRepository.TableNoTracking.Where(c => c.FieldBookList.Select(a => a.FieldId).Contains(6) && c.BookListIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.ComputerBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a=>a.FieldId).Contains(1) &&c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.UlomBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(2) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.SanayeBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(3) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.MechanickBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(4) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.OmranBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(5) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.Memary = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(6) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
            
             return View(vm);
         }

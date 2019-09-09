@@ -3,6 +3,7 @@ using Common.Enums;
 using Common.Utilities.Attributes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Sepehran.Pooshako.Utilities.Attribute;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,20 +17,68 @@ namespace Entities
         public Book()
         {
             BookIsDeleted = false;
+            Language = Language.Persion;
+            CourseType = CourseType.General;
+            BookStatus = BookStatus.Free;
         }
         #region Properties
        
-        [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public string ISBN { get; set; }
+
 
         public bool BookIsDeleted { get; set; }
+
+        [EnsureOneElement(ErrorMessage ="شابک را وارد کنید")]
+        public List<Isbn> ISBNs { get; set; }
+
+        [Display(Name = "تصویر")]
+        public string ImageUrl { get; set; }
+
+
+        [DisplayName("نام کتاب")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public string Name { get; set; }
+
+        [DisplayName("نویسنده")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public string AuthorName { get; set; }
+
+        [DisplayName("ناشر")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public string Publisher { get; set; }
+
+        [DisplayName("سال انتشار")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public int PublishYear { get; set; }
+
+        [DisplayName("نوبت چاپ")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        [Range(minimum: 1, maximum: 1000000, ErrorMessage = DataAnotations.Range)]
+        public int Edition { get; set; }
+
+        [DisplayName("زبان")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public Language Language { get; set; }
+
+        [DisplayName("نوع درس")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public CourseType CourseType { get; set; }
+
+        [DisplayName("وضعیت کتاب")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public BookStatus BookStatus { get; set; }
+
+
+
+       
 
         #endregion Properties
 
         #region Relations
-        [ForeignKey(nameof(BookList))]
-        public int BookListId { get; set; }
-        public virtual BookList BookList { get; set; }
+
+        public virtual List<StudentBook> StudentBook { get; set; }
+        public virtual List<TeacherBook> TeacherBook { get; set; }
+        public virtual List<FieldBook> FieldBook { get; set; }
+        public virtual List<Penalty> Penalties { get; set; }
         #endregion Relations
     }
 }

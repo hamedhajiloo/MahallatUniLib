@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("13980303071939_Init")]
-    partial class Init
+    [Migration("20190802151831_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -27,34 +27,10 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("BookIsDeleted");
-
-                    b.Property<int>("BookListId");
-
-                    b.Property<int?>("FieldId");
-
-                    b.Property<string>("ISBN")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookListId");
-
-                    b.HasIndex("FieldId");
-
-                    b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("Entities.BookList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<string>("AuthorName")
                         .IsRequired();
 
-                    b.Property<bool>("BookListIsDeleted");
+                    b.Property<bool>("BookIsDeleted");
 
                     b.Property<int>("BookStatus");
 
@@ -76,7 +52,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookLists");
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("Entities.Field", b =>
@@ -93,25 +69,42 @@ namespace Data.Migrations
                     b.ToTable("Fields");
                 });
 
-            modelBuilder.Entity("Entities.FieldBookList", b =>
+            modelBuilder.Entity("Entities.FieldBook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BookListId");
+                    b.Property<int>("BookId");
 
                     b.Property<int>("FieldId");
 
-                    b.Property<string>("ISBN");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("BookListId");
+                    b.HasIndex("BookId");
 
                     b.HasIndex("FieldId");
 
-                    b.ToTable("FieldBookLists");
+                    b.ToTable("FieldBooks");
+                });
+
+            modelBuilder.Entity("Entities.Isbn", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("Isbns");
                 });
 
             modelBuilder.Entity("Entities.Penalty", b =>
@@ -122,7 +115,7 @@ namespace Data.Migrations
 
                     b.Property<decimal>("Amount");
 
-                    b.Property<int>("BookListId");
+                    b.Property<int>("BookId");
 
                     b.Property<int>("PenaltyType");
 
@@ -131,7 +124,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookListId");
+                    b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
@@ -213,25 +206,23 @@ namespace Data.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Entities.StudentBookList", b =>
+            modelBuilder.Entity("Entities.StudentBook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BookListId");
-
-                    b.Property<string>("ISBN");
+                    b.Property<int>("BookId");
 
                     b.Property<string>("StudentId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookListId");
+                    b.HasIndex("BookId");
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentBookLists");
+                    b.ToTable("StudentBooks");
                 });
 
             modelBuilder.Entity("Entities.Teacher", b =>
@@ -253,25 +244,23 @@ namespace Data.Migrations
                     b.ToTable("Teachers");
                 });
 
-            modelBuilder.Entity("Entities.TeacherBookList", b =>
+            modelBuilder.Entity("Entities.TeacherBook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BookListId");
-
-                    b.Property<string>("ISBN");
+                    b.Property<int>("BookId");
 
                     b.Property<string>("TeacherId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookListId");
+                    b.HasIndex("BookId");
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("TeacherBookLists");
+                    b.ToTable("TeacherBooks");
                 });
 
             modelBuilder.Entity("Entities.User", b =>
@@ -421,36 +410,32 @@ namespace Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Entities.Book", b =>
+            modelBuilder.Entity("Entities.FieldBook", b =>
                 {
-                    b.HasOne("Entities.BookList", "BookList")
-                        .WithMany("Books")
-                        .HasForeignKey("BookListId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Entities.Field")
-                        .WithMany("Books")
-                        .HasForeignKey("FieldId");
-                });
-
-            modelBuilder.Entity("Entities.FieldBookList", b =>
-                {
-                    b.HasOne("Entities.BookList", "BookList")
-                        .WithMany("FieldBookList")
-                        .HasForeignKey("BookListId")
+                    b.HasOne("Entities.Book", "Book")
+                        .WithMany("FieldBook")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Entities.Field", "Field")
-                        .WithMany()
+                        .WithMany("FieldBooks")
                         .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Entities.Isbn", b =>
+                {
+                    b.HasOne("Entities.Book", "Book")
+                        .WithMany("ISBNs")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Entities.Penalty", b =>
                 {
-                    b.HasOne("Entities.BookList", "BookList")
+                    b.HasOne("Entities.Book", "Book")
                         .WithMany("Penalties")
-                        .HasForeignKey("BookListId")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Entities.User", "User")
@@ -472,15 +457,15 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Entities.StudentBookList", b =>
+            modelBuilder.Entity("Entities.StudentBook", b =>
                 {
-                    b.HasOne("Entities.BookList", "BookList")
-                        .WithMany("StudentBookList")
-                        .HasForeignKey("BookListId")
+                    b.HasOne("Entities.Book", "Book")
+                        .WithMany("StudentBook")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Entities.Student", "Student")
-                        .WithMany("StudentBookList")
+                        .WithMany("StudentBook")
                         .HasForeignKey("StudentId");
                 });
 
@@ -497,15 +482,15 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Entities.TeacherBookList", b =>
+            modelBuilder.Entity("Entities.TeacherBook", b =>
                 {
-                    b.HasOne("Entities.BookList", "BookList")
-                        .WithMany("TeacherBookList")
-                        .HasForeignKey("BookListId")
+                    b.HasOne("Entities.Book", "Book")
+                        .WithMany("TeacherBook")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Entities.Teacher", "Teacher")
-                        .WithMany("TeacherBookList")
+                        .WithMany("TeacherBook")
                         .HasForeignKey("TeacherId");
                 });
 

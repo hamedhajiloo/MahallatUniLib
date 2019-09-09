@@ -11,11 +11,11 @@ namespace Services.DataInitializer
 {
     public class TestDataInitializer : IDataInitializer
     {
-        private readonly IRepository<User> repository;
+        private readonly IRepository<Book> repository;
         private readonly UserManager<User> _userManager;
         private readonly IRepository<Student> studentRepository;
 
-        public TestDataInitializer(IRepository<User> repository,UserManager<User> userManager,IRepository<Student> studentRepository)
+        public TestDataInitializer(IRepository<Book> repository,UserManager<User> userManager,IRepository<Student> studentRepository)
         {
             this.repository = repository;
             this._userManager = userManager;
@@ -26,33 +26,12 @@ namespace Services.DataInitializer
         {
             //for (int i = 0; i < 20; i++)
             //{
-            //    repository.Add(new BookList
+            //    repository.Add(new Book
             //    {
             //        Name = $"Book {i}",
-            //        FieldBookList=new List<FieldBookList>
+            //        FieldBook = new List<FieldBook>
             //        {
-            //            new FieldBookList{FieldId=2}
-            //        },
-            //        ImageUrl= "/site/img/Test/4.png",
-            //        AuthorName="Test",
-            //        BookStatus=BookStatus.Free,
-            //        Edition=1,
-            //        CourseType=Common.CourseType.Special,
-            //        Language=Common.Language.Persion,
-            //        Publisher="Test",
-            //        PublishYear=1380
-            //    });
-
-            //}
-
-            //for (int i = 0; i < 20; i++)
-            //{
-            //    repository.Add(new BookList
-            //    {
-            //        Name = $"Book {i}",
-            //        FieldBookList = new List<FieldBookList>
-            //        {
-            //            new FieldBookList{FieldId=3}
+            //            new FieldBook{FieldId=2}
             //        },
             //        ImageUrl = "/site/img/Test/4.png",
             //        AuthorName = "Test",
@@ -68,12 +47,12 @@ namespace Services.DataInitializer
 
             //for (int i = 0; i < 20; i++)
             //{
-            //    repository.Add(new BookList
+            //    repository.Add(new Book
             //    {
             //        Name = $"Book {i}",
-            //        FieldBookList = new List<FieldBookList>
+            //        FieldBook = new List<FieldBook>
             //        {
-            //            new FieldBookList{FieldId=4}
+            //            new FieldBook{FieldId=3}
             //        },
             //        ImageUrl = "/site/img/Test/4.png",
             //        AuthorName = "Test",
@@ -89,12 +68,12 @@ namespace Services.DataInitializer
 
             //for (int i = 0; i < 20; i++)
             //{
-            //    repository.Add(new BookList
+            //    repository.Add(new Book
             //    {
             //        Name = $"Book {i}",
-            //        FieldBookList = new List<FieldBookList>
+            //        FieldBook = new List<FieldBook>
             //        {
-            //            new FieldBookList{FieldId=4}
+            //            new FieldBook{FieldId=4}
             //        },
             //        ImageUrl = "/site/img/Test/4.png",
             //        AuthorName = "Test",
@@ -110,12 +89,12 @@ namespace Services.DataInitializer
 
             //for (int i = 0; i < 20; i++)
             //{
-            //    repository.Add(new BookList
+            //    repository.Add(new Book
             //    {
             //        Name = $"Book {i}",
-            //        FieldBookList = new List<FieldBookList>
+            //        FieldBook = new List<FieldBook>
             //        {
-            //            new FieldBookList{FieldId=5}
+            //            new FieldBook{FieldId=4}
             //        },
             //        ImageUrl = "/site/img/Test/4.png",
             //        AuthorName = "Test",
@@ -131,12 +110,33 @@ namespace Services.DataInitializer
 
             //for (int i = 0; i < 20; i++)
             //{
-            //    repository.Add(new BookList
+            //    repository.Add(new Book
             //    {
             //        Name = $"Book {i}",
-            //        FieldBookList = new List<FieldBookList>
+            //        FieldBook = new List<FieldBook>
             //        {
-            //            new FieldBookList{FieldId=6}
+            //            new FieldBook{FieldId=5}
+            //        },
+            //        ImageUrl = "/site/img/Test/4.png",
+            //        AuthorName = "Test",
+            //        BookStatus = BookStatus.Free,
+            //        Edition = 1,
+            //        CourseType = Common.CourseType.Special,
+            //        Language = Common.Language.Persion,
+            //        Publisher = "Test",
+            //        PublishYear = 1380
+            //    });
+
+            //}
+
+            //for (int i = 0; i < 20; i++)
+            //{
+            //    repository.Add(new Book
+            //    {
+            //        Name = $"Book {i}",
+            //        FieldBook = new List<FieldBook>
+            //        {
+            //            new FieldBook{FieldId=6}
             //        },
             //        ImageUrl = "/site/img/Test/4.png",
             //        AuthorName = "Test",
@@ -164,7 +164,7 @@ namespace Services.DataInitializer
 
             //foreach (var item in m)
             //{
-              
+
             //    _userManager.AddToRoleAsync(item, "Student");
             //}
             //foreach (var item in m)

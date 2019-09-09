@@ -55,7 +55,7 @@ namespace Services.Dto
         public override void CustomMappings(IMappingExpression<Penalty, PenaltySelectDto> mapping)
         {
             mapping.ForMember(des => des.UserFullName, opt => opt.MapFrom(src => src.User.FullName));
-            mapping.ForMember(des => des.BookName, opt => opt.MapFrom(src => src.BookList.Name));
+            mapping.ForMember(des => des.BookName, opt => opt.MapFrom(src => src.Book.Name));
         }
     }
 }
