@@ -15,7 +15,7 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -32,9 +32,9 @@ namespace Data.Migrations
 
                     b.Property<int>("BookStatus");
 
-                    b.Property<int>("CourseType");
-
                     b.Property<int>("Edition");
+
+                    b.Property<int>("FieldId");
 
                     b.Property<string>("ImageUrl");
 
@@ -49,6 +49,8 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FieldId");
 
                     b.ToTable("Books");
                 });
@@ -65,25 +67,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Fields");
-                });
-
-            modelBuilder.Entity("Entities.FieldBook", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BookId");
-
-                    b.Property<int>("FieldId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("FieldId");
-
-                    b.ToTable("FieldBooks");
                 });
 
             modelBuilder.Entity("Entities.Isbn", b =>
@@ -408,15 +391,10 @@ namespace Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Entities.FieldBook", b =>
+            modelBuilder.Entity("Entities.Book", b =>
                 {
-                    b.HasOne("Entities.Book", "Book")
-                        .WithMany("FieldBook")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Entities.Field", "Field")
-                        .WithMany("FieldBooks")
+                        .WithMany("Books")
                         .HasForeignKey("FieldId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

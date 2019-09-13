@@ -28,9 +28,8 @@
                         <ul>
                             @foreach (var item in Model.Fields)
                             {
-                                <li><a href="shop-grid.html" class="single-menu">@item.Name</a></li>
+                                <li><a href="@Url.Action("Index","Book",new { id=item.Id})" class="single-menu">@item.Name</a></li>
                             }
-                            <li><a href="shop-grid.html" class="single-menu">عمومی</a></li>
                         </ul>
                     </div>
                 </div>
@@ -80,6 +79,48 @@
     </div>
 </div>
 <!-- End categori area -->
+<!-- Start featured product -->
+<div class="featured-product-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="area-title">
+                    <h3>عمومی</h3>
+                </div>
+            </div>
+            <div class="featured-product">
+                <div class="featured-item">
+                    @foreach (var item in Model.General)
+                    {
+                        <!-- Start featured item -->
+                        <div class="col-sm-3">
+                            <div class="featured-inner">
+                                <div class="featured-image">
+                                    <a asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
+                                        <img style="height:196px;width:196px" src="~/upload/image/book/normalimage/@item.ImageUrl" alt="">
+                                    </a>
+                                </div>
+                                <br />
+                                <div class="featured-info">
+                                    <a title="مشاهده" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">@item.Name</a>
+                                    <br />
+                                    <p>@item.AuthorName</p>
+                                    <br />
+                                    <div class="featured-button">
+                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End featured item -->
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End featured product -->
 <!-- Start featured product   مهندسی کامپیوتر-->
 <div class="featured-product-area">
     <div class="container">
@@ -97,22 +138,23 @@
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
+                                    <a asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
+                                        <img style="height:196px;width:196px" src="~/upload/image/book/normalimage/@item.ImageUrl" alt="">
                                     </a>
                                 </div>
+                                <br />
                                 <div class="featured-info">
-                                    <a href="single-product.html">@item.Name</a>
+                                    <a title="مشاهده" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">@item.Name</a>
+                                    <br />
+                                    <p>@item.AuthorName</p>
+                                    <br />
                                     <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
                                         <a href="#" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- End featured item -->
-
                     }
                 </div>
             </div>
@@ -137,15 +179,17 @@
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
+                                    <a asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
+                                        <img style="height:196px;width:196px" src="~/upload/image/book/normalimage/@item.ImageUrl" alt="">
                                     </a>
                                 </div>
+                                <br />
                                 <div class="featured-info">
-                                    <a href="single-product.html">@item.Name</a>
+                                    <a title="مشاهده" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">@item.Name</a>
+                                    <br />
+                                    <p>@item.AuthorName</p>
+                                    <br />
                                     <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
                                         <a href="#" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
@@ -177,15 +221,17 @@
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
+                                    <a asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
+                                        <img style="height:196px;width:196px" src="~/upload/image/book/normalimage/@item.ImageUrl" alt="">
                                     </a>
                                 </div>
+                                <br />
                                 <div class="featured-info">
-                                    <a href="single-product.html">@item.Name</a>
+                                    <a title="مشاهده" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">@item.Name</a>
+                                    <br />
+                                    <p>@item.AuthorName</p>
+                                    <br />
                                     <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
                                         <a href="#" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
@@ -217,15 +263,17 @@
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
+                                    <a asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
+                                        <img style="height:196px;width:196px" src="~/upload/image/book/normalimage/@item.ImageUrl" alt="">
                                     </a>
                                 </div>
+                                <br />
                                 <div class="featured-info">
-                                    <a href="single-product.html">@item.Name</a>
+                                    <a title="مشاهده" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">@item.Name</a>
+                                    <br />
+                                    <p>@item.AuthorName</p>
+                                    <br />
                                     <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
                                         <a href="#" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
@@ -257,15 +305,17 @@
                         <div class="col-sm-3">
                             <div class="featured-inner">
                                 <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
+                                    <a asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
+                                        <img style="height:196px;width:196px" src="~/upload/image/book/normalimage/@item.ImageUrl" alt="">
                                     </a>
                                 </div>
+                                <br />
                                 <div class="featured-info">
-                                    <a href="single-product.html">@item.Name</a>
+                                    <a title="مشاهده" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">@item.Name</a>
+                                    <br />
+                                    <p>@item.AuthorName</p>
+                                    <br />
                                     <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
                                         <a href="#" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
@@ -273,104 +323,6 @@
                         </div>
                         <!-- End featured item -->
 
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End featured product -->
-<!-- Start featured product   معماری-->
-<div class="featured-product-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-sm-12">
-                <div class="area-title">
-                    <h3>معماری</h3>
-                </div>
-            </div>
-            <div class="featured-product">
-                <div class="featured-item">
-                    @foreach (var item in Model.Memary)
-                    {
-                        <!-- Start featured item -->
-                        <div class="col-sm-3">
-                            <div class="featured-inner">
-                                <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="@item.ImageUrl" alt="">
-                                    </a>
-                                </div>
-                                <div class="featured-info">
-                                    <a href="single-product.html">@item.Name</a>
-                                    <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End featured item -->
-
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End featured product -->
-<!-- Start featured product -->
-<div class="featured-product-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-sm-12">
-                <div class="area-title">
-                    <h3>عمومی</h3>
-                </div>
-            </div>
-            <div class="featured-product">
-                <div class="featured-item">
-                    @for (int i = 0; i < 10; i++)
-                    {
-                        <!-- Start featured item -->
-                        <div class="col-sm-3">
-                            <div class="featured-inner">
-                                <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/4.png" alt="">
-                                    </a>
-                                </div>
-                                <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
-                                    <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End featured item -->
-                        <!-- Start featured item -->
-                        <div class="col-sm-3">
-                            <div class="featured-inner">
-                                <div class="featured-image">
-                                    <a href="single-product.html">
-                                        <img style="height:196px;width:196px" src="~/site/img/Test/7.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="featured-info">
-                                    <a href="single-product.html">نام کتاب</a>
-                                    <div class="featured-button">
-                                        <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="fetu-comment"><i class="fa fa-signal"></i></a>
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End featured item -->
                     }
                 </div>
             </div>

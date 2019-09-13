@@ -84,12 +84,7 @@
                     <dd>
                         @Html.DisplayFor(model => model.Language)
                     </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.CourseType)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.CourseType)
-                    </dd>
+                   
                     <dt>
                         @Html.DisplayNameFor(model => model.Count)
                     </dt>
@@ -117,6 +112,7 @@
 
                 </dl>
                 <a asp-action="Details" asp-route-id="@Model.Id">جزئیات</a> |
+                <a asp-action="DeleteOneBook" asp-route-id="@Model.Id">حذف کلی کتاب</a> |
                 <a asp-action="Index">بازگشت</a>
 
             </div>

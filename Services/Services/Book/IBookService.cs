@@ -13,7 +13,7 @@ namespace Services
     {
         Task<BookSelectDto> AddBookAsync(BookDto bookDto,CancellationToken cancellationToken);
         Task<List<BookSelectDto>> GetAllBookAsync(CancellationToken cancellationToken);
-        Task<List<BookSelectDto>> GetAllBookAsync(CancellationToken cancellationToken,CourseType courseType,BookStatus bookStatus,Language language,int Field, string search = "");
+        Task<List<BookSelectDto>> GetAllBookAsync(CancellationToken cancellationToken,BookStatus bookStatus,Language language,int Field, string search = "");
         Task<bool> BookExists(BookDto bookDto, CancellationToken cancellationToken);
         Task<bool> BookExists(int bookId, CancellationToken cancellationToken);
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);

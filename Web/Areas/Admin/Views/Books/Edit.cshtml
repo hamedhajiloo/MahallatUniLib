@@ -51,10 +51,10 @@
 
                     @*ISBN *@
                     @*<div class="form-group">
-                    <label asp-for="ISBN" class="control-label"></label>
-                    <input asp-for="ISBN" class="form-control circleInput" placeholder="" />
-                    <span asp-validation-for="ISBN" class="text-danger"></span>
-                </div>*@
+            <label asp-for="ISBN" class="control-label"></label>
+            <input asp-for="ISBN" class="form-control circleInput" placeholder="" />
+            <span asp-validation-for="ISBN" class="text-danger"></span>
+        </div>*@
 
                     @*نویسنده *@
                     <div class="form-group">
@@ -99,14 +99,18 @@
                         <span asp-validation-for="Language" class="text-danger"></span>
                     </div>
 
-                    @* نوع درس *@
+                    @*  رشته *@
                     <div class="form-group">
-                        <label asp-for="CourseType" class="control-label"></label>
-                        <select asp-for="CourseType" class="form-control circleInput">
+                        <label asp-for="FieldId" class="control-label">رشته</label>
+                        <select asp-for="FieldId" class="form-control circleInput" name="FieldId">
                             <option value="1">عمومی</option>
-                            <option value="2">اختصاصی</option>
+                            <option value="2">مهندسی کامپیوتر</option>
+                            <option value="3">علوم کامپیوتر</option>
+                            <option value="4">مهندسی صنایع</option>
+                            <option value="5">مهندسی مکانیک</option>
+                            <option value="6">مهندسی عمران</option>
                         </select>
-                        <span asp-validation-for="CourseType" class="text-danger"></span>
+                        @*<span asp-validation-for="Fields" class="text-danger"></span>*@
                     </div>
 
                     @* تصویر *@

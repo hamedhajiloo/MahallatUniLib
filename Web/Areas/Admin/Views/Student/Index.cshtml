@@ -16,7 +16,7 @@
 
         <div class="panel-body">
             <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
-                <a class="btn btn-primary" asp-controller="Student" asp-action="Create">
+                <a class="btn btn-primary" asp-controller="Student" asp-action="Create" asp-area="Admin">
                     <i class="glyphicon glyphicon-plus"></i>
                     افزودن دانشجو
                 </a>
@@ -145,7 +145,6 @@
                                 '<td>' + item.authorName + '</td>' +
                                 '<td>' + item.edition + '</td>' +
                                 '<td class="hidden-xs">' + item.publishYear + '</td>' +
-                                '<td class="hidden-xs">' + item.courseType + '</td>' +
                                 '<td style="color:indianred">' + item.bookStatusNum + '</td>' +
                                 '<td>' +
                                 '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
@@ -161,7 +160,6 @@
                                 '<td>' + item.authorName + '</td>' +
                                 '<td>' + item.edition + '</td>' +
                                 '<td class="hidden-xs">' + item.publishYear + '</td>' +
-                                '<td class="hidden-xs">' + item.courseType + '</td>' +
                                 '<td style="color:green">' + item.bookStatusNum + '</td>' +
                                 '<td>' +
                                 '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
@@ -178,7 +176,6 @@
                                 '<td>' + item.authorName + '</td>' +
                                 '<td>' + item.edition + '</td>' +
                                 '<td class="hidden-xs">' + item.publishYear + '</td>' +
-                                '<td class="hidden-xs">' + item.courseType + '</td>' +
                                 '<td style="color:yellow">' + item.bookStatusNum + '</td>' +
                                 '<td>' +
                                 '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
@@ -195,7 +192,6 @@
                                 '<td>' + item.authorName + '</td>' +
                                 '<td>' + item.edition + '</td>' +
                                 '<td class="hidden-xs">' + item.publishYear + '</td>' +
-                                '<td class="hidden-xs">' + item.courseType + '</td>' +
                                 '<td style="color:red">' + item.bookStatusNum + '</td>' +
                                 '<td>' +
                                 '<a class="btn btn-sm btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +

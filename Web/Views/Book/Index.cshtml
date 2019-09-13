@@ -1,0 +1,43 @@
+﻿@using Entities;
+@model List<Book>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="container">
+
+
+    <div id="my-tab-content" class="tab-content">
+        <!-- Start categori grid view -->
+        @foreach (var item in Model)
+        {
+
+            <!-- Start featured item -->
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="featured-inner">
+                    <div class="featured-image">
+                        <a asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
+                            <img style="height:350px;width:350px" src="~/upload/image/book/normalimage/@item.ImageUrl" alt="">
+                        </a>
+                    </div>
+                    <br />
+                    <div class="featured-info">
+                        <a title="مشاهده" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">@item.Name</a>
+                        <br />
+                        <p>@item.AuthorName</p>
+                        <br />
+                        <div class="featured-button">
+                            <a href="#" class="add-to-card">رزرو کتاب</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End featured item -->
+
+        }
+
+    </div>
+</div>

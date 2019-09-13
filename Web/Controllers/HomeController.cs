@@ -17,7 +17,6 @@ using WebFramework.Filters;
 
 namespace Web.Controllers
 {
-   [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         private readonly IBookService _bookService;
@@ -30,6 +29,7 @@ namespace Web.Controllers
             _fieldRepository = fieldRepository;
             _bookRepository = bookRepository;
         }
+
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var pagable = new Pagable
@@ -42,20 +42,15 @@ namespace Web.Controllers
             var vm = new HomeIndexVM();
 
             vm.Fields = await _fieldRepository.TableNoTracking.ToListAsync(cancellationToken);
-            vm.ComputerBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a=>a.FieldId).Contains(1) &&c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.UlomBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(2) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.SanayeBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(3) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.MechanickBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(4) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.OmranBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(5) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.Memary = await _bookRepository.TableNoTracking.Where(c => c.FieldBook.Select(a => a.FieldId).Contains(6) && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-           
+            vm.General = await _bookRepository.TableNoTracking.Where(c => c.FieldId==1 &&c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.ComputerBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 2 && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
+            vm.UlomBooks = await _bookRepository.TableNoTracking.Where(c =>c.FieldId==3 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.SanayeBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 4 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.MechanickBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 5 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.OmranBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 6 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+          
             return View(vm);
         }
-        public async Task<IActionResult> Alaki(CancellationToken cancellationToken,Language lan,CourseType ctype,int field,BookStatus bstatus,Pagable pagable)
-        {
-            var model = await _bookService.GetAllBookAsync(cancellationToken,ctype,bstatus,lan,field,pagable.Search);
-            return Ok(model);
-        }
-
+       
     }
 }

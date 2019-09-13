@@ -10,11 +10,11 @@ namespace Entities
     /// </summary>
     public class Field : BaseEntity
     {
-        [DisplayName("عنوان انگلیسی")]
+        [DisplayName("عنوان")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public string Name { get; set; }
 
-        public virtual List<FieldBook> FieldBooks { get; set; }
+        public virtual List<Book> Books { get; set; }
         public virtual List<Student> Students { get; set; }
         public virtual List<Teacher> Teachers { get; set; }
 

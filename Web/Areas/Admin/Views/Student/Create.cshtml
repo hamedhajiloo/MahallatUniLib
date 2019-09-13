@@ -1,0 +1,71 @@
+﻿@model StudentDto
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+}
+
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h2>افزودن دانشجو</h2>
+    </div>
+    <div class="panel-body">
+        <style>
+            .circleInput {
+                border-radius: 3px;
+            }
+        </style>
+
+        <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+            <form id="formId" asp-area="Admin" asp-controller="Student" asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+               
+                <div class="col-md-4  col-lg-4" style="margin-bottom:15px; margin-top:15px;">
+
+                    @* نام و نام خانوادگی *@
+                    <div class="form-group">
+                        <label asp-for="FullName" class="control-label"></label>
+                        <input asp-for="FullName" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+
+
+                    @*UserName *@
+                    <div class="form-group">
+                        <label asp-for="UserName" class="control-label"></label>
+                        <input asp-for="UserName" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+
+                    @*  رشته *@
+                    <div class="form-group">
+                        <label class="control-label">رشته</label>
+                        <select class="form-control circleInput" name="FieldId">
+                            <option value="2">مهندسی کامپیوتر</option>
+                            <option value="3">علوم کامپیوتر</option>
+                            <option value="4">مهندسی صنایع</option>
+                            <option value="5">مهندسی مکانیک</option>
+                            <option value="6">مهندسی عمران</option>
+                        </select>
+                        @*<span asp-validation-for="Fields" class="text-danger"></span>*@
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="ایجاد" class="btn btn-success formSubmit" />
+                        <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+                    </div>
+
+
+            
+                    </div>
+                    </form>
+       
+        </div>
+
+    </div>
+</div>
+
+
+

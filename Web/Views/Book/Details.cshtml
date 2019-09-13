@@ -1,0 +1,121 @@
+﻿@model Services.Dto.BookSelectDto
+@{
+    ViewData["Title"] = "جزئیات";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h2 class="text-center">جزئیات کتاب</h2>
+    </div>
+    <div class="panel-body">
+        <style>
+            .circleInput {
+                border-radius: 3px;
+            }
+        </style>
+
+        <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+            <div class="col-md-4 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+
+                <dl class="text-center">
+                    @*<dt>
+                            @Html.DisplayNameFor(model => model.ISBN)
+                        </dt><br/>
+                        <dd>
+                            @Html.DisplayFor(model => model.ISBN)
+                        </dd><hr/>*@
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt><br/>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd><hr/>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.AuthorName)
+                    </dt><br/>
+                    <dd>
+                        @Html.DisplayFor(model => model.AuthorName)
+                    </dd><hr/>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Publisher)
+                    </dt><br/>
+                    <dd>
+                        @Html.DisplayFor(model => model.Publisher)
+                    </dd><hr/>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PublishYear)
+                    </dt><br/>
+                    <dd>
+                        @Html.DisplayFor(model => model.PublishYear)
+                    </dd><hr/>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Edition)
+                    </dt><br/>
+                    <dd>
+                        @Html.DisplayFor(model => model.Edition)
+                    </dd><hr/>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Language)
+                    </dt><br/>
+                    <dd>
+                        @Html.DisplayFor(model => model.Language)
+                    </dd><hr/>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Field)
+                    </dt><br/>
+                    <dd>
+                        @Html.DisplayFor(model => model.Field)
+                    </dd><hr/>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Count)
+                    </dt><br/>
+                    <dd>
+                        @Html.DisplayFor(model => model.Count)
+                    </dd><hr/>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BookStatus)
+                    </dt><br/>
+
+                    @{
+                        if (Model.BookStatus == Common.Enums.BookStatus.Free)
+                        {
+                            <dd style="color:forestgreen">@Model.BookStatusNum</dd><hr/>
+                        }
+                        else if (Model.BookStatus == Common.Enums.BookStatus.Reserved)
+                        {
+                            <dd style="color:yellow">@Model.BookStatusNum</dd><hr/>
+                        }
+                        else if (Model.BookStatus == Common.Enums.BookStatus.Borrowed)
+                        {
+                            <dd style="color:red">@Model.BookStatusNum</dd><hr/>
+                        }
+                    }
+
+                </dl>
+                <a href="/">بازگشت</a>
+            </div>
+
+            <div class="col-md-4" style="margin-top:25px; margin-bottom:25px;">
+               
+
+                    <div class="form-group">
+                        <img id="imgbook" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                             src="~/upload/image/book/normalimage/@Model.ImageUrl" alt="BookImage"
+                             style="height:350px;" />
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+

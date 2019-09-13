@@ -67,22 +67,19 @@ namespace Services.Dto
         public string ImageUrl { get; set; }
 
 
-
-        [DisplayName("نوع درس")]
-        [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public CourseType CourseType { get; set; }
-
-
-
-
         [DisplayName("وضعیت کتاب")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public BookStatus BookStatus { get; set; }
 
 
+        [DisplayName("رشته")]
+        [Required(ErrorMessage = DataAnotations.EnterMessage)]
+        public FieldStatus FieldId { get; set; }
+
         public override void CustomMappings(IMappingExpression<Book, BookDto> mapping)
         {
             mapping.ForMember(des => des.BooksISBN, opt => opt.MapFrom(src => src.ISBNs.Select(p=>p.Value).ToList()));
+            mapping.ForMember(des => des.FieldId,opt=>opt.Ignore());
 
         }
         //public IEnumerable<ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
@@ -113,8 +110,6 @@ namespace Services.Dto
         public string Language { get; set; }
 
 
-        [Display(Name = "نوع درس")]
-        public string CourseType { get; set; }
 
 
         [Display(Name = "تصویر")]
@@ -136,10 +131,14 @@ namespace Services.Dto
         public int Count { get; set; }
 
 
+        [DisplayName("رشته")]
+        public string Field { get; set; }
+
+
         public override void CustomMappings(IMappingExpression<Book, BookSelectDto> mapping)
         {
-            mapping.ForMember(des => des.CourseType, opt => opt.MapFrom(src => src.CourseType.ToDisplay(DisplayProperty.Name)));
             mapping.ForMember(des => des.Language, opt => opt.MapFrom(src => src.Language.ToDisplay(DisplayProperty.Name)));
+            mapping.ForMember(des => des.Field, opt => opt.MapFrom(src => src.Field.Name));
             mapping.ForMember(des => des.BookStatusNum, opt => opt.MapFrom(src => src.BookStatus.ToDisplay(DisplayProperty.Name)));
             mapping.ForMember(des => des.Count, opt => opt.MapFrom(src => src.ISBNs.Where(c=>c.IsDeleted==false).Count()));
             mapping.ForMember(des => des.Isbns, opt => opt.MapFrom(src => src.ISBNs.Where(c=>c.IsDeleted==false)));
@@ -147,5 +146,43 @@ namespace Services.Dto
 
     }
 
+    public enum FieldStatus
+    {
+        /// <summary>
+        /// نامشخص
+        /// </summary>
+        [Display(Name = "نامشخص")]
+        N =1,
 
+        /// <summary>
+        /// کامپیوتر
+        /// </summary>
+        [Display(Name = "کامپیوتر")]
+        C =2,
+
+
+        /// <summary>
+        /// علوم کامپیوتر
+        /// </summary>
+        [Display(Name = "علوم کامپیوتر")]
+        PC =3,
+
+        /// <summary>
+        /// صنایع
+        /// </summary>
+        [Display(Name = "صنایع")]
+        S=4,
+
+        /// <summary>
+        /// مکانیک
+        /// </summary>
+        [Display(Name = "مکانیک")]
+        M = 5,
+
+        /// <summary>
+        /// عمران
+        /// </summary>
+        [Display(Name = "عمران")]
+        O = 6
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Common;
 using Common.Enums;
+using Common.Exceptions;
 using Data.Repositories;
 using Entities;
 using Microsoft.EntityFrameworkCore;
@@ -18,14 +19,17 @@ namespace Services
     {
         private readonly IRepository<Book> _repository;
         private readonly IRepository<Isbn> _isbnRepository;
+        private readonly IRepository<Field> _filedRepository;
         private readonly IRepository<Book> _Book;
 
         public BookService(IRepository<Book> repository,
              IRepository<Isbn> IsbnRepository,
+             IRepository<Field> filedRepository,
             IRepository<Book> Book)
         {
             _repository = repository;
             _isbnRepository = IsbnRepository;
+            _filedRepository = filedRepository;
             _Book = Book;
         }
 
@@ -39,8 +43,41 @@ namespace Services
         public async Task<BookSelectDto> AddBookAsync(BookDto bookDto, CancellationToken cancellationToken)
         {
             Book Book = bookDto.ToEntity();
+            int fieldId = 0;
+            if (bookDto.FieldId==FieldStatus.N)
+                fieldId = 1;
 
+            if (bookDto.FieldId == FieldStatus.C)
+                fieldId = 2;
+
+            if (bookDto.FieldId == FieldStatus.PC)
+                fieldId = 3;
+
+            if (bookDto.FieldId == FieldStatus.S)
+                fieldId = 4;
+
+            if (bookDto.FieldId == FieldStatus.M)
+                fieldId = 5;
+
+            if (bookDto.FieldId == FieldStatus.O)
+                fieldId = 6;
+            
             await _Book.AddAsync(Book, cancellationToken);
+            if (bookDto.FieldId != FieldStatus.N)
+            {
+                var field = await _filedRepository.TableNoTracking.Where(c => c.Id == fieldId).SingleOrDefaultAsync(cancellationToken);
+                if (field == null)
+                {
+                    throw new BadRequestException("رشته مورد نظر یافت نشد");
+                }
+                Book.FieldId = fieldId;
+                await _Book.UpdateAsync(Book, cancellationToken);
+            }
+            else
+            {
+                await _Book.UpdateAsync(Book, cancellationToken);
+            }
+               
             List<Isbn> isbns = new List<Isbn>();
             foreach (string item in bookDto.BooksISBN)
             {
@@ -82,8 +119,7 @@ namespace Services
                                 p.Publisher.Contains(pagable.Search.Trim()) &&
                                 p.PublishYear.ToString().Contains(pagable.Search.Trim()) &&
                                 p.Name.Contains(pagable.Search.Trim()) &&
-                                p.Language.ToString().Contains(pagable.Search.Trim()) &&
-                                p.FieldBook.Select(c => c.FieldId).Contains(FieldId)).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
+                                p.Language.ToString().Contains(pagable.Search.Trim())).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
             return model;
         }
 
@@ -182,30 +218,33 @@ namespace Services
         public async Task<BookDto> FindBookById4EditAsync(int id, CancellationToken cancellationToken)
         {
             BookDto model = await _Book.Table.Include(c => c.ISBNs).Where(c => c.Id == id && c.BookIsDeleted == false).ProjectTo<BookDto>().SingleOrDefaultAsync(cancellationToken);
-            Book book = model.ToEntity();
-            try
-            {
-                //List<string> isbns = model.BooksISBN.ToList();
-                //IList<string> isbnList = new List<string>();
-                //foreach (var item in isbns)
-                //{
-                //    isbnList.Add(item);
-                //}
-                //foreach (var item in isbns)
-                //{
-                //    model.BooksISBN.Add(item);
-                //}
-                //model.BooksISBN.AddRange(isbns);
-            }
-            catch (Exception)
-            {
+            var book= await _Book.Table.Include(c => c.ISBNs).Where(c => c.Id == id && c.BookIsDeleted == false).SingleOrDefaultAsync(cancellationToken);
 
-                throw;
-            }
+
+            FieldStatus fieldId = 0;
+            if (book.FieldId ==1)
+                fieldId =FieldStatus.N ;
+
+            if (book.FieldId == 2)
+                fieldId = FieldStatus.C;
+
+            if (book.FieldId ==3)
+                fieldId = FieldStatus.PC;
+
+            if (book.FieldId == 4)
+                fieldId = FieldStatus.S;
+
+            if (book.FieldId ==5)
+                fieldId = FieldStatus.M;
+
+            if (book.FieldId == 6)
+                fieldId = FieldStatus.O;
+
+            model.FieldId = fieldId;
             return model;
         }
 
-        public async Task<List<BookSelectDto>> GetAllBookAsync(CancellationToken cancellationToken, CourseType courseType, BookStatus bookStatus, Language language, int Field, string search)
+        public async Task<List<BookSelectDto>> GetAllBookAsync(CancellationToken cancellationToken,BookStatus bookStatus, Language language, int Field, string search)
         {
             IQueryable<Book> models = _Book.TableNoTracking.Include(c => c.ISBNs);
 
@@ -217,14 +256,15 @@ namespace Services
                                   p.Edition.ToString().Contains(search) ||
                                   p.Publisher.Contains(search) ||
                                   p.Name.Contains(search)) &&
-                                  (courseType != CourseType.None ? p.CourseType == courseType : true) &&
                                   (language != Language.None ? p.Language == language : true) &&
+                                  (Field != 0 ? p.FieldId == Field : true) &&
                                   (bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true));
             }
             else if (search == null)
             {
-                models = models.Where(p => p.BookIsDeleted == false && (courseType != CourseType.None ? p.CourseType == courseType : true) &&
+                models = models.Where(p => p.BookIsDeleted == false &&
                                   (language != Language.None ? p.Language == language : true) &&
+                                  (Field != 0? p.FieldId == Field : true) &&
                                   (bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true));
             }
 
