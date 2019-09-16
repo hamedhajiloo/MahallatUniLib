@@ -19,12 +19,12 @@ namespace Entities
 
         public virtual User User { get; set; }
 
-        [ForeignKey(nameof(Field))]
-        [DisplayName("رشته")]
-        [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public int FieldId { get; set; }
+        //[ForeignKey(nameof(Field))]
+        //[DisplayName("رشته")]
+        //[Required(ErrorMessage = DataAnotations.EnterMessage)]
+        //public int FieldId { get; set; }
 
-        public virtual Field Field { get; set; }
+        //public virtual Field Field { get; set; }
 
         public virtual List<TeacherBook> TeacherBook { get; set; }
 

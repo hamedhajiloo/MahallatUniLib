@@ -149,9 +149,9 @@ namespace Services.Dto
     public enum FieldStatus
     {
         /// <summary>
-        /// نامشخص
+        /// عمومی
         /// </summary>
-        [Display(Name = "نامشخص")]
+        [Display(Name = "عمومی")]
         N =1,
 
         /// <summary>

@@ -54,12 +54,18 @@ namespace Services.Dto
         [DisplayName("روزانه / شبانه")]
         public string StudentStatus { get; set; }
 
+        [DisplayName("روزانه / شبانه")]
+        public StudentStatus StudentStatusEnum { get; set; }
 
         [DisplayName("شناسه کاربر")]
         public string UserId { get; set; }
 
         [DisplayName("شناسه رشته")]
         public int FieldId { get; set; }
+
+        [DisplayName("رشته تحصیلی")]
+        public FieldStatus FieldStatus { get; set; }
+
 
         [DisplayName(" نام و نام خانوادگی")]
         public string StudentFullName { get; set; }
@@ -75,6 +81,8 @@ namespace Services.Dto
         {
             mapping.ForMember(des => des.StudentFullName, opt => opt.MapFrom(src => src.User.FullName));
             mapping.ForMember(des => des.UserName, opt => opt.MapFrom(src => src.User.UserName));
+            mapping.ForMember(des => des.UserId, opt => opt.MapFrom(src => src.User.Id));
+            mapping.ForMember(des => des.StudentStatusEnum, opt => opt.MapFrom(src => src.StudentStatus));
             mapping.ForMember(des => des.StudentStatus, opt => opt.MapFrom(src => src.StudentStatus.ToDisplay(DisplayProperty.Name)));
             mapping.ForMember(des => des.FiledName, opt => opt.MapFrom(src => src.Field.Name));
         }

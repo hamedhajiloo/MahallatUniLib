@@ -1,0 +1,53 @@
+﻿@model Services.Dto.TeacherDto
+
+@{
+
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+
+}
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h2 class="text-center">ویرایش اطلاعات @Model.UserFullName</h2>
+    </div>
+    <div class="panel-body">
+        <style>
+            .circleInput {
+                border-radius: 3px;
+            }
+        </style>
+
+        <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+
+            <h3>اطلاعات @Model.UserFullName</h3>
+            <hr />
+            <div class="col-md-4 col-lg-4 col-sm-4 " style="margin-bottom:15px; margin-top:15px;">
+
+                <form asp-area="Admin" asp-controller="Personel" asp-action="Edit" method="post">
+
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="UserId" />
+                    @* نام و نام خانوادگی *@
+                    <div class="form-group">
+                        <label asp-for="UserFullName" class="control-label"></label>
+                        <input asp-for="UserFullName" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="UserFullName" class="text-danger"></span>
+                    </div>
+
+                    @* کد ملی*@
+                    <div class="form-group">
+                        <label asp-for="NationalCode" class="control-label"></label>
+                        <input asp-for="NationalCode" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="NationalCode" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="ویرایش" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

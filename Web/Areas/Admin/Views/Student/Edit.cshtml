@@ -1,0 +1,77 @@
+﻿@model Services.Dto.StudentSelectDto
+
+@{
+
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+
+}
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h2 class="text-center">ویرایش اطلاعات @Model.StudentFullName</h2>
+    </div>
+    <div class="panel-body">
+        <style>
+            .circleInput {
+                border-radius: 3px;
+            }
+        </style>
+
+        <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+
+            <h3>اطلاعات @Model.StudentFullName</h3>
+            <hr />
+            <div class="col-md-4 col-lg-4 col-sm-4 " style="margin-bottom:15px; margin-top:15px;">
+
+                <form asp-area="Admin" asp-controller="Student" asp-action="Edit" method="post">
+
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UserId" />
+                    @* نام و نام خانوادگی *@
+                    <div class="form-group">
+                        <label asp-for="StudentFullName" class="control-label"></label>
+                        <input asp-for="StudentFullName" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="StudentFullName" class="text-danger"></span>
+                    </div>
+
+
+                    @*شماره دانشجویی *@
+                    <div class="form-group">
+                        <label asp-for="UserName" class="control-label"></label>
+                        <input asp-for="UserName" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    @* روزانه/شبانه *@
+                    <div class="form-group">
+                        <label asp-for="StudentStatusEnum" class="control-label"></label>
+                        <select asp-for="StudentStatusEnum" class="form-control circleInput">
+                            <option value="1">روزانه</option>
+                            <option value="2">شبانه</option>
+                        </select>
+                        <span asp-validation-for="StudentStatusEnum" class="text-danger"></span>
+                    </div>
+
+                    @*  رشته *@
+                    <div class="form-group">
+                        <label asp-for="FieldStatus" class="control-label">رشته</label>
+                        <select asp-for="FieldStatus" class="form-control circleInput" name="FieldId">
+                            <option value="2">مهندسی کامپیوتر</option>
+                            <option value="3">علوم کامپیوتر</option>
+                            <option value="4">مهندسی صنایع</option>
+                            <option value="5">مهندسی مکانیک</option>
+                            <option value="6">مهندسی عمران</option>
+                        </select>
+                        @*<span asp-validation-for="Fields" class="text-danger"></span>*@
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="ویرایش" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

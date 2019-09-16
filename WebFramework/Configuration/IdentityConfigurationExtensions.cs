@@ -26,7 +26,7 @@ namespace WebFramework.Configuration
                 #endregion
 
                 #region Username Settings
-                identityOptions.User.RequireUniqueEmail = settings.RequireUniqueEmail;
+                //identityOptions.User.RequireUniqueEmail = settings.RequireUniqueEmail;
                 #endregion
 
                 #region Signin Sttings

@@ -6,8 +6,8 @@ using Services.Enum.ServicesResult.Student;
 using System.Threading;
 using System.Threading.Tasks;
 using Entities;
-
-
+using Common;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Web.Areas.Admin.Controllers
 {
@@ -30,21 +30,21 @@ namespace Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string studentId, [FromHeader] CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(string gstudentid, [FromHeader] CancellationToken cancellationToken)
         {
-            var res = await _studentService.DeleteAsync(studentId, cancellationToken);
+            var res = await _studentService.DeleteAsync(gstudentid, cancellationToken);
             if (res == DeleteAsyncStatus.Ok)
             {
-                TempData["War"] = "کتاب مورد نظر حذف شد";
+                TempData["War"] = "عملیات با موفقیت انجام شد";
                 return RedirectToAction(nameof(Index));
             }
             else if (res == DeleteAsyncStatus.NonExists)
             {
-                TempData["Error"] = "کتاب مورد نظر یافت نشد";
+                TempData["Error"] = "دانشجوی مورد نظر یافت نشد";
                 return RedirectToAction(nameof(Index));
             }
 
-            TempData["Error"] = "مشکلی در حذف کتاب به وجود آمد";
+            TempData["Error"] = "مشکلی در حذف به وجود آمد";
             return RedirectToAction(nameof(Index));
         }
 
@@ -55,7 +55,7 @@ namespace Web.Areas.Admin.Controllers
             var res = model.Data;
             if (res == null)
             {
-                TempData["Error"] = "کتاب مورد نظر یافت نشد";
+                TempData["Error"] = "دانشجو مورد نظر یافت نشد";
                 return RedirectToAction(nameof(Index));
             }
             return View(res);
@@ -139,6 +139,49 @@ namespace Web.Areas.Admin.Controllers
             return LocalRedirect("/Admin/Student/Index");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Search(CancellationToken cancellationToken, Pagable pagable)
+        {
+            var model = await _studentService.GetAllAsync(cancellationToken, pagable.Search);
+
+            return this.Json(new { data = model });
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id, [FromHeader]CancellationToken cancellationToken)
+        {
+            ViewBag.ViewTitle = "فرم ویرایش اطلاعات دانشجو";
+            var model = await _studentService.GetByIdAsync( cancellationToken,id);
+            if (model == null)
+            {
+                TempData["Error"] = "این دانشجو در سیستم وجود ندارد";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromHeader]CancellationToken cancellationToken, StudentSelectDto studentDto)
+        {
+            foreach (var modelState in ViewData.ModelState.Values)
+            {
+                foreach (ModelError error in modelState.Errors)
+                {
+                    TempData["Error"] = error.ErrorMessage;
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                await _studentService.EditAsync(studentDto, cancellationToken);
+
+                TempData["Success"] = "تبریک . ویرایش با موفقیت انجام شد";
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["Error"]="مشکلی در ثبت اطلاعات رخ داد";
+            return LocalRedirect("/Admin/Student/Index");
+        }
 
     }
 }

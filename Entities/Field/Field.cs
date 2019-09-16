@@ -16,7 +16,7 @@ namespace Entities
 
         public virtual List<Book> Books { get; set; }
         public virtual List<Student> Students { get; set; }
-        public virtual List<Teacher> Teachers { get; set; }
+        //public virtual List<Teacher> Teachers { get; set; }
 
     }
 }

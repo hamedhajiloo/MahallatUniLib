@@ -1,4 +1,6 @@
-﻿@model List<StudentSelectDto>
+﻿@using Entities
+@model List<User>
+
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
 }
@@ -9,16 +11,16 @@
 
     <div class="panel panel-success col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
         <div class="panel-heading">
-            <h3 class="text-center">لیست دانشجویان</h3>
+            <h3 class="text-center">لیست اساتید</h3>
         </div>
 
 
 
         <div class="panel-body">
             <div class="col-md-6 col-lg-6 col-sm-4 col-xs-6">
-                <a class="btn btn-primary" asp-controller="Student" asp-action="Create" asp-area="Admin">
+                <a class="btn btn-primary" asp-controller="Personel" asp-action="Create" asp-area="Admin">
                     <i class="glyphicon glyphicon-plus"></i>
-                    افزودن دانشجو
+                    افزودن استاد
                 </a>
             </div>
             <div class="form-row">
@@ -39,30 +41,21 @@
             <table class="table table-responsive text-center books">
                 <thead>
                     <tr style="font-size:15px; font-weight:600;">
-                        <td>@Html.DisplayNameFor(model => model[0].UserName)</td>
-                        <td>@Html.DisplayNameFor(model => model[0].StudentFullName)</td>
-                        <td>@Html.DisplayNameFor(model => model[0].FiledName)</td>
-                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].PenaltyAmount)</td>
-                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].StudentStatus)</td>
+                        <td>کد ملی</td>
+                        <td>@Html.DisplayNameFor(model => model[0].FullName)</td>
                        
                         <td>عملیات</td>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-
                         <tr>
                             <td>@item.UserName</td>
-                            <td>@item.StudentFullName</td>
-                            <td>@item.FiledName</td>
-                            <td class="hidden-xs">@item.PenaltyAmount</td>
-                            <td class="hidden-xs">@item.StudentStatus</td>
-
+                            <td>@item.FullName</td>
                           
                             <td>
-                                <a class="btn btn-sm btn-warning" asp-controller="Student" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
+                                <a class="btn btn-sm btn-warning" asp-controller="Personel" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
                                 <a class="btn btn-sm btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
-                                <a class="btn btn-sm btn-info" asp-controller="Student" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>
                                 <input type="hidden" name="studentid" value=@item.Id id="r_@item.Id" />
                             </td>
                         </tr>
@@ -80,11 +73,11 @@
                     <h4 class="modal-title" id="myModalLabel">حذف دانشجو</h4>
                 </div>
                 <div class="modal-body">
-                    <h3>آیا برای حذف این دانشجو اطمینان دارید؟</h3>
+                    <h3>آیا برای حذف این استاد اطمینان دارید؟</h3>
                 </div>
                 <div class="modal-footer">
-                    <form asp-action="Delete" asp-controller="Student" method="post">
-                        <input type="hidden" name="gstudentid" id="gstudentid" value="" />
+                    <form asp-action="Delete" asp-controller="Personel" method="post">
+                        <input type="hidden" name="gPersonelId" id="gPersonelId" value="" />
                         <button type="button" class="btn btn-primary" data-dismiss="modal">انصراف</button>
 
                         <button type="submit" class="btn btn-danger">حذف</button>
@@ -100,7 +93,7 @@
 
         var DeleteAlarm = function (obj) {
             var studentid = $(obj).val();
-            $('#gstudentid').val(studentid);
+            $('#gPersonelId').val(studentid);
 
         }
         var Search = function () {
@@ -109,7 +102,7 @@
             var str = '';
             $.ajax({
                 type: "POST",
-                url: "/Admin/Student/Search?&search="+search,
+                url: "/Admin/Personel/Search?&search="+search,
                 contentType: "application/json",
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("XSRF-TOKEN",
@@ -123,36 +116,19 @@
                     $.each((response.data), function (i, item) {
                         console.log(item["studentStatus"]);
                         console.log(item["userName"]);
-                        if (item.StudentStatus == "روزانه") {
+                        var user = item["user"];
+
                             str += '<tr>' +
-                                '<td>' + item["userName"] + '</td>' +
-                                '<td>' + item["studentFullName"] + '</td>' +
-                                '<td>' + item["filedName"] + '</td>' +
-                                '<td class="hidden-xs">' + item["penaltyAmount"] + '</td>' +
-                                '<td style="color:green">' + item["studentStatus"] + '</td>' +
+                                '<td>' + user["userName"] + '</td>' +
+                                '<td>' + user["fullName"] + '</td>' +
+                               
                                 '<td>' +
-                                '<a class="btn btn-sm btn-warning" href="Student/Edit/' + item["id"] + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
+                                '<a class="btn btn-sm btn-warning" href="Personel/Edit/' + item["id"] + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
                                 '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item["id"] + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-                                '<a class="btn btn-sm btn-info" href="Student/Details/' + item["id"] + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
                                 '<input type="hidden" name="studentid" value=' + item["id"] + ' id="r_' + item["id"] + '" />' +
                                 '</td>' +
                                 '</tr>';
-                        }
-                        else{
-                            str += '<tr>' +
-                                '<td>' + item["userName"] + '</td>' +
-                                '<td>' + item["studentFullName"] + '</td>' +
-                                '<td>' + item["filedName"] + '</td>' +
-                                '<td class="hidden-xs">' + item["penaltyAmount"] + '</td>' +
-                                '<td style="color:indianred">' + item["studentStatus"] + '</td>' +
-                               '<td>' +
-                                '<a class="btn btn-sm btn-warning" href="Student/Edit/' + item["id"] + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
-                                '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item["id"] + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-                                '<a class="btn btn-sm btn-info" href="Student/Details/' + item["id"] + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
-                                '<input type="hidden" name="studentid" value=' + item["id"] + ' id="r_' + item["id"] + '" />' +
-                                '</td>' +
-                                '</tr>';
-                        }
+                       
                     dvItems.html('').append(str);
                     });
                 },
