@@ -20,18 +20,20 @@ namespace Web.Areas.Admin.Controllers
     public class TeacherController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
         private readonly IRepository<Teacher> _repository;
         private readonly IRepository<User> _uRepository;
 
-        public TeacherController(UserManager<User> userManager, IRepository<Teacher> repository,IRepository<User> uRepository)
+        public TeacherController(UserManager<User> userManager,IUserService userService, IRepository<Teacher> repository,IRepository<User> uRepository)
         {
             _userManager = userManager;
+            this._userService = userService;
             this._repository = repository ?? throw new System.ArgumentNullException(nameof(repository));
             this._uRepository = uRepository;
         }
         public async Task<IActionResult> Index([FromHeader]CancellationToken cancellationToken)
         {
-            var model = await _repository.TableNoTracking.Include(c=>c.User).ToListAsync(cancellationToken);
+            var model = await _repository.TableNoTracking.Include(c=>c.User).Where(c=>c.User.Deleted==false).ToListAsync(cancellationToken);
             return View(model);
         }
 
@@ -39,7 +41,8 @@ namespace Web.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(string gTeacherId, [FromHeader] CancellationToken cancellationToken)
         {
             var teacher = await _repository.Table.Include(c => c.User).Where(c => c.Id == gTeacherId).SingleOrDefaultAsync(cancellationToken);
-            await _repository.DeleteAsync(teacher, cancellationToken);
+            await _repository.DeleteAsync(teacher, cancellationToken,false);
+            await _userService.DeleteAsync(teacher.User.Id, cancellationToken);
             return RedirectToAction(nameof(Index));
         }
 

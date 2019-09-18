@@ -23,6 +23,8 @@ namespace Entities
 
         #region Properties
 
+        public bool Deleted { get; set; }
+
         [DisplayName("نام و نام خانوادگی")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         [StringLength(100)]

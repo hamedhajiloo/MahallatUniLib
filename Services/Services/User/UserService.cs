@@ -17,6 +17,16 @@ namespace Services
             _jwtService = jwtService;
             _userManager = userManager;
         }
+
+        public async Task DeleteAsync(string id, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            user.Deleted = true;
+            user.UserName += "- DELETED";
+            user.NormalizedUserName += "- DELETED";
+            await _userManager.UpdateAsync(user);
+        }
+
         public async Task<AccessToken> TokenAsync(string username, string password, CancellationToken cancellationToken)
         {
             var existsUser = await _userManager.FindByNameAsync(username);

@@ -20,12 +20,15 @@ namespace Web.Areas.Admin.Controllers
     public class PersonelController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
         private readonly IRepository<User> _uRepository;
 
         public PersonelController(UserManager<User> userManager,
+            IUserService userService,
                                   IRepository<User> uRepository)
         {
             _userManager = userManager;
+            this._userService = userService;
             this._uRepository = uRepository;
         }
         public async Task<IActionResult> Index([FromHeader]CancellationToken cancellationToken)
@@ -38,7 +41,7 @@ namespace Web.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(string gPersonelId, [FromHeader] CancellationToken cancellationToken)
         {
             var user = await _uRepository.Table.Where(c => c.Id == gPersonelId).SingleOrDefaultAsync(cancellationToken);
-            await _uRepository.DeleteAsync(user,cancellationToken);
+            await _userService.DeleteAsync(gPersonelId,cancellationToken);
             return RedirectToAction(nameof(Index));
         }
 

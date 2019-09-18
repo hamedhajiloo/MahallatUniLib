@@ -10,5 +10,7 @@ namespace Services
     public interface IUserService
     {
         Task<AccessToken> TokenAsync(string username , string password,CancellationToken cancellationToken);
+
+        Task DeleteAsync(string id, CancellationToken cancellationToken);
     }
 }

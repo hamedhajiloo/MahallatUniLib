@@ -19,11 +19,13 @@ namespace Services
     {
         private readonly IRepository<Student> _repository;
         private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
 
-        public StudentService(IRepository<Student> repository,UserManager<User> userManager)
+        public StudentService(IRepository<Student> repository,UserManager<User> userManager, IUserService userService)
         {
             _repository = repository;
             this._userManager = userManager;
+            this._userService = userService;
         }
 
         public async Task<AddAsyncStatus> AddAsync(CancellationToken cancellationToken, StudentDto studentDto)
@@ -45,7 +47,7 @@ namespace Services
 
         public async Task<List<StudentSelectDto>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _repository.TableNoTracking.ProjectTo<StudentSelectDto>().ToListAsync(cancellationToken);
+            return await _repository.TableNoTracking.Include(c=>c.User).Where(c=>c.User.Deleted==false).ProjectTo<StudentSelectDto>().ToListAsync(cancellationToken);
         }
 
         public async Task<StudentSelectDto> GetByIdAsync(CancellationToken cancellationToken, string id)
@@ -87,10 +89,14 @@ namespace Services
         {
             try
             {
-                var model = await _repository.Table.SingleOrDefaultAsync(c => c.Id == studentId, cancellationToken);
+                var model = await _repository.Table.Include(c=>c.User).SingleOrDefaultAsync(c => c.Id == studentId, cancellationToken);
                 if (model == null)
                     return DeleteAsyncStatus.NonExists;
+
+
+                await _userService.DeleteAsync(model.UserId, cancellationToken);
                 await _repository.DeleteAsync(model, cancellationToken);
+                
                 return DeleteAsyncStatus.Ok;
             }
             catch
@@ -112,9 +118,9 @@ namespace Services
         {
             if (string.IsNullOrEmpty(search))
             {
-                return await _repository.TableNoTracking.Include(c => c.User).Include(c => c.Field).ProjectTo<StudentSelectDto>().ToListAsync(cancellationToken);
+                return await _repository.TableNoTracking.Include(c => c.User).Where(c=>c.User.Deleted==false).Include(c => c.Field).ProjectTo<StudentSelectDto>().ToListAsync(cancellationToken);
             }
-            return await _repository.TableNoTracking.Include(c=>c.User).Include(c=>c.Field)
+            return await _repository.TableNoTracking.Include(c=>c.User).Where(c=>c.User.Deleted==false).Include(c=>c.Field)
                 .Where(c=>
                 c.User.FullName.Contains(search)||
                 c.User.UserName.Contains(search)||

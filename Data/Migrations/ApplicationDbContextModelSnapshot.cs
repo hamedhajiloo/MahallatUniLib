@@ -250,6 +250,8 @@ namespace Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<bool>("Deleted");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 

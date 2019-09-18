@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Entities;
 using Common;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Data.Repositories;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web.Areas.Admin.Controllers
 {
@@ -17,11 +20,13 @@ namespace Web.Areas.Admin.Controllers
     {
         private readonly IStudentService _studentService;
         private readonly UserManager<User> _userManager;
+        private readonly IRepository<User> _uRepository;
 
-        public StudentController(IStudentService studentService,UserManager<User> userManager)
+        public StudentController(IStudentService studentService,UserManager<User> userManager,IRepository<User> uRepository)
         {
             _studentService = studentService;
             this._userManager = userManager;
+            this._uRepository = uRepository;
         }
         public async Task<IActionResult> Index([FromHeader]CancellationToken cancellationToken)
         {
@@ -84,7 +89,7 @@ namespace Web.Areas.Admin.Controllers
                 return View(studentDto);
             }
 
-            var existsStudentUserName = await _userManager.FindByNameAsync(studentDto.UserName);
+            var existsStudentUserName = await _uRepository.TableNoTracking.Where(c => c.UserName == studentDto.UserName).SingleOrDefaultAsync(cancellationToken);
             if (existsStudentUserName != null)
             {
                 TempData["Error"] = "این شماره دانشجویی قبلا ثبت شده است";
