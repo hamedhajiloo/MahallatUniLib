@@ -19,11 +19,8 @@
         <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
             <div class="col-md-4 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
                 <form asp-area="Admin" asp-controller="Setting" asp-action="Edit" method="post">
-
-
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" name="bookid" value="@Model.Id" />
-
                     <div class="form-group">
                         <label asp-for="Amount_Of_Punishment_For_Reserving_The_Book" class="control-label"></label>
                         <input asp-for="Amount_Of_Punishment_For_Reserving_The_Book" class="form-control circleInput" placeholder="" />
@@ -46,22 +43,11 @@
                         <span asp-validation-for="ReservCount" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for=" ReservDay" class="control-label"></label>
-                        <input asp-for="ReservDay" class="form-control circleInput" placeholder="" />
-                        <span asp-validation-for="ReservDay" class="text-danger"></span>
-                    </div>
-                  
-
-                    <div class="form-group">
                         <input type="submit" value="ویرایش" class="btn btn-success" />
                         <a asp-action="Index" class="btn btn-danger">بازگشت</a>
                     </div>
                 </form>
-
-             
             </div>
-
-       
         </div>
     </div>
 </div>

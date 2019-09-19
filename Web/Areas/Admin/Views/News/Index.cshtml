@@ -1,0 +1,156 @@
+﻿@model List<Entities.News.News>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+}
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+
+
+    <div class="panel panel-success col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+        <div class="panel-heading">
+            <h3 class="text-center">لیست اخبار</h3>
+        </div>
+
+
+
+        <div class="panel-body">
+            <div class="col-md-6 col-lg-6 col-sm-4 col-xs-6">
+                <a class="btn btn-primary" asp-controller="News" asp-action="Create" asp-area="Admin">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن خبر
+                </a>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 col-lg-6 col-sm-4 col-xs-6">
+                    @* متن جستجو *@
+                    <div class="form-group">
+                        <input type="text" id="search" name="search" value="" onkeyup="Search()" placeholder="جستجو..." class="form-control input-lg circleInput search" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="box table-responsive box-body no-padding">
+
+            <table class="table table-responsive  text-center books">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>@Html.DisplayNameFor(model => model[0].Title)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].Message)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].Link)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].InserDateP)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].Picture)</td>
+                        <td style="min-width:250px" scope="col">عملیات</td>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a class="btn btn-xs btn-info" asp-controller="Books" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;" title="@item.Title"><i class="glyphicon glyphicon-signal"></i> @(item.Title.Length > 10 ? item.Title.Remove(10) + "...." : item.Title) </a>
+                            </td>
+                            <td>@item.Message</td>
+                            <td><a href="@item.Link">لینک</a></td>
+                            <td>@item.InserDateP</td>
+                            <td><img style="height:100px; width:100px;" src="~/upload/image/news/normalimage/@item.Picture" alt="Alternate Text" /></td>
+                            <td>
+                                <a class="btn btn-xs btn-warning" asp-controller="News" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
+                                <a class="btn btn-xs btn-danger" asp-action="Delete" asp-controller="News" asp-area="Admin" asp-route-id="@item.Id" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    @*<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">حذف خبر</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>آیا برای حذف این خبر اطمینان دارید؟</h3>
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="Delete" asp-controller="News" asp-area="Admin" method="post">
+                        <input type="hidden" name="gnewsId" id="gnewsId" value="" />
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">انصراف</button>
+
+                        <button type="submit" class="btn btn-danger">حذف</button>
+                    </form>
+                       
+                </div>
+            </div>
+        </div>
+    </div>*@
+</div>
+
+@section PanelScripts{
+    <script>
+
+    var DeleteAlarm = function (obj) {
+        var bookid = $(obj).val();
+        console.log(obj);
+            console.log(bookid);
+            $('#newsid').val(bookid);
+
+        }
+        var Search = function () {
+
+            var search = $('.search').val();
+            var lan = $('.lan').val();
+            var ctype = $('.ctype').val();
+            var bstatus = $('.bstatus').val();
+            var field = $('.field').val();
+            var str = '';
+            var url = "/Admin/News/Search?lan=" +"&&search=" + search+"";
+            //window.location.replace(url);
+            $.ajax({
+                type: "POST",
+                url: url,
+                contentType: "application/json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                dataType: "json",
+                success: function (response) { 
+                    var dvItems = $(".books tbody");
+                    dvItems.empty();
+
+                    $.each((response.data), function (i, item) {
+                        console.table(item);
+                        console.log(item.inserDateP);
+                      
+                            str += '<tr>' +
+                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.title + ' </a></td>' +
+                                '<td>' + item.message + '</td>' +
+                                '<td>' + item.link + '</td>' +
+                                '<td>' + item.inserDateP + '</td>' +
+                                '<td><img style="height:100px; width:100px;" src="/upload/image/news/normalimage/'+item.picture+'" alt="Alternate Text" /></td>'+
+                                '<td>' +
+                                '<a class="btn btn-xs btn-warning" href="News/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
+                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '</td>' +
+                                '</tr>';
+                    });
+                    dvItems.html('').append(str);
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+        }
+
+    </script>
+}

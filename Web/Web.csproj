@@ -674,10 +674,10 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\fonts\iransans\" />
     <Folder Include="wwwroot\lib\Error\" />
     <Folder Include="wwwroot\upload\image\book\thumbnailimage\" />
+    <Folder Include="wwwroot\upload\image\news\normalimage\" />
   </ItemGroup>
 
   <ItemGroup>

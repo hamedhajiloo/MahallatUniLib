@@ -2,22 +2,21 @@
 
 namespace Data.Migrations
 {
-    public partial class mig8 : Migration
+    public partial class Mig2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "Deleted",
-                table: "AspNetUsers",
-                nullable: false,
-                defaultValue: false);
+            migrationBuilder.AddColumn<string>(
+                name: "InserDateP",
+                table: "News",
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Deleted",
-                table: "AspNetUsers");
+                name: "InserDateP",
+                table: "News");
         }
     }
 }

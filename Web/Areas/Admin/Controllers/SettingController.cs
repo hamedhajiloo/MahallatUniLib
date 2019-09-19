@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -11,6 +12,9 @@ namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/Setting/[action]")]
+    [Authorize(Roles = "Admin,Personel")]
+
+
     public class SettingController : Controller
     {
         private readonly ISettingService _settingService;

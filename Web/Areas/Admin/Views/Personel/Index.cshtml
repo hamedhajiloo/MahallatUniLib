@@ -11,7 +11,7 @@
 
     <div class="panel panel-success col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
         <div class="panel-heading">
-            <h3 class="text-center">لیست اساتید</h3>
+            <h3 class="text-center">لیست پرسنل سایت</h3>
         </div>
 
 
@@ -20,7 +20,7 @@
             <div class="col-md-6 col-lg-6 col-sm-4 col-xs-6">
                 <a class="btn btn-primary" asp-controller="Personel" asp-action="Create" asp-area="Admin">
                     <i class="glyphicon glyphicon-plus"></i>
-                    افزودن استاد
+                    افزودن پرسنل
                 </a>
             </div>
             <div class="form-row">
@@ -47,7 +47,7 @@
                         <td>عملیات</td>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.Where(c=>c.Deleted==false))
                     {
                         <tr>
                             <td>@item.UserName</td>
@@ -70,10 +70,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">حذف دانشجو</h4>
+                    <h4 class="modal-title" id="myModalLabel">حذف پرسنل</h4>
                 </div>
                 <div class="modal-body">
-                    <h3>آیا برای حذف این استاد اطمینان دارید؟</h3>
+                    <h3>آیا برای حذف این پرسنل اطمینان دارید؟</h3>
                 </div>
                 <div class="modal-footer">
                     <form asp-action="Delete" asp-controller="Personel" method="post">
@@ -114,13 +114,12 @@
                     dvItems.empty();
                     console.table(response.data);
                     $.each((response.data), function (i, item) {
-                        console.log(item["studentStatus"]);
-                        console.log(item["userName"]);
-                        var user = item["user"];
+                        console.log(item.studentStatus);
+                        console.table(item)
 
-                            str += '<tr>' +
-                                '<td>' + user["userName"] + '</td>' +
-                                '<td>' + user["fullName"] + '</td>' +
+                        str += '<tr>' +
+                            '<td>' + item["userName"] + '</td>' +
+                                '<td>' + item["fullName"] + '</td>' +
                                
                                 '<td>' +
                                 '<a class="btn btn-sm btn-warning" href="Personel/Edit/' + item["id"] + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +

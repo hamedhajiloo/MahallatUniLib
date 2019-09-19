@@ -7,14 +7,14 @@ namespace Entities
         /// <summary>
         /// جریمه برای برگرداندن کتاب
         /// </summary>
-        [DataType(DataType.Currency)]
+        //[DataType(DataType.Currency)]
         [Display(Name = "جریمه امانت دادن کتاب")]
         public decimal Amount_Of_Punishment_For_Returning_The_Book { get; set; }
 
         /// <summary>
         /// جریمه برای رزرو کتاب
         /// </summary>
-        [DataType(DataType.Currency)]
+        //[DataType(DataType.Currency)]
         [Display(Name = "جریمه رزرو کتاب")]
         public decimal Amount_Of_Punishment_For_Reserving_The_Book { get; set; }
 

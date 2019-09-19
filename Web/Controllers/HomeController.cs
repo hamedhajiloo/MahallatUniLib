@@ -7,6 +7,7 @@ using Common;
 using Common.Enums;
 using Data.Repositories;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services;
@@ -17,6 +18,8 @@ using WebFramework.Filters;
 
 namespace Web.Controllers
 {
+    [Authorize(Roles ="User")]
+
     public class HomeController : Controller
     {
         private readonly IBookService _bookService;

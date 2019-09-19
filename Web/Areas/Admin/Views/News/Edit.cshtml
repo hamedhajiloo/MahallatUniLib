@@ -1,0 +1,151 @@
+﻿@model Entities.News.News
+
+@{
+
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+
+}
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h2 class="text-center">ویرایش خبر</h2>
+    </div>
+    <div class="panel-body">
+        <style>
+            .circleInput {
+                border-radius: 3px;
+            }
+        </style>
+
+        <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+      
+            <hr />
+            <div class="col-md-6 col-lg-6 col-sm-6 " style="margin-bottom:15px; margin-top:15px;">
+
+                <form asp-area="Admin" asp-controller="News" asp-action="Edit" method="post">
+
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" name="bookid" value="@Model.Id" />
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Message" class="control-label"></label>
+                        <input asp-for="Message" class="form-control circleInput" placeholder="" />
+                        <span asp-validation-for="Message" class="text-danger"></span>
+                    </div>
+
+                  
+                    <div class="form-group">
+                        <label asp-for="Link" class="control-label"></label>
+                        <input asp-for="Link" class="form-control circleInput" placeholder="" />
+                        <a href="@Model.Link">@Model.Link</a>
+                        <span asp-validation-for="Link" class="text-danger"></span>
+                    </div>
+                    
+
+                    @* تصویر *@
+                    <div class="form-group">
+                        <label asp-for="Picture" class="control-label"></label>
+                        <div class="form-horizontal">
+                            <input asp-for="Picture" type="file" id="files" name="files" />
+                            <input type="button" onclick="UploadImage()" id="btnupload" class="btn btn-info" value="آپلود و نمایش تصویر" />
+                        </div>
+                        <span asp-validation-for="Picture" class="text-danger"></span>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <input type="submit" value="ویرایش" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-danger">بازگشت</a>
+                    </div>
+
+                    <input type="text" class="hidden" id="imagename" name="imagename" />
+                    <input type="hidden" name="ImageUrl" value="@Model.Picture" />
+
+                </form>
+
+                @if (ViewBag.SuccessMessage != "")
+                {
+                    <span style="color:green;">
+                        @ViewBag.SuccessMessage
+                    </span>
+                }
+
+
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-sm-6" style="margin-top:25px; margin-bottom:25px;">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="box box-widget widget-user">
+                        <div class="widget-user-header bg-light-blue-active text-center">
+                            <h3 class="widget-user-username">تصویر کتاب</h3>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <img id="imgbook" class="img-bordered col-md-12 col-xs-12 col-sm-12"
+                             src="~/upload/image/book/normalimage/@Model.Picture" alt="BookImage"
+                             style="height:350px;" />
+                    </div>
+
+                    <div id="divmessage" class="text-center hidden" style="color:green;">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section PanelScripts {
+    <script>
+        var UploadImage = function () {
+            var data = new FormData;
+            var file = $("#files").get(0);
+            var files = file.files;
+
+            for (var i = 0; i < files.length; i++) {
+                data.append('files', files[i]);
+            }
+
+            $.ajax({
+                type: "post",
+                url: '@Url.Action("UploadImage", "News", new { area = "Admin"})',
+                data: data,
+                contentType: false,
+                processData: false,
+            }).done(function (result) {
+                if (result.status == "success") {
+                   // var imageurl = "\\upload\\image\\normalimage\\" + result.imagename;
+                    $("#imgbook").attr('src', "\\upload\\image\\\\news\\normalimage\\" + result.imagename);
+
+                    $("#divmessage").removeClass('hidden');
+                    $("#divmessage").text("تصویر با موفقیت آپلود شد");
+                    $("#imagename").val(result.imagename);
+
+                    }
+                }).fail(function (result) {
+                    if (result.status != "success") {
+                        $("#divmessage").removeClass('hidden');
+                        $("#divmessage").text("در هنگام آپلود مشکلی رخ داد");
+
+                    }
+                });
+
+        }
+
+    </script>
+    
+}

@@ -92,8 +92,16 @@
                             <div class="user-info-adn-search">
                                 <div class="user-info">
                                     <p>
-                                        <a href="#"><i class="fa fa-user"></i> پروفایل</a>
-                                        <a href="#"><i class="fa fa-key"></i> خروج</a>
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <text>salam</text>
+                                        }
+                                        else
+                                        {
+                                            <a href="#"><i class="fa fa-user"></i> پروفایل</a>
+                                            <a href="#"><i class="fa fa-key"></i> خروج</a>
+                                        }
+
                                     </p>
                                 </div>
                                 <div class="search-and-cart">

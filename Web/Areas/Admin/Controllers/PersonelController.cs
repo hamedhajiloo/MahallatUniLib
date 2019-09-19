@@ -1,6 +1,7 @@
 ﻿using Common;
 using Data.Repositories;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -9,6 +10,7 @@ using Services;
 using Services.Dto;
 using Services.Enum.ServicesResult.Student;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +19,8 @@ namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("[area]/[controller]/[action]")]
+    [Authorize(Roles = "Admin")]
+
     public class PersonelController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -34,14 +38,21 @@ namespace Web.Areas.Admin.Controllers
         public async Task<IActionResult> Index([FromHeader]CancellationToken cancellationToken)
         {
             var model = await _userManager.GetUsersInRoleAsync("Personel");
-            return View(model);
+            IList<User> result = new List<User>();
+            foreach (var user in model)
+            {
+                if (user.Deleted == false)
+                {
+                    result.Add(user);
+                }
+            }
+            return View(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(string gPersonelId, [FromHeader] CancellationToken cancellationToken)
         {
-            var user = await _uRepository.Table.Where(c => c.Id == gPersonelId).SingleOrDefaultAsync(cancellationToken);
-            await _userService.DeleteAsync(gPersonelId,cancellationToken);
+            await _userService.DeleteAsync(gPersonelId, cancellationToken);
             return RedirectToAction(nameof(Index));
         }
 
@@ -73,10 +84,10 @@ namespace Web.Areas.Admin.Controllers
             User user = new User
             {
                 FullName = teacherDto.UserFullName,
-                UserName=teacherDto.NationalCode
+                UserName = teacherDto.NationalCode
             };
 
-            IdentityResult result = await _userManager.CreateAsync(user, "111111");
+            IdentityResult result = await _userManager.CreateAsync(user, teacherDto.NationalCode);
             if (result != IdentityResult.Success)
             {
                 TempData["Error"] = "مشکلی در ثبت نام به وجود آمده است";
@@ -84,7 +95,7 @@ namespace Web.Areas.Admin.Controllers
             }
 
 
-          
+
 
             IdentityResult roleResult = await _userManager.AddToRoleAsync(user, "Personel");
             if (roleResult != IdentityResult.Success)
@@ -102,14 +113,31 @@ namespace Web.Areas.Admin.Controllers
             var search = pagable.Search;
             if (string.IsNullOrEmpty(search))
             {
-                var teacher= await _uRepository.TableNoTracking.ToListAsync(cancellationToken);
-                return Json(new { data = teacher });
+                var personel = await _userManager.GetUsersInRoleAsync("Personel");
+                var result = new List<User>();
+                foreach (var user in personel)
+                {
+                    if (user.Deleted == false)
+                    {
+                        result.Add(user);
+                    }
+                }
+
+                return Json(new { data = result });
             }
-            var model= await _uRepository.TableNoTracking
-                .Where(c =>
-                c.FullName.Contains(search) ||
-                c.UserName.Contains(search)).ToListAsync(cancellationToken);
-            return Json(new { data = model });
+            var model = await _userManager.GetUsersInRoleAsync("Personel");
+
+            var result2 = new List<User>();
+            foreach (var user in model.Where(c => (
+               c.FullName.Contains(search) ||
+               c.UserName.Contains(search)) && c.Deleted == false).ToList())
+            {
+                if (user.Deleted == false)
+                {
+                    result2.Add(user);
+                }
+            }
+            return Json(new { data = result2 });
         }
 
 
@@ -124,7 +152,7 @@ namespace Web.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var res = new TeacherDto { UserId = model.Id, UserFullName = model.FullName,NationalCode=model.UserName };
+            var res = new TeacherDto { UserId = model.Id, UserFullName = model.FullName, NationalCode = model.UserName };
             return View(res);
         }
 
@@ -142,7 +170,7 @@ namespace Web.Areas.Admin.Controllers
             {
                 var user = await _userManager.FindByIdAsync(teacherDto.UserId);
 
-                var otherUser = await _uRepository.TableNoTracking.Where(c => c.Id != user.Id && ( c.UserName == teacherDto.NationalCode)).SingleOrDefaultAsync(cancellationToken);
+                var otherUser = await _uRepository.TableNoTracking.Where(c => c.Id != user.Id && (c.UserName == teacherDto.NationalCode)).SingleOrDefaultAsync(cancellationToken);
                 if (otherUser != null)
                 {
                     TempData["Error"] = "این پرسنل در سیستم وجود دارد";

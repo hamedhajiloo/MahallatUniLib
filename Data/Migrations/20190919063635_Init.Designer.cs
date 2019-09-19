@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190916213900_mig7")]
-    partial class mig7
+    [Migration("20190919063635_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -88,6 +88,27 @@ namespace Data.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Isbns");
+                });
+
+            modelBuilder.Entity("Entities.News.News", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Link");
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("Picture");
+
+                    b.Property<string>("ThumbNail");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News");
                 });
 
             modelBuilder.Entity("Entities.Penalty", b =>
@@ -251,6 +272,8 @@ namespace Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<bool>("Deleted");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);

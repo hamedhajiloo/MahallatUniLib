@@ -24,14 +24,14 @@
                         @Html.DisplayNameFor(model => model.Amount_Of_Punishment_For_Reserving_The_Book)
                     </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.Amount_Of_Punishment_For_Reserving_The_Book)
+                        @Html.DisplayFor(model => model.Amount_Of_Punishment_For_Reserving_The_Book) تومان
                     </dd><hr>
 
                     <dt>
                         @Html.DisplayNameFor(model => model.Amount_Of_Punishment_For_Returning_The_Book)
                     </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.Amount_Of_Punishment_For_Returning_The_Book)
+                        @Html.DisplayFor(model => model.Amount_Of_Punishment_For_Returning_The_Book) تومان
                     </dd><hr>
 
 
@@ -52,17 +52,9 @@
                     </dd><hr>
 
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.ReservDay)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.ReservDay)
-                    </dd><hr>
-
-
                 </dl>
                 <a asp-action="Edit">ویرایش</a> |
-                <a asp-action="Index">بازگشت</a>
+                <a asp-action="Index" asp-controller="Home" asp-area="Admin">بازگشت</a>
 
             </div>
         </div>

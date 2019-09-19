@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190917140114_mig8")]
-    partial class mig8
+    [Migration("20190919140839_Mig2")]
+    partial class Mig2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -88,6 +88,33 @@ namespace Data.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Isbns");
+                });
+
+            modelBuilder.Entity("Entities.News.News", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Deleted");
+
+                    b.Property<string>("InserDateP");
+
+                    b.Property<DateTime>("InsertDate");
+
+                    b.Property<string>("Link");
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("Picture");
+
+                    b.Property<string>("ThumbNail");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News");
                 });
 
             modelBuilder.Entity("Entities.Penalty", b =>

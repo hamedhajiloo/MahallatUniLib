@@ -2,6 +2,7 @@
 using Common.Enums;
 using Data.Repositories;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -19,6 +20,7 @@ namespace Web.Areas.Admin.Controllers
 {
     [Route("[area]/[controller]/[action]")]
     [Area("Admin")]
+    [Authorize(Roles ="Admin,Personel")]
     [Controller]
     //[ShowErrorPageType]
     public class BooksController : Controller

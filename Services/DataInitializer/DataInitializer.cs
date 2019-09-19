@@ -1,5 +1,6 @@
 ﻿using Data.Repositories;
 using Entities;
+using Microsoft.AspNetCore.Identity;
 using System.Linq;
 
 namespace Services.DataInitializer
@@ -7,12 +8,19 @@ namespace Services.DataInitializer
     public class DataInitializer : IDataInitializer
     {
         private readonly IRepository<Role> _roleRepository;
+        private readonly IRepository<Setting> _sRepository;
+        private readonly UserManager<User> _userManager;
         private readonly IRepository<Field> _fieldRepository;
 
-        public DataInitializer(IRepository<Role> roleRepository, IRepository<Field> fieldRepository)
+        public DataInitializer(IRepository<Role> roleRepository,
+                               IRepository<Setting> sRepository,
+                               UserManager<User> userManager,
+                               IRepository<Field> fieldRepository)
         {
-            this._roleRepository = roleRepository;
-            this._fieldRepository = fieldRepository;
+            this._roleRepository = roleRepository ?? throw new System.ArgumentNullException(nameof(roleRepository));
+            this._sRepository = sRepository ?? throw new System.ArgumentNullException(nameof(sRepository));
+            this._userManager = userManager;
+            this._fieldRepository = fieldRepository ?? throw new System.ArgumentNullException(nameof(fieldRepository));
         }
 
         public void InitializeData()
@@ -26,6 +34,13 @@ namespace Services.DataInitializer
                     Description = "Admin",
                     NormalizedName="ADMIN"
                 });
+                var user = new User
+                {
+                    FullName = "Administrator",
+                    UserName = "Administrator"
+                };
+                _userManager.CreateAsync(user, "Admin@12b#");
+                _userManager.AddToRoleAsync(user, "Admin");
             }
             if (!_roleRepository.TableNoTracking.Any(p => p.Name == "Personel"))
             {
@@ -106,6 +121,18 @@ namespace Services.DataInitializer
                 });
             }
 
+            if (_sRepository.GetById(1)==null)
+            {
+                var setting = new Setting
+                {
+                    Amount_Of_Punishment_For_Reserving_The_Book = 50,
+                    Amount_Of_Punishment_For_Returning_The_Book = 200,
+                    BorrowDay = 14,
+                    ReservCount = 4,
+                    ReservDay = 2
+                };
+                _sRepository.Add(setting);
+            }
         }
     }
 

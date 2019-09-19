@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Common;
+using Data.Repositories;
+using Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Common;
-using Data.Repositories;
-using Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Services;
-using Web.Model;
 
 namespace Web.Controllers
 {
+    [Authorize(Roles ="User")]
     [Route("Book/[action]")]
     public class BookController : Controller
     {
@@ -30,14 +30,14 @@ namespace Web.Controllers
 
         public async Task<ActionResult> Index(int id, CancellationToken cancellationToken)
         {
-            var pagable = new Pagable
+            Pagable pagable = new Pagable
             {
                 Desc = true,
                 Page = 1,
                 PageSize = 10
             };
 
-            var books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
+            List<Book> books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
 
 
             return View(books);
@@ -46,7 +46,7 @@ namespace Web.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Details(int id, [FromHeader]CancellationToken cancellationToken)
         {
-            var model = await _bookService.FindBookByIdAsync(id, cancellationToken);
+            Services.Dto.BookSelectDto model = await _bookService.FindBookByIdAsync(id, cancellationToken);
             return View(model);
         }
 

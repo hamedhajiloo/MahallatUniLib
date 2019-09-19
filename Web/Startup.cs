@@ -58,6 +58,7 @@ namespace Web
             services.AddMyServicesAndRepositories();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpContextAccessor();
+            services.AddAuthentication().AddCookie();
             // services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
             //services.AddJwtAuthentication(_siteSetting.JwtSettings);
         }

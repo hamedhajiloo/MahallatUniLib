@@ -88,6 +88,33 @@ namespace Data.Migrations
                     b.ToTable("Isbns");
                 });
 
+            modelBuilder.Entity("Entities.News.News", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Deleted");
+
+                    b.Property<string>("InserDateP");
+
+                    b.Property<DateTime>("InsertDate");
+
+                    b.Property<string>("Link");
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("Picture");
+
+                    b.Property<string>("ThumbNail");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News");
+                });
+
             modelBuilder.Entity("Entities.Penalty", b =>
                 {
                     b.Property<int>("Id")

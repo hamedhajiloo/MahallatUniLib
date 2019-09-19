@@ -1,6 +1,104 @@
-﻿
+﻿@using Web.Areas.Admin.Models;
+@model IndexModel
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
 }
 
-salam
+
+    <div class="container-fluid">
+        <div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style=" border-bottom: 2px dashed green;">
+            <span class="label label-success">
+                تعداد کل کتاب ها
+            </span>
+            <h4 class="no-margins">
+                @Model.AllBook
+            </h4>
+        </div>
+        <div class="col col-md-2 col-lg-2 col-sm-2 col-xs-2"></div>
+        <div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style="border-bottom: 2px dashed green;">
+            <span class="label label-success">
+                تعداد کتاب های رزرو شده
+            </span>
+            <h4 class="no-margins">
+                @Model.ReserveBook
+            </h4>
+        </div>
+        <hr />
+        <br /><br /><br />
+        <div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style="border-bottom: 2px dashed green;">
+            <span class="label label-success">
+                تعداد کتاب های امانت داده شده
+            </span>
+            <h4 class="no-margins">
+                @Model.BorrowedBook
+            </h4>
+        </div>
+        <div class="col col-md-2 col-lg-2 col-sm-2 col-xs-2"></div>
+        <div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style="border-bottom: 2px dashed green;">
+            <span class="label label-success">
+                تعداد کتاب های آزاد
+            </span>
+            <h4 class="no-margins">
+                @Model.FreeBook
+            </h4>
+        </div>
+        <hr />
+        <br /><br /><br />
+
+        <div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style=" border-bottom: 2px dashed red;">
+            <span class="label label-danger">
+                تعداد کل دانشجویان
+            </span>
+            <h4 class="no-margins">
+                @Model.AllStudent
+            </h4>
+        </div>
+        @*<div class="col col-md-2 col-lg-2 col-sm-2 col-xs-2"></div>*@
+        @*<div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style="border-bottom: 2px dashed red;">
+            <span class="label label-danger">
+                تعداد دانشجویانی که کتاب به امانت گرفته اند
+            </span>
+            <h4 class="no-margins">
+                @Model.BorrowedStudent
+            </h4>
+        </div>*@
+        @*<hr />
+        <br /><br /><br /><br />
+        <div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style="border-bottom: 2px dashed red;">
+            <span class="label label-danger">
+                تعداد دانشجویانی که کتاب رزرو کرده اند
+            </span>
+            <h4 class="no-margins">
+                @Model.ReserveStudent
+            </h4>
+        </div>
+        <div class="col col-md-2 col-lg-2 col-sm-2 col-xs-2"></div>
+        <div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style="border-bottom: 2px dashed red;">
+            <span class="label label-danger">
+                تعداد دانشجویانی که کتابی به امانت نگرفته و کتابی رزرو نکرده اند
+            </span>
+            <h4 class="no-margins">
+                @Model.FreeStudent
+            </h4>
+        </div>*@
+        <hr />
+        <br /><br /><br />
+
+        <div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style=" border-bottom: 2px dashed orange;">
+            <span class="label label-warning">
+                تعداد اساتید
+            </span>
+            <h4 class="no-margins">
+                @Model.Teacher
+            </h4>
+        </div>
+        <div class="col col-md-2 col-lg-2 col-sm-2 col-xs-2"></div>
+        <div class="col col-md-5 col-lg-5 col-sm-5 col-xs-5" style="border-bottom: 2px dashed blue;">
+            <span class="label label-info">
+                تعداد پرسنل
+            </span>
+            <h4 class="no-margins">
+                @Model.Personel
+            </h4>
+        </div>
+    </div>

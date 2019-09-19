@@ -1,6 +1,7 @@
 ﻿using Common;
 using Data.Repositories;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -17,6 +18,8 @@ namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("[area]/[controller]/[action]")]
+    [Authorize(Roles = "Admin,Personel")]
+
     public class TeacherController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -41,7 +44,6 @@ namespace Web.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(string gTeacherId, [FromHeader] CancellationToken cancellationToken)
         {
             var teacher = await _repository.Table.Include(c => c.User).Where(c => c.Id == gTeacherId).SingleOrDefaultAsync(cancellationToken);
-            await _repository.DeleteAsync(teacher, cancellationToken,false);
             await _userService.DeleteAsync(teacher.User.Id, cancellationToken);
             return RedirectToAction(nameof(Index));
         }
@@ -84,7 +86,7 @@ namespace Web.Areas.Admin.Controllers
                 UserName=teacherDto.NationalCode
             };
 
-            IdentityResult result = await _userManager.CreateAsync(user, "111111");
+            IdentityResult result = await _userManager.CreateAsync(user, teacherDto.NationalCode);
             if (result != IdentityResult.Success)
             {
                 TempData["Error"] = "مشکلی در ثبت نام به وجود آمده است";
@@ -117,10 +119,10 @@ namespace Web.Areas.Admin.Controllers
             var search = pagable.Search;
             if (string.IsNullOrEmpty(search))
             {
-                var teacher= await _repository.TableNoTracking.Include(c => c.User).Include(c => c.User).ToListAsync(cancellationToken);
+                var teacher= await _repository.TableNoTracking.Include(c => c.User).Where(c=>c.User.Deleted==false).ToListAsync(cancellationToken);
                 return Json(new { data = teacher });
             }
-            var model= await _repository.TableNoTracking.Include(c => c.User).Include(c => c.User)
+            var model= await _repository.TableNoTracking.Include(c => c.User).Where(c=>c.User.Deleted==false)
                 .Where(c =>
                 c.User.FullName.Contains(search) ||
                 c.User.UserName.Contains(search)).ToListAsync(cancellationToken);

@@ -51,21 +51,30 @@
                     @foreach (var item in Model)
                     {
 
-                        <tr>
-                            <td>@item.UserName</td>
-                            <td>@item.StudentFullName</td>
-                            <td>@item.FiledName</td>
-                            <td class="hidden-xs">@item.PenaltyAmount</td>
-                            <td class="hidden-xs">@item.StudentStatus</td>
+                    <tr>
+                        <td>@item.UserName</td>
+                        <td>@item.StudentFullName</td>
+                        <td>@item.FiledName</td>
+                        <td class="hidden-xs">@item.PenaltyAmount</td>
+                        @if (item.StudentStatus == "روزانه")
+                        {
+                            <td class="hidden-xs" style="color:green">@item.StudentStatus</td>
 
-                          
-                            <td>
-                                <a class="btn btn-sm btn-warning" asp-controller="Student" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
-                                <a class="btn btn-sm btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
-                                <a class="btn btn-sm btn-info" asp-controller="Student" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>
-                                <input type="hidden" name="studentid" value=@item.Id id="r_@item.Id" />
-                            </td>
-                        </tr>
+                        }
+                        else
+                        {
+                            <td class="hidden-xs" style="color:indianred">@item.StudentStatus</td>
+
+                        }
+
+
+                        <td>
+                            <a class="btn btn-sm btn-warning" asp-controller="Student" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
+                            <a class="btn btn-sm btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
+                            <a class="btn btn-sm btn-info" asp-controller="Student" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>
+                            <input type="hidden" name="studentid" value=@item.Id id="r_@item.Id" />
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
