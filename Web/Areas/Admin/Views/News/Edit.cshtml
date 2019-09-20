@@ -59,7 +59,7 @@
                         <span asp-validation-for="Picture" class="text-danger"></span>
                     </div>
 
-
+                    <input type="hidden" name="InsertDate" value="@Model.InsertDate" />
 
                     <div class="form-group">
                         <input type="submit" value="ویرایش" class="btn btn-success" />
@@ -67,7 +67,7 @@
                     </div>
 
                     <input type="text" class="hidden" id="imagename" name="imagename" />
-                    <input type="hidden" name="ImageUrl" value="@Model.Picture" />
+                    <input type="hidden" name="Picture" value="@Model.Picture" />
 
                 </form>
 
@@ -92,7 +92,7 @@
 
                     <div class="form-group">
                         <img id="imgbook" class="img-bordered col-md-12 col-xs-12 col-sm-12"
-                             src="~/upload/image/book/normalimage/@Model.Picture" alt="BookImage"
+                             src="~/upload/image/news/normalimage/@Model.Picture" alt="BookImage"
                              style="height:350px;" />
                     </div>
 

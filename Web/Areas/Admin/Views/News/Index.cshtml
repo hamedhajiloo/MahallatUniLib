@@ -69,28 +69,6 @@
         </div>
 
     </div>
-    @*<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">حذف خبر</h4>
-                </div>
-                <div class="modal-body">
-                    <h3>آیا برای حذف این خبر اطمینان دارید؟</h3>
-                </div>
-                <div class="modal-footer">
-                    <form asp-action="Delete" asp-controller="News" asp-area="Admin" method="post">
-                        <input type="hidden" name="gnewsId" id="gnewsId" value="" />
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">انصراف</button>
-
-                        <button type="submit" class="btn btn-danger">حذف</button>
-                    </form>
-                       
-                </div>
-            </div>
-        </div>
-    </div>*@
 </div>
 
 @section PanelScripts{
@@ -137,8 +115,8 @@
                                 '<td>' + item.inserDateP + '</td>' +
                                 '<td><img style="height:100px; width:100px;" src="/upload/image/news/normalimage/'+item.picture+'" alt="Alternate Text" /></td>'+
                                 '<td>' +
-                                '<a class="btn btn-xs btn-warning" href="News/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
-                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-xs btn-warning" href="/Admin/News/Edit?id=' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
+                                '<a class="btn btn-xs btn-danger" href="/Admin/News/Delete?id=' + item.id + '"  style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
                                 '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
                                 '</td>' +
                                 '</tr>';

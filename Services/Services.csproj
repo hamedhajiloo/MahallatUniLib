@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="DNTPersianUtils.Core" Version="3.5.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.4.0" />
     <PackageReference Include="wilx.System.Linq.Dynamic.Core" Version="2.1.0" />
   </ItemGroup>

@@ -129,9 +129,9 @@ namespace Web.Areas.Admin.Controllers
                 if (imagename != null)
                 {
                     news.Picture = imagename;
+                    news.ThumbNail = imagename;
                 }
 
-                news.ThumbNail = imagename;
 
                 await _repository.UpdateAsync(news, cancellationToken);
 
@@ -163,7 +163,7 @@ namespace Web.Areas.Admin.Controllers
                                             p.Message.Contains(pagable.Search)) && p.Deleted == false;
             }
 
-            List<News> model = await _repository.TableNoTracking.Where(ConditionalExpression).OrderByDescending(c=>c.InsertDate).ToListAsync(cancellationToken);
+            List<News> model = await _repository.TableNoTracking.Where(ConditionalExpression).OrderByDescending(c => c.InsertDate).ToListAsync(cancellationToken);
             foreach (var item in model)
             {
                 item.InserDateP = item.InsertDate.ToFriendlyPersianDateTextify();
