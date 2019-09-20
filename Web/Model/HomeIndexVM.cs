@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Entities.News;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace Web.Model
         public IList<Book> UlomBooks { get; set; }
         public IList<Book> Memary { get; set; }
         public IList<Book> General { get; set; }
+        public IList<News> News { get; set; }
     }
 }

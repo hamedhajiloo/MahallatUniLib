@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Common;
+using DNTPersianUtils.Core;
 using Common.Enums;
 using Data.Repositories;
 using Entities;
+using Entities.News;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,18 +20,20 @@ using WebFramework.Filters;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles ="User")]
+    [Authorize(Roles ="Student")]
 
     public class HomeController : Controller
     {
         private readonly IBookService _bookService;
         private readonly IRepository<Field> _fieldRepository;
+        private readonly IRepository<News> _nRepository;
         private readonly IRepository<Book> _bookRepository;
 
-        public HomeController(IBookService bookService,IRepository<Field> fieldRepository,IRepository<Book> bookRepository)
+        public HomeController(IBookService bookService, IRepository<Field> fieldRepository, IRepository<News> nRepository, IRepository<Book> bookRepository)
         {
             _bookService = bookService;
-            _fieldRepository = fieldRepository;
+            _fieldRepository = fieldRepository ?? throw new ArgumentNullException(nameof(fieldRepository));
+            this._nRepository = nRepository;
             _bookRepository = bookRepository;
         }
 
@@ -51,6 +55,9 @@ namespace Web.Controllers
             vm.SanayeBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 4 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
             vm.MechanickBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 5 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
             vm.OmranBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 6 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.News = await _nRepository.TableNoTracking.Where(c => c.Deleted == false).OrderByDescending(c => c.InsertDate).Take(10).ToListAsync();
+            foreach (var item in vm.News)
+                item.InserDateP = item.InsertDate.ToFriendlyPersianDateTextify(true);
           
             return View(vm);
         }

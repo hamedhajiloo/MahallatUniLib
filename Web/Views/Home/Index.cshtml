@@ -340,42 +340,25 @@
                 </div>
             </div>
             <div class="blog-box featured-product-area">
+                @foreach (var item in Model.News)
+                {
                 <div class="col-xs-12 col-sm-4">
-                    <a href="single-blog.html"><img src="~/site/img/blog/4-home-default.jpg" alt=""></a>
-                    <span class="blog-date">1394-08-12 04:40:21</span>
+                    @if (!string.IsNullOrEmpty(item.Link))
+                    {
+                        <a href="@item.Link"><img style="height:250px; width:300px;" src="~/upload/image/news/normalimage/@item.Picture" alt=""></a>
+                    }
+                    else
+                    {
+                        <img style="height:250px; width:300px;" src="~/upload/image/news/normalimage/@item.Picture" alt="">
+                    }
+                    <span class="blog-date">@item.InserDateP</span>
                     <div class="blog-info">
-                        <h3><a href="single-blog.html">عنوان خبر</a></h3>
-                        <p>لورم ایپسوم متنی است که ساختگی برای طراحی و چاپ آن مورد است. صنعت چاپ زمانی لازم بود شرایطی شما باید فکر ثبت نام و طراحی، لازمه خروج می باشد. در ضمن قاعده همفکری ها جوابگوی سئوالات زیاد شاید باشد، آنچنان که لازم بود طراحی گرافیکی خوب بود. کتابهای زیادی شرایط سخت ، دشوار و کمی در سالهای دور لازم است.</p>
-                        <a href="single-blog.html" class="readmore">ادامه مطلب<i class="fa fa-arrow-left"></i></a>
+                        <h3>@item.Title</h3>
+                        <h5>@item.Message</h5>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-4">
-                    <a href="single-blog.html"><img src="~/site/img/blog/3-home-default.jpg" alt=""></a>
-                    <span class="blog-date">1394-08-12 04:40:21</span>
-                    <div class="blog-info">
-                        <h3><a href="single-blog.html">عنوان خبر</a></h3>
-                        <p>لورم ایپسوم متنی است که ساختگی برای طراحی و چاپ آن مورد است. صنعت چاپ زمانی لازم بود شرایطی شما باید فکر ثبت نام و طراحی، لازمه خروج می باشد. در ضمن قاعده همفکری ها جوابگوی سئوالات زیاد شاید باشد، آنچنان که لازم بود طراحی گرافیکی خوب بود. کتابهای زیادی شرایط سخت ، دشوار و کمی در سالهای دور لازم است.</p>
-                        <a href="single-blog.html" class="readmore">ادامه مطلب<i class="fa fa-arrow-left"></i></a>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <a href="single-blog.html"><img src="~/site/img/blog/2-home-default.jpg" alt=""></a>
-                    <span class="blog-date">1394-08-12 04:40:21</span>
-                    <div class="blog-info">
-                        <h3><a href="single-blog.html">عنوان خبر</a></h3>
-                        <p>لورم ایپسوم متنی است که ساختگی برای طراحی و چاپ آن مورد است. صنعت چاپ زمانی لازم بود شرایطی شما باید فکر ثبت نام و طراحی، لازمه خروج می باشد. در ضمن قاعده همفکری ها جوابگوی سئوالات زیاد شاید باشد، آنچنان که لازم بود طراحی گرافیکی خوب بود. کتابهای زیادی شرایط سخت ، دشوار و کمی در سالهای دور لازم است.</p>
-                        <a href="single-blog.html" class="readmore">ادامه مطلب<i class="fa fa-arrow-left"></i></a>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <a href="single-blog.html"><img src="~/site/img/blog/1-home-default.jpg" alt=""></a>
-                    <span class="blog-date">1394-08-12 04:40:21</span>
-                    <div class="blog-info">
-                        <h3><a href="single-blog.html">عنوان خبر</a></h3>
-                        <p>لورم ایپسوم متنی است که ساختگی برای طراحی و چاپ آن مورد است. صنعت چاپ زمانی لازم بود شرایطی شما باید فکر ثبت نام و طراحی، لازمه خروج می باشد. در ضمن قاعده همفکری ها جوابگوی سئوالات زیاد شاید باشد، آنچنان که لازم بود طراحی گرافیکی خوب بود. کتابهای زیادی شرایط سخت ، دشوار و کمی در سالهای دور لازم است.</p>
-                        <a href="single-blog.html" class="readmore">ادامه مطلب<i class="fa fa-arrow-left"></i></a>
-                    </div>
-                </div>
+
+                }
             </div>
         </div>
     </div>

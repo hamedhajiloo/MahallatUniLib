@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles ="User")]
+    [Authorize(Roles ="Student")]
     [Route("Book/[action]")]
     public class BookController : Controller
     {

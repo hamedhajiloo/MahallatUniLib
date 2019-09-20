@@ -92,15 +92,9 @@
                             <div class="user-info-adn-search">
                                 <div class="user-info">
                                     <p>
-                                        @if (User.Identity.IsAuthenticated)
-                                        {
-                                            <text>salam</text>
-                                        }
-                                        else
-                                        {
-                                            <a href="#"><i class="fa fa-user"></i> پروفایل</a>
-                                            <a href="#"><i class="fa fa-key"></i> خروج</a>
-                                        }
+                                      
+                                            <a href="#"><i class="fa fa-user"></i> @User.Identity.Name</a>
+                                            <a asp-action="LogOut" asp-controller="Account"><i class="fa fa-key"></i> خروج</a>
 
                                     </p>
                                 </div>
