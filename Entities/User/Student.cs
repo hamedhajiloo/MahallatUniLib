@@ -51,7 +51,7 @@ namespace Entities
 
         public virtual Field Field { get; set; }
 
-        public virtual List<StudentBook> StudentBook { get; set; }
+        public virtual List<ReserveBook> StudentBook { get; set; }
 
         #endregion Relations
     }

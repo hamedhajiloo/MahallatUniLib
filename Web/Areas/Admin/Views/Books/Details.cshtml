@@ -80,7 +80,7 @@
                         @Html.DisplayNameFor(model => model.BookStatus)
                     </dt>
 
-                    @{
+                    @*@{
                         if (Model.BookStatus == Common.Enums.BookStatus.Free)
                         {
                             <dd style="color:forestgreen">@Model.BookStatusNum</dd>
@@ -93,7 +93,7 @@
                         {
                             <dd style="color:red">@Model.BookStatusNum</dd>
                         }
-                    }
+                    }*@
 
                 </dl>
                 <a asp-action="Edit" asp-route-id="@Model.Id">ویرایش</a> |

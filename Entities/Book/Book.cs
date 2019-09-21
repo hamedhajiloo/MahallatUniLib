@@ -18,7 +18,6 @@ namespace Entities
         {
             BookIsDeleted = false;
             Language = Language.Persion;
-            BookStatus = BookStatus.Free;
         }
         #region Properties
        
@@ -58,12 +57,6 @@ namespace Entities
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public Language Language { get; set; }
 
-
-        [DisplayName("وضعیت کتاب")]
-        [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public BookStatus BookStatus { get; set; }
-
-
         [ForeignKey(nameof(Field))]
         public int FieldId { get; set; }
         public virtual Field Field { get; set; }
@@ -73,9 +66,9 @@ namespace Entities
 
         #region Relations
 
-        public virtual List<StudentBook> StudentBook { get; set; }
-        public virtual List<TeacherBook> TeacherBook { get; set; }
+        public virtual List<ReserveBook> StudentBook { get; set; }
         public virtual List<Penalty> Penalties { get; set; }
+
         #endregion Relations
     }
 }

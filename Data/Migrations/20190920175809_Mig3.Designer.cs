@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190920175809_Mig3")]
+    partial class Mig3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,35 +139,6 @@ namespace Data.Migrations
                     b.ToTable("Penalties");
                 });
 
-            modelBuilder.Entity("Entities.ReserveBook", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BookId");
-
-                    b.Property<int>("BookStatus");
-
-                    b.Property<DateTime?>("BorrowDate");
-
-                    b.Property<DateTime?>("ReserveDate");
-
-                    b.Property<string>("StudentId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ReserveBooks");
-                });
-
             modelBuilder.Entity("Entities.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -241,6 +214,31 @@ namespace Data.Migrations
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("Entities.StudentBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId");
+
+                    b.Property<int>("BookStatus");
+
+                    b.Property<string>("StudentId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StudentBooks");
+                });
+
             modelBuilder.Entity("Entities.Teacher", b =>
                 {
                     b.Property<string>("Id")
@@ -254,6 +252,25 @@ namespace Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Teachers");
+                });
+
+            modelBuilder.Entity("Entities.TeacherBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId");
+
+                    b.Property<string>("TeacherId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("TeacherBooks");
                 });
 
             modelBuilder.Entity("Entities.User", b =>
@@ -434,22 +451,6 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Entities.ReserveBook", b =>
-                {
-                    b.HasOne("Entities.Book", "Book")
-                        .WithMany("StudentBook")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Entities.Student")
-                        .WithMany("StudentBook")
-                        .HasForeignKey("StudentId");
-
-                    b.HasOne("Entities.User", "User")
-                        .WithMany("ReserveBooks")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("Entities.Student", b =>
                 {
                     b.HasOne("Entities.Field", "Field")
@@ -463,12 +464,40 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("Entities.StudentBook", b =>
+                {
+                    b.HasOne("Entities.Book", "Book")
+                        .WithMany("StudentBook")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Entities.Student")
+                        .WithMany("StudentBook")
+                        .HasForeignKey("StudentId");
+
+                    b.HasOne("Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Entities.Teacher", b =>
                 {
                     b.HasOne("Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Entities.TeacherBook", b =>
+                {
+                    b.HasOne("Entities.Book", "Book")
+                        .WithMany("TeacherBook")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Entities.Teacher", "Teacher")
+                        .WithMany("TeacherBook")
+                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

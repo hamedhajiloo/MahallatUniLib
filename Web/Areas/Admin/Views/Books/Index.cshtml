@@ -107,7 +107,7 @@
                             <td class="hidden-xs">@item.PublishYear</td>
                             <td class="hidden-xs">@item.Language</td>
 
-                            @if (item.BookStatus == Common.Enums.BookStatus.None)
+                            @*@if (item.BookStatus == Common.Enums.BookStatus.None)
                             {
                                 <td style="color:indianred">@item.BookStatusNum</td>
                             }
@@ -122,7 +122,7 @@
                             else if (item.BookStatus == Common.Enums.BookStatus.Borrowed)
                             {
                                 <td style="color:red">@item.BookStatusNum</td>
-                            }
+                            }*@
 
 
                             <td>

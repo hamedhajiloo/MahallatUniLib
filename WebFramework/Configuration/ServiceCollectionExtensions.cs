@@ -172,6 +172,7 @@ namespace WebFramework
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IDataInitializer, DataInitializer>();
+            services.AddScoped<IStudentBookService, StudentBookService>();
         }
 
     }

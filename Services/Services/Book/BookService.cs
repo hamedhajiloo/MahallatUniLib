@@ -257,15 +257,19 @@ namespace Services
                                   p.Publisher.Contains(search) ||
                                   p.Name.Contains(search)) &&
                                   (language != Language.None ? p.Language == language : true) &&
-                                  (Field != 0 ? p.FieldId == Field : true) &&
-                                  (bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true));
+                                  (Field != 0 ? p.FieldId == Field : true) 
+                                  //&&
+                                  //(bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true)
+                                  );
             }
             else if (search == null)
             {
                 models = models.Where(p => p.BookIsDeleted == false &&
                                   (language != Language.None ? p.Language == language : true) &&
-                                  (Field != 0? p.FieldId == Field : true) &&
-                                  (bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true));
+                                  (Field != 0? p.FieldId == Field : true) 
+                                  //&&
+                                  //(bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true)
+                                  );
             }
 
             return await models.OrderByDescending(c => c.Id).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);

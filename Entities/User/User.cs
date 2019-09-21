@@ -43,6 +43,7 @@ namespace Entities
 
         #region Relations
         public virtual List<Penalty> Penalties { get; set; }
+        public virtual List<ReserveBook> ReserveBooks { get; set; }
         #endregion
     }
 

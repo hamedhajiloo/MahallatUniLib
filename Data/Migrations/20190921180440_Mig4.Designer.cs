@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190921180440_Mig4")]
+    partial class Mig4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,10 +148,6 @@ namespace Data.Migrations
                     b.Property<int>("BookId");
 
                     b.Property<int>("BookStatus");
-
-                    b.Property<DateTime?>("BorrowDate");
-
-                    b.Property<DateTime?>("ReserveDate");
 
                     b.Property<string>("StudentId");
 
@@ -446,7 +444,7 @@ namespace Data.Migrations
                         .HasForeignKey("StudentId");
 
                     b.HasOne("Entities.User", "User")
-                        .WithMany("ReserveBooks")
+                        .WithMany()
                         .HasForeignKey("UserId");
                 });
 

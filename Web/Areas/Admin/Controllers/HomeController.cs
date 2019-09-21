@@ -40,11 +40,11 @@ namespace newsSite90tv.Areas.Admin.Controllers
             {
                 AllBook = await _bRepository.TableNoTracking.Where(c => c.BookIsDeleted == false).CountAsync(cancellationToken),
 
-                BorrowedBook = await _bRepository.TableNoTracking.Where(c => c.BookIsDeleted == false && c.BookStatus == BookStatus.Borrowed).CountAsync(cancellationToken),
+                BorrowedBook = await _bRepository.TableNoTracking.Where(c => c.BookIsDeleted == false /*&& c.BookStatus == BookStatus.Borrowed*/).CountAsync(cancellationToken),
 
-                FreeBook = await _bRepository.TableNoTracking.Where(c => c.BookIsDeleted == false && c.BookStatus == BookStatus.Free).CountAsync(cancellationToken),
+                FreeBook = await _bRepository.TableNoTracking.Where(c => c.BookIsDeleted == false /*&& c.BookStatus == BookStatus.Free*/).CountAsync(cancellationToken),
 
-                ReserveBook = await _bRepository.TableNoTracking.Where(c => c.BookIsDeleted == false && c.BookStatus == BookStatus.Reserved).CountAsync(cancellationToken),
+                ReserveBook = await _bRepository.TableNoTracking.Where(c => c.BookIsDeleted == false/* && c.BookStatus == BookStatus.Reserved*/).CountAsync(cancellationToken),
 
             };
             //personel

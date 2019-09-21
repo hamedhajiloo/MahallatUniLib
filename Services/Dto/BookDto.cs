@@ -121,9 +121,9 @@ namespace Services.Dto
         public BookStatus BookStatus { get; set; }
 
 
-        [DisplayName("وضعیت کتاب")]
-        [Required(ErrorMessage = DataAnotations.EnterMessage)]
-        public string BookStatusNum { get; set; }
+        //[DisplayName("وضعیت کتاب")]
+        //[Required(ErrorMessage = DataAnotations.EnterMessage)]
+        //public string BookStatusNum { get; set; }
 
         public List<Isbn> Isbns { get; set; }
 
@@ -139,7 +139,7 @@ namespace Services.Dto
         {
             mapping.ForMember(des => des.Language, opt => opt.MapFrom(src => src.Language.ToDisplay(DisplayProperty.Name)));
             mapping.ForMember(des => des.Field, opt => opt.MapFrom(src => src.Field.Name));
-            mapping.ForMember(des => des.BookStatusNum, opt => opt.MapFrom(src => src.BookStatus.ToDisplay(DisplayProperty.Name)));
+           // mapping.ForMember(des => des.BookStatusNum, opt => opt.MapFrom(src => src.BookStatus.ToDisplay(DisplayProperty.Name)));
             mapping.ForMember(des => des.Count, opt => opt.MapFrom(src => src.ISBNs.Where(c=>c.IsDeleted==false).Count()));
             mapping.ForMember(des => des.Isbns, opt => opt.MapFrom(src => src.ISBNs.Where(c=>c.IsDeleted==false)));
         }
