@@ -214,7 +214,32 @@ namespace Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> AddOneBook(int id, [FromHeader]CancellationToken cancellationToken)
+        {
+            var book = await _repository.TableNoTracking.Where(c => c.Id == id).SingleOrDefaultAsync(cancellationToken);
+            return View(book);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> AddOneBook(AddOneBookDto dto, [FromHeader]CancellationToken cancellationToken)
+        {
+            var exists = await _isbnRepository.TableNoTracking.Where(c => c.Value.Trim() == dto.ISBN.Trim()).FirstOrDefaultAsync(cancellationToken);
+            var book = await _repository.TableNoTracking.Where(c => c.Id == dto.BookId).SingleOrDefaultAsync(cancellationToken);
+
+            if (exists!=null)
+            {
+                TempData["Error"] = "شابک  وارد شده تکراری است";
+                return View(book);
+            }
+            var _isbn = new Isbn
+            {
+                BookId = dto.BookId,
+                Value = dto.ISBN
+            };
+            await _isbnRepository.AddAsync(_isbn, cancellationToken);
+            return RedirectToAction(nameof(Index));
+        }
         [HttpPost]
         public async Task<IActionResult> Search(CancellationToken cancellationToken, Language lan, int field, BookStatus bstatus, Pagable pagable)
         {
@@ -222,5 +247,13 @@ namespace Web.Areas.Admin.Controllers
           
             return this.Json(new { data = model });
         }
+
+
+    }
+    public class AddOneBookDto
+    {
+        public int BookId { get; set; }
+        public string ISBN { get; set; }
+
     }
 }

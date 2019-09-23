@@ -44,7 +44,7 @@
                 <div class="col-md-4 col-lg-4 col-sm-4">
                    
                 </div>
-                <div class="col-md-4 col-lg-4 col-sm-4">
+                <!--<div class="col-md-4 col-lg-4 col-sm-4">
                     @* وضعیت کتاب *@
                     <div class="form-group">
                         <label class="control-label"> وضعیت کتاب</label>
@@ -55,7 +55,7 @@
                             <option value="3">امانت داده شده </option>
                         </select>
                     </div>
-                </div>
+                </div>-->
                 <div class="col-md-4 col-lg-4 col-sm-4">
                     @*رشته*@
                     <div class="form-group">
@@ -88,7 +88,7 @@
                         <td>@Html.DisplayNameFor(model => model[0].Count)</td>
                         <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].PublishYear)</td>
                         <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].Language)</td>
-                        <td>@Html.DisplayNameFor(model => model[0].BookStatus)</td>
+                        @*<td>@Html.DisplayNameFor(model => model[0].BookStatus)</td>*@
                         <td style="min-width:250px" scope="col">عملیات</td>
                 </thead>
                 
@@ -129,6 +129,7 @@
                                 <a class="btn btn-xs btn-warning" asp-controller="Books" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
                                 @*<a class="btn btn-xs btn-primary" asp-controller="Books" asp-action="DeleteOneBook" asp-route-isbn="@isbn"><i class="glyphicon glyphicon-minus-sign"></i> کاهش تعداد کتاب</a>*@
                                 <a class="btn btn-xs btn-danger" asp-action="Delete" asp-route-gbookid="@item.Id" ><i class="glyphicon glyphicon-trash"></i> حذف</a>
+                                <a class="btn btn-xs btn-success" asp-action="AddOneBook" asp-controller="Books" asp-area="Admin" asp-route-id="@item.Id"><i class="glyphicon glyphicon-plus"></i>افزودن</a>
                             </td>
                         </tr>
                     }
@@ -203,11 +204,12 @@
                                 ' <td>' + parseInt(item.isbns.length) + '</td>' +
                                 '<td class="hidden-xs">' + item.publishYear + '</td>' +
                                 '<td class="hidden-xs">'+item.language+'</td>'+
-                                '<td style="color:indianred">' + item.bookStatusNum + '</td>' +
+                                //'<td style="color:indianred">' + item.bookStatusNum + '</td>' +
                                 '<td>' +
                                 '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
-                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-xs btn-success" href="/Admin/Books/AddOneBook/'+item.id+'"><i class="glyphicon glyphicon-plus"></i>افزودن</a>'+
+                                '<input type="hidden" name="bookid" value=' + item.id + ' id="r_' + item.id + '" />' +
                                 '</td>' +
                                 '</tr>';
                         }
@@ -219,11 +221,12 @@
                                 ' <td>' + parseInt(item.isbns.length)  + '</td>' +
                                 '<td class="hidden-xs">' + item.publishYear + '</td>' +
                                 '<td class="hidden-xs">'+item.language+'</td>'+
-                                '<td style="color:green">' + item.bookStatusNum + '</td>' +
+                                //'<td style="color:green">' + item.bookStatusNum + '</td>' +
                                 '<td>' +
                                 '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
-                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + parseInt(item.Id) + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + parseInt(item.id) + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-xs btn-success" href="/Admin/Books/AddOneBook/'+item.id+'"><i class="glyphicon glyphicon-plus"></i>افزودن</a>'+
+                                '<input type="hidden" name="bookid" value=' + item.id + ' id="r_' + item.id + '" />' +
                                 '</td>' +
                                 '</tr>';
                         }
@@ -236,12 +239,13 @@
                                 ' <td>' + parseInt(item.isbns.length)  + '</td>' +
                                 '<td class="hidden-xs">' + item.publishYear + '</td>' +
                                 '<td class="hidden-xs">'+item.language+'</td>'+
-                                '<td style="color:yellow">' + item.bookStatusNum + '</td>' +
+                                //'<td style="color:yellow">' + item.bookStatusNum + '</td>' +
                                 '<td>' +
                                 '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
-                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
                                 '<a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
-                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '<a class="btn btn-xs btn-success" href="/Admin/Books/AddOneBook/'+item.id+'"><i class="glyphicon glyphicon-plus"></i>افزودن</a>'+
+                                '<input type="hidden" name="bookid" value=' + item.id + ' id="r_' + item.id + '" />' +
                                 '</td>' +
                                 '</tr>';
                         }
@@ -254,12 +258,13 @@
                                 ' <td>' + parseInt(item.isbns.length)  + '</td>' +
                                 '<td class="hidden-xs">' + item.publishYear + '</td>' +
                                 '<td class="hidden-xs">'+item.language+'</td>'+
-                                '<td style="color:red">' + item.bookStatusNum + '</td>' +
+                                //'<td style="color:red">' + item.bookStatusNum + '</td>' +
                                 '<td>' +
                                 '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
-                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.Id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
+                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
                                 '<a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
-                                '<input type="hidden" name="bookid" value=' + item.Id + ' id="r_' + item.Id + '" />' +
+                                '<a class="btn btn-xs btn-success" href="/Admin/Books/AddOneBook/'+item.id+'"><i class="glyphicon glyphicon-plus"></i>افزودن</a>'+
+                                '<input type="hidden" name="bookid" value=' + item.id + ' id="r_' + item.id + '" />' +
                                 '</td>' +
                                 '</tr>';
                         }

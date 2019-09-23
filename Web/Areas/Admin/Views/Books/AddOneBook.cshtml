@@ -1,0 +1,35 @@
+﻿@model Entities.Book
+@{
+    ViewData["Title"] = "AddOneBook";
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+}
+
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h2 class="text-center">افزودن کتاب</h2>
+    </div>
+    <div class="panel-body">
+        <style>
+            .circleInput {
+                border-radius: 3px;
+            }
+        </style>
+
+        <div class="row center-block box box-primary" style="box-shadow:2px 2px 7px 3px gray;">
+            <div class="col-md-4 col-md-offset-2" style="margin-bottom:15px; margin-top:15px;">
+                <h2> @Html.DisplayFor(model => model.Name)</h2>
+                <h3> @Html.DisplayFor(model => model.AuthorName)</h3>
+                <hr />
+                <form action="/Admin/Books/AddOneBook" method="post">
+
+                    <input type="hidden" name="BookId" value="@Model.Id" />
+                    <input type="text" name="ISBN" value="" />
+                    <input type="submit"  value="افزودن" class="btn btn-success" /> |
+                    <a asp-action="Index">بازگشت</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
