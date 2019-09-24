@@ -17,6 +17,7 @@ using Services.Dto;
 using Web.Model;
 using WebFramework.Api;
 using WebFramework.Filters;
+using Microsoft.AspNetCore.Identity;
 
 namespace Web.Controllers
 {
@@ -28,13 +29,19 @@ namespace Web.Controllers
         private readonly IRepository<Field> _fieldRepository;
         private readonly IRepository<News> _nRepository;
         private readonly IRepository<Book> _bookRepository;
+        private readonly UserManager<User> _userManager;
 
-        public HomeController(IBookService bookService, IRepository<Field> fieldRepository, IRepository<News> nRepository, IRepository<Book> bookRepository)
+        public HomeController(IBookService bookService,
+                              IRepository<Field> fieldRepository,
+                              IRepository<News> nRepository,
+                              IRepository<Book> bookRepository,
+                              UserManager<User> userManager)
         {
             _bookService = bookService;
             _fieldRepository = fieldRepository ?? throw new ArgumentNullException(nameof(fieldRepository));
             this._nRepository = nRepository;
             _bookRepository = bookRepository;
+            this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -60,6 +67,15 @@ namespace Web.Controllers
                 item.InserDateP = item.InsertDate.ToFriendlyPersianDateTextify(true);
           
             return View(vm);
+        }
+
+      
+        public async Task<IActionResult> DashBoard(CancellationToken cancellationToken)
+        {
+            var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
+            return View();
         }
        
     }
