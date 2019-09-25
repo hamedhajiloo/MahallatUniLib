@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190921180440_Mig4")]
-    partial class Mig4
+    [Migration("20190925185359_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -148,6 +148,10 @@ namespace Data.Migrations
                     b.Property<int>("BookId");
 
                     b.Property<int>("BookStatus");
+
+                    b.Property<DateTime?>("BorrowDate");
+
+                    b.Property<DateTime?>("ReserveDate");
 
                     b.Property<string>("StudentId");
 
@@ -444,7 +448,7 @@ namespace Data.Migrations
                         .HasForeignKey("StudentId");
 
                     b.HasOne("Entities.User", "User")
-                        .WithMany()
+                        .WithMany("ReserveBooks")
                         .HasForeignKey("UserId");
                 });
 

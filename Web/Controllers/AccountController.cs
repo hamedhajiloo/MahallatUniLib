@@ -30,6 +30,14 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult Login(string ReturnUrl=null)
         {
+            ////
+            // var user = new User
+            //    {
+            //        FullName = "Administrator",
+            //        UserName = "Administrator"
+            //    };
+            //    _userManager.CreateAsync(user, "Admin@12b#");
+            //    _userManager.AddToRoleAsync(user, "Admin");
             if (User.Identity.IsAuthenticated)
             {
                 if (User.IsInRole("Admin"))

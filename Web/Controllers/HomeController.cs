@@ -28,18 +28,21 @@ namespace Web.Controllers
         private readonly IBookService _bookService;
         private readonly IRepository<Field> _fieldRepository;
         private readonly IRepository<News> _nRepository;
+        private readonly IRepository<ReserveBook> _reserveBookRepository;
         private readonly IRepository<Book> _bookRepository;
         private readonly UserManager<User> _userManager;
 
         public HomeController(IBookService bookService,
                               IRepository<Field> fieldRepository,
                               IRepository<News> nRepository,
+                              IRepository<ReserveBook> reserveBookRepository,
                               IRepository<Book> bookRepository,
                               UserManager<User> userManager)
         {
             _bookService = bookService;
             _fieldRepository = fieldRepository ?? throw new ArgumentNullException(nameof(fieldRepository));
             this._nRepository = nRepository;
+            this._reserveBookRepository = reserveBookRepository ?? throw new ArgumentNullException(nameof(reserveBookRepository));
             _bookRepository = bookRepository;
             this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
@@ -72,10 +75,31 @@ namespace Web.Controllers
       
         public async Task<IActionResult> DashBoard(CancellationToken cancellationToken)
         {
+            var model = new DashBoardModel();
             var userId = User.Identity.GetUserId();
+            //Reserve Count
+            model.ReserveCount = await _reserveBookRepository.TableNoTracking
+                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved).CountAsync();
+
+            //Reserve Last Update DateTime
+            var lastReserve = await _reserveBookRepository.TableNoTracking
+                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved)
+                .OrderBy(c => c.ReserveDate).SingleOrDefaultAsync(cancellationToken);
+            model.ReserveLastupdate = lastReserve.ReserveDate.ToFriendlyPersianDateTextify();
+
+            //Borrow Count
+            model.BorrowCount = await _reserveBookRepository.TableNoTracking
+               .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Borrowed).CountAsync();
+
+            //Borrow Last Update DateTime
+            var lastBorrow = await _reserveBookRepository.TableNoTracking
+                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved)
+                .OrderBy(c => c.ReserveDate).SingleOrDefaultAsync(cancellationToken);
+            model.BorrowLastUpdate = lastBorrow.BorrowDate.ToFriendlyPersianDateTextify();
+
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.FullName = user.FullName;
-            return View();
+            return View(model);
         }
        
     }

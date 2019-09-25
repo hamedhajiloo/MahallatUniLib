@@ -107,7 +107,7 @@
                                     <p>@item.AuthorName</p>
                                     <br />
                                     <div class="featured-button">
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                        <a onclick="AddToReserve(@item.Id)" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +149,7 @@
                                     <p>@item.AuthorName</p>
                                     <br />
                                     <div class="featured-button">
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                        <a onclick="AddToReserve(@item.Id)"  class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
                             </div>
@@ -190,7 +190,7 @@
                                     <p>@item.AuthorName</p>
                                     <br />
                                     <div class="featured-button">
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                        <a onclick="AddToReserve(@item.Id)" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
                             </div>
@@ -232,7 +232,7 @@
                                     <p>@item.AuthorName</p>
                                     <br />
                                     <div class="featured-button">
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                        <a onclick="AddToReserve(@item.Id)" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
                             </div>
@@ -274,7 +274,7 @@
                                     <p>@item.AuthorName</p>
                                     <br />
                                     <div class="featured-button">
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                        <a onclick="AddToReserve(@item.Id)" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
                             </div>
@@ -316,7 +316,7 @@
                                     <p>@item.AuthorName</p>
                                     <br />
                                     <div class="featured-button">
-                                        <a href="#" class="add-to-card">رزرو کتاب</a>
+                                        <a onclick="AddToReserve(@item.Id)" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
                             </div>
@@ -364,3 +364,28 @@
     </div>
 </div>
 <!-- End blog area -->
+@section Script{ 
+    <script type="text/javascript">
+        var AddToReserve=function (id) {
+            var id = id;
+            $.ajax({
+                type: "Get",
+                url: "/Book/Reserve/"+id+"",
+                contentType: "application/json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                dataType: "json",
+                success: function (response) {
+                    toastr.success("Ok")
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+        }
+    </script>
+    
+}

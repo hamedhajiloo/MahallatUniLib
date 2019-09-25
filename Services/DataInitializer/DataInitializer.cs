@@ -9,16 +9,20 @@ namespace Services.DataInitializer
     {
         private readonly IRepository<Role> _roleRepository;
         private readonly IRepository<Setting> _sRepository;
+        private readonly IRepository<User> _userRepository;
         private readonly UserManager<User> _userManager;
         private readonly IRepository<Field> _fieldRepository;
 
-        public DataInitializer(IRepository<Role> roleRepository,
-                               IRepository<Setting> sRepository,
-                               UserManager<User> userManager,
-                               IRepository<Field> fieldRepository)
+        public DataInitializer(
+            IRepository<Role> roleRepository,
+            IRepository<Setting> sRepository,
+            IRepository<User> userRepository,
+            UserManager<User> userManager,
+            IRepository<Field> fieldRepository)
         {
             this._roleRepository = roleRepository ?? throw new System.ArgumentNullException(nameof(roleRepository));
             this._sRepository = sRepository ?? throw new System.ArgumentNullException(nameof(sRepository));
+            this._userRepository = userRepository ?? throw new System.ArgumentNullException(nameof(userRepository));
             this._userManager = userManager;
             this._fieldRepository = fieldRepository ?? throw new System.ArgumentNullException(nameof(fieldRepository));
         }
@@ -34,13 +38,7 @@ namespace Services.DataInitializer
                     Description = "Admin",
                     NormalizedName="ADMIN"
                 });
-                var user = new User
-                {
-                    FullName = "Administrator",
-                    UserName = "Administrator"
-                };
-                _userManager.CreateAsync(user, "Admin@12b#");
-                _userManager.AddToRoleAsync(user, "Admin");
+               
             }
             if (!_roleRepository.TableNoTracking.Any(p => p.Name == "Personel"))
             {
@@ -70,6 +68,7 @@ namespace Services.DataInitializer
                 });
             }
 
+           
 
             //Field
 
@@ -133,6 +132,8 @@ namespace Services.DataInitializer
                 };
                 _sRepository.Add(setting);
             }
+
+            
         }
     }
 
