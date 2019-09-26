@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Enums;
 using Data.Repositories;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +30,7 @@ namespace Web.Controllers
         {
             _bookService = bookService;
             _fieldRepository = fieldRepository;
-            this._rbRepository = rbRepository ?? throw new System.ArgumentNullException(nameof(rbRepository));
+            _rbRepository = rbRepository ?? throw new System.ArgumentNullException(nameof(rbRepository));
             _bookRepository = bookRepository;
         }
 
@@ -44,7 +45,7 @@ namespace Web.Controllers
             };
 
             List<Book> books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
-         
+
             return View(books);
         }
 
@@ -58,18 +59,21 @@ namespace Web.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Reserve(int id, [FromHeader]CancellationToken cancellationToken)
         {
-            var userId = User.Identity.GetUserId();
-            var book = await _bookRepository.TableNoTracking
+            string userId = User.Identity.GetUserId();
+            Book book = await _bookRepository.TableNoTracking
                 .Where(c => c.Id == id && c.BookIsDeleted == false).SingleOrDefaultAsync(cancellationToken);
 
-            var rb = await _rbRepository.TableNoTracking.Where(c => c.UserId == userId && c.BookId == id).SingleOrDefaultAsync(cancellationToken);
-            var message = "قبلا این کتاب را رزرو کرده اید";
-            if (rb!=null)
+            if (book == null)
+                return new JsonResult("کتاب مورد نظر یافت نشد");
+
+            ReserveBook rb = await _rbRepository.TableNoTracking.Where(c => c.UserId == userId && c.BookId == id).SingleOrDefaultAsync(cancellationToken);
+            string message = "قبلا این کتاب را رزرو کرده اید";
+            if (rb != null)
             {
                 return new JsonResult(message);
             }
 
-            var newrb = new ReserveBook
+            ReserveBook newrb = new ReserveBook
             {
                 BookId = id,
                 BookStatus = Common.Enums.BookStatus.Reserved,
@@ -82,6 +86,47 @@ namespace Web.Controllers
             return new JsonResult(message);
         }
 
+        //UnReserve
+       
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> UnReserve(int id, [FromHeader]CancellationToken cancellationToken)
+        {
+            string userId = User.Identity.GetUserId();
+            Book book = await _bookRepository.TableNoTracking
+                .Where(c => c.Id == id && c.BookIsDeleted == false)
+                .SingleOrDefaultAsync(cancellationToken);
 
+            if (book==null)
+                return new JsonResult("کتاب مورد نظر یافت نشد");
+
+            ReserveBook rb = await _rbRepository.Table.Where(c => c.UserId == userId && c.BookId == id).SingleOrDefaultAsync(cancellationToken);
+
+
+            string message = "این کتاب را تا به حال رزرو نکرده اید";
+            if (rb == null)
+                return new JsonResult(message);
+
+
+            await _rbRepository.DeleteAsync(rb, cancellationToken);
+            message = "با موفقیت حذف شد";
+            return new JsonResult(message);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetReserve(CancellationToken cancellationToken)
+        {
+            var userId = User.Identity.GetUserId();
+            var books = await _rbRepository.TableNoTracking.Include(c=>c.Book)
+                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved).ToListAsync(cancellationToken);
+            return View(books);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBorrow(CancellationToken cancellationToken)
+        {
+            var userId = User.Identity.GetUserId();
+            var books = await _rbRepository.TableNoTracking.Include(c=>c.Book)
+                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Borrowed).ToListAsync(cancellationToken);
+            return View(books);
+        }
     }
 }

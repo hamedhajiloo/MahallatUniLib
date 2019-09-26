@@ -71,6 +71,11 @@
     ============================================ -->
     <link rel="stylesheet" href="~/site/css/responsive.css">
 
+    <!-- Toastr CSS
+    ============================================ -->
+    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
+
+
     <script src="~/site/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body class="home-1">
@@ -81,20 +86,20 @@
     <div class="main-area">
         <!-- Start header -->
         <header>
-          
+
             <!-- Start logo and search area -->
             <div class="logo-and-search-area">
                 <div class="container">
                     <div class="row">
-                      
+
                         <div>
                             <!-- Start user info adn search -->
                             <div class="user-info-adn-search">
                                 <div class="user-info">
                                     <p>
-                                      
-                                            <a href="#"><i class="fa fa-user"></i> @User.Identity.Name</a>
-                                            <a asp-action="LogOut" asp-controller="Account"><i class="fa fa-key"></i> خروج</a>
+
+                                        <a href="#"><i class="fa fa-user"></i> @User.Identity.Name</a>
+                                        <a asp-action="LogOut" asp-controller="Account"><i class="fa fa-key"></i> خروج</a>
 
                                     </p>
                                 </div>
@@ -108,8 +113,9 @@
                                             </form>
                                         </div>
                                     </div>
+                                    <br />
                                     <div class="shoping-cart">
-                                        <a href="cart.html"><span>رزرو من(3)</span></a>
+                                        <a asp-action="DashBoard" asp-controller="Home"><span>@ViewBag.FullName</span></a>
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +175,7 @@
         <!-- Start footer -->
         <footer>
 
-           
+
             <!-- Start footer copyright -->
             <div class="footer-copyright">
                 <div class="container">
@@ -177,7 +183,7 @@
                         <div class="col-xs-12 col-sm-12">
                             <div class="copyright-text">
                                 <p><a href="https://hamedhajiloo.github.io/">حامد حاجیلو</a></p>
-                                
+
                             </div>
                         </div>
 
@@ -230,6 +236,9 @@
     ============================================ -->
     <script src="~/site/js/main.js"></script>
 
+
+    <!-- toastr js
+    ============================================ -->
     <script src="~/lib/toastr/toastr.min.js"></script>
     @RenderSection("Script", false)
 </body>

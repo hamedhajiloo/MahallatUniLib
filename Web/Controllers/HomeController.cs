@@ -68,7 +68,10 @@ namespace Web.Controllers
             vm.News = await _nRepository.TableNoTracking.Where(c => c.Deleted == false).OrderByDescending(c => c.InsertDate).Take(10).ToListAsync();
             foreach (var item in vm.News)
                 item.InserDateP = item.InsertDate.ToFriendlyPersianDateTextify(true);
-          
+            var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
+
             return View(vm);
         }
 
@@ -82,20 +85,33 @@ namespace Web.Controllers
                 .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved).CountAsync();
 
             //Reserve Last Update DateTime
-            var lastReserve = await _reserveBookRepository.TableNoTracking
-                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved)
-                .OrderBy(c => c.ReserveDate).SingleOrDefaultAsync(cancellationToken);
-            model.ReserveLastupdate = lastReserve.ReserveDate.ToFriendlyPersianDateTextify();
-
+            if (model.ReserveCount!=0)
+            {
+                var lastReserve = await _reserveBookRepository.TableNoTracking
+               .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved)
+               .OrderByDescending(c => c.ReserveDate).FirstOrDefaultAsync(cancellationToken);
+                model.ReserveLastupdate = lastReserve.ReserveDate.ToFriendlyPersianDateTextify();
+            }
+            else
+            {
+                model.ReserveLastupdate = "";
+            }
             //Borrow Count
             model.BorrowCount = await _reserveBookRepository.TableNoTracking
                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Borrowed).CountAsync();
 
             //Borrow Last Update DateTime
-            var lastBorrow = await _reserveBookRepository.TableNoTracking
-                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved)
-                .OrderBy(c => c.ReserveDate).SingleOrDefaultAsync(cancellationToken);
-            model.BorrowLastUpdate = lastBorrow.BorrowDate.ToFriendlyPersianDateTextify();
+            if (model.BorrowCount!=0)
+            {
+                var lastBorrow = await _reserveBookRepository.TableNoTracking
+               .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved)
+               .OrderByDescending(c => c.ReserveDate).FirstOrDefaultAsync(cancellationToken);
+                model.BorrowLastUpdate = lastBorrow.BorrowDate.ToFriendlyPersianDateTextify();
+            }
+            else
+            {
+                model.BorrowLastUpdate = "";
+            }
 
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.FullName = user.FullName;

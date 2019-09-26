@@ -14,6 +14,10 @@
     <link href="~/assets/css/style.css" rel="stylesheet" />
     <!-- You can choose a theme from css/styles instead of get all themes -->
     <link href="~/assets/css/styles/all-themes.css" rel="stylesheet" />
+
+    <!-- toastr css -->
+    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
+
 </head>
 <body class="light rtl">
     <!-- Page Loader -->
@@ -41,7 +45,7 @@
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
-               
+
             </div>
         </div>
     </nav>
@@ -52,7 +56,7 @@
             <!-- Menu -->
             <div class="menu">
                 <ul class="list">
-                 
+
                     <li class="active">
                         <a asp-action="DashBoard" asp-controller="Home">
                             <i class="fas fa-tachometer-alt"></i>
@@ -68,10 +72,10 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="users.html">کتاب های رزرو شده</a>
+                                <a asp-action="GetReserve" asp-controller="Book">کتاب های رزرو شده</a>
                             </li>
                             <li>
-                                <a href="users.html">کتاب های امانت گرفته شده</a>
+                                <a asp-action="GetBorrow" asp-controller="Book">کتاب های امانت گرفته شده</a>
                             </li>
                         </ul>
                     </li>
@@ -93,6 +97,22 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Home" class="menu-toggle">
+                            <i class="fas fa-home"></i>
+                            <span>
+                                صفحه اصلی
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Account" asp-action="LogOut" class="menu-toggle">
+                            <i class="fas fa-sign-out"></i>
+                            <span>
+                                خروج
+                            </span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <!-- #Menu -->
@@ -109,5 +129,9 @@
     <script src="~/assets/js/pages/dashboard/dashboard3.js"></script>
     <!-- Knob Js -->
     <script src="~/assets/js/pages/todo/todo.js"></script>
+    <script src="~/assets/js/pages/tables/jquery-datatable.js"></script>
+    <script src="~/assets/js/table.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    @RenderSection("Script", false)
 </body>
 </html>

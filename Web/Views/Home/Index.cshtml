@@ -149,7 +149,7 @@
                                     <p>@item.AuthorName</p>
                                     <br />
                                     <div class="featured-button">
-                                        <a onclick="AddToReserve(@item.Id)"  class="add-to-card">رزرو کتاب</a>
+                                        <a onclick="AddToReserve(@item.Id)" class="add-to-card">رزرو کتاب</a>
                                     </div>
                                 </div>
                             </div>
@@ -342,21 +342,21 @@
             <div class="blog-box featured-product-area">
                 @foreach (var item in Model.News)
                 {
-                <div class="col-xs-12 col-sm-4">
-                    @if (!string.IsNullOrEmpty(item.Link))
-                    {
-                        <a href="@item.Link"><img style="height:250px; width:300px;" src="~/upload/image/news/normalimage/@item.Picture" alt=""></a>
-                    }
-                    else
-                    {
-                        <img style="height:250px; width:300px;" src="~/upload/image/news/normalimage/@item.Picture" alt="">
-                    }
-                    <span class="blog-date">@item.InserDateP</span>
-                    <div class="blog-info">
-                        <h3>@item.Title</h3>
-                        <h5>@item.Message</h5>
+                    <div class="col-xs-12 col-sm-4">
+                        @if (!string.IsNullOrEmpty(item.Link))
+                        {
+                            <a href="@item.Link"><img style="height:250px; width:300px;" src="~/upload/image/news/normalimage/@item.Picture" alt=""></a>
+                        }
+                        else
+                        {
+                            <img style="height:250px; width:300px;" src="~/upload/image/news/normalimage/@item.Picture" alt="">
+                        }
+                        <span class="blog-date">@item.InserDateP</span>
+                        <div class="blog-info">
+                            <h3>@item.Title</h3>
+                            <h5>@item.Message</h5>
+                        </div>
                     </div>
-                </div>
 
                 }
             </div>
@@ -364,13 +364,13 @@
     </div>
 </div>
 <!-- End blog area -->
-@section Script{ 
+@section Script{
     <script type="text/javascript">
-        var AddToReserve=function (id) {
+        var AddToReserve = function (id) {
             var id = id;
             $.ajax({
                 type: "Get",
-                url: "/Book/Reserve/"+id+"",
+                url: "/Book/Reserve/" + id + "",
                 contentType: "application/json",
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("XSRF-TOKEN",
@@ -378,17 +378,19 @@
                 },
                 dataType: "json",
                 success: function (response) {
-                    console.log(response);
-                    toastr.success(response);
+                    if (response == "با موفقیت رزرو شد") {
+                        toastr.success(response);
+                    }
+                    else {
+                        toastr.error(response);
+                    }
                 },
                 failure: function (response) {
                     toastr.error(response);
-                    console.log(response);
-
                 }
             });
 
         }
     </script>
-    
+
 }
