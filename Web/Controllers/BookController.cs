@@ -66,7 +66,7 @@ namespace Web.Controllers
             var message = "قبلا این کتاب را رزرو کرده اید";
             if (rb!=null)
             {
-                return this.Json(new { message = message });
+                return new JsonResult(message);
             }
 
             var newrb = new ReserveBook
@@ -79,7 +79,7 @@ namespace Web.Controllers
 
             await _rbRepository.AddAsync(newrb, cancellationToken);
             message = "با موفقیت رزرو شد";
-            return this.Json(new { message=message });
+            return new JsonResult(message);
         }
 
 

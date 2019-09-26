@@ -378,10 +378,13 @@
                 },
                 dataType: "json",
                 success: function (response) {
-                    toastr.success("Ok")
+                    console.log(response);
+                    toastr.success(response);
                 },
                 failure: function (response) {
-                    alert(response);
+                    toastr.error(response);
+                    console.log(response);
+
                 }
             });
 
