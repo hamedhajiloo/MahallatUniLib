@@ -248,6 +248,12 @@ namespace Web.Areas.Admin.Controllers
             return this.Json(new { data = model });
         }
 
+        public async Task<IActionResult> GetBooks4Add2Borrow(string userid,[FromHeader]CancellationToken cancellationToken)
+        {
+            var model = await _bRepository.TableNoTracking.Where(c => c.ReserveBook.Where(a => a.BookStatus == BookStatus.Free || (a.UserId == userid && a.BookStatus == BookStatus.Reserved)).Any() == true).ToListAsync(cancellationToken);
+
+            return View(model);
+        }
 
     }
     public class AddOneBookDto

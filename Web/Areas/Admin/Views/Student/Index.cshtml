@@ -73,6 +73,7 @@
                             <a class="btn btn-sm btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
                             <a class="btn btn-sm btn-info" asp-controller="Student" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>
                             <input type="hidden" name="studentid" value=@item.Id id="r_@item.Id" />
+                            <a asp-action="GetBooks4Add2Borrow" asp-controller="Books" asp-area="Admin" asp-route-userid="@item.Id" class="btn btn-sm btn-success" >امانت دادن کتاب</a>
                         </td>
                     </tr>
                     }
@@ -144,6 +145,7 @@
                                 '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item["id"] + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
                                 '<a class="btn btn-sm btn-info" href="Student/Details/' + item["id"] + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
                                 '<input type="hidden" name="studentid" value=' + item["id"] + ' id="r_' + item["id"] + '" />' +
+                                '<a href="Books/GetBooks4Add2Borrow?userid=' + item["id"] + '" class="btn btn-sm btn-success" >امانت دادن کتاب</a>' +
                                 '</td>' +
                                 '</tr>';
                         }
@@ -159,6 +161,7 @@
                                 '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item["id"] + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
                                 '<a class="btn btn-sm btn-info" href="Student/Details/' + item["id"] + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
                                 '<input type="hidden" name="studentid" value=' + item["id"] + ' id="r_' + item["id"] + '" />' +
+                                '<a href="Books/GetBooks4Add2Borrow?userid=' + item["id"] + '" class="btn btn-sm btn-success" >امانت دادن کتاب</a>' +
                                 '</td>' +
                                 '</tr>';
                         }
