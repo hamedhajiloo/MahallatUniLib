@@ -35,7 +35,7 @@ namespace Entities
         public void Configure(EntityTypeBuilder<ReserveBook> builder)
         {
             builder.HasOne(c => c.Book)
-                .WithMany(c => c.StudentBook)
+                .WithMany(c => c.ReserveBook)
                 .HasForeignKey(c => new { c.BookId});
         }
     }
