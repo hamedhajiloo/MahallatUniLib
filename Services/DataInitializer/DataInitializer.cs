@@ -128,7 +128,8 @@ namespace Services.DataInitializer
                     Amount_Of_Punishment_For_Returning_The_Book = 200,
                     BorrowDay = 14,
                     ReservCount = 4,
-                    ReservDay = 2
+                    ReservDay = 2,
+                    BDay4Reserve=2
                 };
                 _sRepository.Add(setting);
             }

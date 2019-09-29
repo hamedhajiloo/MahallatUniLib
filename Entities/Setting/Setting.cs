@@ -35,5 +35,8 @@ namespace Entities
         /// </summary>
         [Display(Name = "تعداد روز هایی که کتاب می تواند امانت داده شود")]
         public int BorrowDay { get; set; }
+
+        [Display(Name = "از چند روز قبل باید رزرو باشد؟")]
+        public int BDay4Reserve { get; set; }
     }
 }
