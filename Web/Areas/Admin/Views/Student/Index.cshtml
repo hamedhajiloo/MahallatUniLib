@@ -133,7 +133,7 @@
                     $.each((response.data), function (i, item) {
                         console.log(item["studentStatus"]);
                         console.log(item["userName"]);
-                        if (item.StudentStatus == "روزانه") {
+                        if (item.StudentStatus !== "شبانه") {
                             str += '<tr>' +
                                 '<td>' + item["userName"] + '</td>' +
                                 '<td>' + item["studentFullName"] + '</td>' +
