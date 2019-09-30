@@ -2,6 +2,7 @@
 @model List<Book>
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+    var userid = ViewBag.UserId;
 }
 
 
@@ -13,6 +14,22 @@
             <h3 class="text-center">لیست کتاب ها</h3>
         </div>
 
+        <div class="panel-body">
+         
+            <div class="form-row">
+                <div class="col-md-6 col-lg-6 col-sm-6">
+                    @* متن جستجو *@
+                    <div class="form-group">
+                        <input type="text" name="search" value="" class="form-control circleInput search" placeholder="جستجو کنید ... " onkeyup="Search()" />
+                    </div>
+                </div>
+              
+                <div class="col-md-6 col-lg-6 col-sm-6">
+
+                </div>
+            </div>
+
+        </div>
 
 
         <div class="box table-responsive box-body no-padding">
@@ -40,31 +57,15 @@
                             <td>@(item.AuthorName.Length > 10 ? item.AuthorName.Remove(10) + "...." : item.AuthorName)</td>
                             <td>@item.Edition</td>
                             <td class="hidden-xs">@item.PublishYear</td>
-                            <td class="hidden-xs">@item.Language</td>
-
-                            @*@if (item.BookStatus == Common.Enums.BookStatus.None)
-                                {
-                                    <td style="color:indianred">@item.BookStatusNum</td>
-                                }
-                                @if (item.BookStatus == Common.Enums.BookStatus.Free)
-                                {
-                                    <td style="color:green">@item.BookStatusNum</td>
-                                }
-                                else if (item.BookStatus == Common.Enums.BookStatus.Reserved)
-                                {
-                                    <td style="color:yellow">@item.BookStatusNum</td>
-                                }
-                                else if (item.BookStatus == Common.Enums.BookStatus.Borrowed)
-                                {
-                                    <td style="color:red">@item.BookStatusNum</td>
-                                }*@
-
-
+                            <td class="hidden-xs">@item.Language.ToDisplay()</td>
                             <td>
-                                <a class="btn btn-xs btn-warning" asp-controller="Books" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
-                                @*<a class="btn btn-xs btn-primary" asp-controller="Books" asp-action="DeleteOneBook" asp-route-isbn="@isbn"><i class="glyphicon glyphicon-minus-sign"></i> کاهش تعداد کتاب</a>*@
-                                <a class="btn btn-xs btn-danger" asp-action="Delete" asp-route-gbookid="@item.Id"><i class="glyphicon glyphicon-trash"></i> حذف</a>
-                                <a class="btn btn-xs btn-success" asp-action="AddOneBook" asp-controller="Books" asp-area="Admin" asp-route-id="@item.Id"><i class="glyphicon glyphicon-plus"></i>افزودن</a>
+                                <form asp-action="Borrow" asp-controller="Books" asp-area="Admin" method="post">
+                                    <input type="hidden" name="userid" value="@userid" />
+                                    <input type="hidden" name="bookid" value="@item.Id" />
+                                    <button type="submit" class="btn btn-xs btn-success">
+                                        <i class="glyphicon glyphicon-plus"></i>امانت دادن
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     }
@@ -73,38 +74,12 @@
         </div>
 
     </div>
-    @*<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">حذف کتاب</h4>
-                    </div>
-                    <div class="modal-body">
-                        <h3>آیا برای حذف این کتاب اطمینان دارید؟</h3>
-                    </div>
-                    <div class="modal-footer">
-                        <form asp-action="Delete" asp-controller="Books" method="post">
-                            <input type="hidden" name="gbookid" id="gbookid" value="" />
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">انصراف</button>
-
-                            <button type="submit" class="btn btn-danger">حذف</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>*@
+    
 </div>
 
 @section PanelScripts{
     <script>
 
-        //var DeleteAlarm = function (obj) {
-        //    var bookid = $(obj).val();
-        //    console.log(bookid);
-        //    $('#gbookid').val(bookid);
-
-        //}
         var Search = function () {
 
             var search = $('.search').val();
@@ -113,7 +88,7 @@
             var bstatus = $('.bstatus').val();
             var field = $('.field').val();
             var str = '';
-            var url = "/Admin/Books/Search?lan=" + lan + "&&search=" + search + "&&ctype=" + ctype + "&&bstatus=" + bstatus + "&&field=" + field + "";
+            var url = "/Admin/Books/Search4Borrow?search=" + search + "";
             //window.location.replace(url);
             $.ajax({
                 type: "POST",
@@ -130,84 +105,42 @@
 
                     $.each((response.data), function (i, item) {
                         console.table(item);
-                        //console.log(item.Count);
-                        if (item.bookStatus == 0) {
-                            str += '<tr>' +
-                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
-                                '<td>' + item.authorName + '</td>' +
-                                '<td>' + item.edition + '</td>' +
-                                ' <td>' + parseInt(item.isbns.length) + '</td>' +
-                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
-                                '<td class="hidden-xs">'+item.language+'</td>'+
-                                //'<td style="color:indianred">' + item.bookStatusNum + '</td>' +
-                                '<td>' +
-                                '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
-                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-                                '<a class="btn btn-xs btn-success" href="/Admin/Books/AddOneBook/'+item.id+'"><i class="glyphicon glyphicon-plus"></i>افزودن</a>'+
-                                '<input type="hidden" name="bookid" value=' + item.id + ' id="r_' + item.id + '" />' +
-                                '</td>' +
+
+                        if (item.language="Persian") {
+                              str += '<tr>' +
+                            '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                            '<td>' + item.authorName + '</td>' +
+                            '<td>' + item.edition + '</td>' +
+                            '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                            '<td class="hidden-xs">فارسی</td>' +
+                                  '<td>' +
+                                    '<form action="/Admin/Books/Borrow" method="post">'+
+                                    '<input type="hidden" name="userid" value="@userid" />'+
+                                   ' <input type="hidden" name="bookid" value="'+item.id+'" />'+
+                                   ' <button type="submit" class="btn btn-xs btn-success">'+
+                                      '  <i class="glyphicon glyphicon-plus"></i>امانت دادن'+
+                                   ' </button>'+
+                               ' </form>'+
+                            '</td>' +
+                                '</tr>';
+                        } else {
+                             str += '<tr>' +
+                            '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                            '<td>' + item.authorName + '</td>' +
+                            '<td>' + item.edition + '</td>' +
+                            '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                            '<td class="hidden-xs">انگلیسی</td>' +
+                             '<td>' +
+                                    '<form action="/Admin/Books/Borrow" method="post">'+
+                                    '<input type="hidden" name="userid" value="@userid" />'+
+                                   ' <input type="hidden" name="bookid" value="'+item.id+'" />'+
+                                   ' <button type="submit" class="btn btn-xs btn-success">'+
+                                      '  <i class="glyphicon glyphicon-plus"></i>امانت دادن'+
+                                   ' </button>'+
+                               ' </form>'+
+                            '</td>' +
                                 '</tr>';
                         }
-                        if (item.bookStatus == 1) {
-                            str += '<tr>' +
-                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
-                                '<td>' + item.authorName + '</td>' +
-                                '<td>' + item.edition + '</td>' +
-                                ' <td>' + parseInt(item.isbns.length)  + '</td>' +
-                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
-                                '<td class="hidden-xs">'+item.language+'</td>'+
-                                //'<td style="color:green">' + item.bookStatusNum + '</td>' +
-                                '<td>' +
-                                '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
-                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + parseInt(item.id) + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-                                '<a class="btn btn-xs btn-success" href="/Admin/Books/AddOneBook/'+item.id+'"><i class="glyphicon glyphicon-plus"></i>افزودن</a>'+
-                                '<input type="hidden" name="bookid" value=' + item.id + ' id="r_' + item.id + '" />' +
-                                '</td>' +
-                                '</tr>';
-                        }
-
-                        if (item.bookStatus == 2) {
-                            str += '<tr>' +
-                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
-                                '<td>' + item.authorName + '</td>' +
-                                '<td>' + item.edition + '</td>' +
-                                ' <td>' + parseInt(item.isbns.length)  + '</td>' +
-                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
-                                '<td class="hidden-xs">'+item.language+'</td>'+
-                                //'<td style="color:yellow">' + item.bookStatusNum + '</td>' +
-                                '<td>' +
-                                '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
-                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-                                '<a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
-                                '<a class="btn btn-xs btn-success" href="/Admin/Books/AddOneBook/'+item.id+'"><i class="glyphicon glyphicon-plus"></i>افزودن</a>'+
-                                '<input type="hidden" name="bookid" value=' + item.id + ' id="r_' + item.id + '" />' +
-                                '</td>' +
-                                '</tr>';
-                        }
-
-                        if (item.bookStatus == 3) {
-                            str += '<tr>' +
-                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
-                                '<td>' + item.authorName + '</td>' +
-                                '<td>' + item.edition + '</td>' +
-                                ' <td>' + parseInt(item.isbns.length)  + '</td>' +
-                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
-                                '<td class="hidden-xs">'+item.language+'</td>'+
-                                //'<td style="color:red">' + item.bookStatusNum + '</td>' +
-                                '<td>' +
-                                '<a class="btn btn-xs btn-warning" href="Books/Edit/' + item.id + '" ><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>' +
-                                '<a class="btn btn-xs btn-danger" onclick="DeleteAlarm("#r_' + item.id + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
-                                '<a class="btn btn-xs btn-info" href="Books/Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> جزئیات </a>' +
-                                '<a class="btn btn-xs btn-success" href="/Admin/Books/AddOneBook/'+item.id+'"><i class="glyphicon glyphicon-plus"></i>افزودن</a>'+
-                                '<input type="hidden" name="bookid" value=' + item.id + ' id="r_' + item.id + '" />' +
-                                '</td>' +
-                                '</tr>';
-                        }
-
-
-
-
-
                     });
                     dvItems.html('').append(str);
                 },

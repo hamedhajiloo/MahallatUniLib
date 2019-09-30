@@ -104,7 +104,7 @@ namespace Web.Controllers
             if (model.BorrowCount!=0)
             {
                 var lastBorrow = await _reserveBookRepository.TableNoTracking
-               .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved)
+               .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Borrowed)
                .OrderByDescending(c => c.ReserveDate).FirstOrDefaultAsync(cancellationToken);
                 model.BorrowLastUpdate = lastBorrow.BorrowDate.ToFriendlyPersianDateTextify();
             }

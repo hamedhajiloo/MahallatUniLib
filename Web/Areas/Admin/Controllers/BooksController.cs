@@ -30,6 +30,7 @@ namespace Web.Areas.Admin.Controllers
         private readonly IRepository<Isbn> _isbnRepository;
         private readonly IImageService _imageService;
         private readonly IRepository<Setting> _sRepository;
+        private readonly IRepository<ReserveBook> _rbRepository;
         private readonly IRepository<Book> _repository;
         private readonly IRepository<Field> fRepository;
         private readonly IRepository<Book> _bRepository;
@@ -38,6 +39,7 @@ namespace Web.Areas.Admin.Controllers
                                IRepository<Isbn> isbnRepository,
                                IImageService imageService,
                                IRepository<Setting> sRepository,
+                               IRepository<ReserveBook> rbRepository,
                                IRepository<Book> repository,
                                IRepository<Field> fRepository,
                                IRepository<Book> bRepository)
@@ -46,6 +48,7 @@ namespace Web.Areas.Admin.Controllers
             this._isbnRepository = isbnRepository ?? throw new System.ArgumentNullException(nameof(isbnRepository));
             _imageService = imageService ?? throw new System.ArgumentNullException(nameof(imageService));
             this._sRepository = sRepository ?? throw new ArgumentNullException(nameof(sRepository));
+            this._rbRepository = rbRepository ?? throw new ArgumentNullException(nameof(rbRepository));
             _repository = repository ?? throw new System.ArgumentNullException(nameof(repository));
             this.fRepository = fRepository;
             _bRepository = bRepository ?? throw new System.ArgumentNullException(nameof(bRepository));
@@ -252,27 +255,65 @@ namespace Web.Areas.Admin.Controllers
             return this.Json(new { data = model });
         }
 
+        public async Task<IActionResult> Search4Borrow(CancellationToken cancellationToken, Pagable pagable)
+        {
+            var model = await _bookService.GetAllBookAsync(pagable, cancellationToken);
+
+            return this.Json(new { data = model });
+        }
+
         public async Task<IActionResult> GetBooks4Add2Borrow(string userid, [FromHeader]CancellationToken cancellationToken)
         {
             var dtNow = DateTime.Now;
             var setting = await _sRepository.GetByIdAsync(cancellationToken, 1);
+            ViewBag.UserId = userid;
+            //var result = await _bRepository.TableNoTracking.Include(a => a.ReserveBook).Where(c => c.ReserveBook.Count > 0).ToListAsync(cancellationToken);
 
-           // var result = await _bRepository.TableNoTracking.Include(a=>a.ReserveBook).Where(c => c.ReserveBook.Count > 0).ToListAsync(cancellationToken);
-         
 
             var model = await _bRepository.TableNoTracking.Include(c => c.ISBNs).Include(c => c.ReserveBook)
-                .Where(c => (c.ReserveBook
+                .Where(c => (c.ISBNs.Where(a => a.IsDeleted == false).Count() > c.ReserveBook.Where(a => a.BookStatus == BookStatus.Borrowed).Count()) &&((c.ReserveBook
                 .Where(a => a.UserId == userid &&
                 (a.BookStatus == BookStatus.Reserved && (((DateTime)a.ReserveDate).AddDays(setting.BDay4Reserve) <= dtNow)))
-                .Count()>0)
+                .Count() > 0)
 
                 ||
 
-                c.ISBNs.Where(a=>a.IsDeleted==false).Count() > c.ReserveBook.Count
+                (c.ISBNs.Where(a => a.IsDeleted == false).Count() > c.ReserveBook.Count
+                && c.ReserveBook.Where(a => a.UserId == userid).Count() == 0))
                 ).ToListAsync(cancellationToken);
             return View(model);
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> Borrow(string userid, int bookid, [FromHeader]CancellationToken cancellationToken)
+        {
+            var rb = await _rbRepository.Table
+                .Where(c => c.UserId == userid && c.BookId == bookid).SingleOrDefaultAsync(cancellationToken);
+
+            if (rb == null)
+            {
+                rb = new ReserveBook
+                {
+                    BookId = bookid,
+                    BookStatus = BookStatus.Borrowed,
+                    BorrowDate = DateTime.Now,
+                    UserId = userid
+                };
+                await _rbRepository.AddAsync(rb, cancellationToken);
+            }
+
+            else
+            {
+                rb.BookStatus = BookStatus.Borrowed;
+                rb.BorrowDate = DateTime.Now;
+
+                await _rbRepository.UpdateAsync(rb, cancellationToken);
+
+            }
+            TempData["Success"] = "عملیات با موفقیت انجام شد";
+            return RedirectToAction(nameof(GetBooks4Add2Borrow));
+        }
     }
     public class AddOneBookDto
     {

@@ -116,6 +116,14 @@ namespace Services.Dto
         public string ImageUrl { get; set; }
 
 
+        [Display(Name = "تعداد رزرو")]
+        public int ReserveCount { get; set; }
+
+
+        [Display(Name = "تعداد امانت")]
+        public int BorrowCount { get; set; }
+
+
         [DisplayName("وضعیت کتاب")]
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public BookStatus BookStatus { get; set; }
@@ -141,7 +149,15 @@ namespace Services.Dto
             mapping.ForMember(des => des.Field, opt => opt.MapFrom(src => src.Field.Name));
            // mapping.ForMember(des => des.BookStatusNum, opt => opt.MapFrom(src => src.BookStatus.ToDisplay(DisplayProperty.Name)));
             mapping.ForMember(des => des.Count, opt => opt.MapFrom(src => src.ISBNs.Where(c=>c.IsDeleted==false).Count()));
+
+            mapping.ForMember(des => des.ReserveCount, opt => 
+            opt.MapFrom(src => src.ReserveBook.Where(c=>c.BookStatus==BookStatus.Reserved).Count()));
+
+            mapping.ForMember(des => des.BorrowCount, opt =>
+            opt.MapFrom(src => src.ReserveBook.Where(c => c.BookStatus == BookStatus.Borrowed).Count()));
+
             mapping.ForMember(des => des.Isbns, opt => opt.MapFrom(src => src.ISBNs.Where(c=>c.IsDeleted==false)));
+
         }
 
     }

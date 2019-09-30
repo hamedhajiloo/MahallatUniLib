@@ -276,5 +276,28 @@ namespace Services
 
 
         }
+
+        public async Task<List<BookSelectDto>> GetAllBookAsync(Pagable pagable, CancellationToken cancellationToken)
+        {
+             IQueryable<Book> models = _Book.TableNoTracking.Include(c => c.ISBNs);
+            var search = pagable.Search;
+
+            if (search != null)
+            {
+                search = search.Trim();
+                models = models.Where(p => p.BookIsDeleted == false && (p.AuthorName.Contains(search) ||
+                                  p.Edition.ToString().Contains(search) ||
+                                  p.Publisher.Contains(search) ||
+                                  p.Name.Contains(search))
+                                  );
+            }
+            else if (search == null)
+            {
+                models = models.Where(p => p.BookIsDeleted == false);
+            }
+
+            return await models.OrderByDescending(c => c.Id).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
+
+        }
     }
 }
