@@ -28,7 +28,7 @@ namespace Services
                 model.BorrowDay = setting.BorrowDay;
                 model.ReservCount = setting.ReservCount;
                 model.ReservDay = setting.ReservDay;
-
+                model.BDay4Reserve = setting.BDay4Reserve;
                 await _repository.UpdateAsync(model, cancellationToken);
                 return true;
             }

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Dto;
 using Services.Services.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -20,7 +21,7 @@ namespace Web.Areas.Admin.Controllers
 {
     [Route("[area]/[controller]/[action]")]
     [Area("Admin")]
-    [Authorize(Roles ="Admin,Personel")]
+    [Authorize(Roles = "Admin,Personel")]
     [Controller]
     //[ShowErrorPageType]
     public class BooksController : Controller
@@ -28,6 +29,7 @@ namespace Web.Areas.Admin.Controllers
         private readonly IBookService _bookService;
         private readonly IRepository<Isbn> _isbnRepository;
         private readonly IImageService _imageService;
+        private readonly IRepository<Setting> _sRepository;
         private readonly IRepository<Book> _repository;
         private readonly IRepository<Field> fRepository;
         private readonly IRepository<Book> _bRepository;
@@ -35,6 +37,7 @@ namespace Web.Areas.Admin.Controllers
         public BooksController(IBookService bookService,
                                IRepository<Isbn> isbnRepository,
                                IImageService imageService,
+                               IRepository<Setting> sRepository,
                                IRepository<Book> repository,
                                IRepository<Field> fRepository,
                                IRepository<Book> bRepository)
@@ -42,6 +45,7 @@ namespace Web.Areas.Admin.Controllers
             _bookService = bookService ?? throw new System.ArgumentNullException(nameof(bookService));
             this._isbnRepository = isbnRepository ?? throw new System.ArgumentNullException(nameof(isbnRepository));
             _imageService = imageService ?? throw new System.ArgumentNullException(nameof(imageService));
+            this._sRepository = sRepository ?? throw new ArgumentNullException(nameof(sRepository));
             _repository = repository ?? throw new System.ArgumentNullException(nameof(repository));
             this.fRepository = fRepository;
             _bRepository = bRepository ?? throw new System.ArgumentNullException(nameof(bRepository));
@@ -78,7 +82,7 @@ namespace Web.Areas.Admin.Controllers
                 }
                 for (int i = 0; i < bookDto.BooksISBN.Count; i++)
                 {
-                    for (int j = i+1; j < bookDto.BooksISBN.Count; j++)
+                    for (int j = i + 1; j < bookDto.BooksISBN.Count; j++)
                     {
                         if (bookDto.BooksISBN[i] == bookDto.BooksISBN[j])
                         {
@@ -129,7 +133,7 @@ namespace Web.Areas.Admin.Controllers
             isbn.IsDeleted = true;
             await _isbnRepository.UpdateAsync(isbn, cancellationToken);
 
-            var result = await _isbnRepository.TableNoTracking.Where(c => c.BookId == isbn.BookId&&c.IsDeleted==false).ToListAsync(cancellationToken);
+            var result = await _isbnRepository.TableNoTracking.Where(c => c.BookId == isbn.BookId && c.IsDeleted == false).ToListAsync(cancellationToken);
 
             return new JsonResult(result);
         }
@@ -180,8 +184,8 @@ namespace Web.Areas.Admin.Controllers
         [HttpGet("id:int")]
         public async Task<IActionResult> DeleteOneBook([FromHeader]CancellationToken cancellationToken, int id)
         {
-           var book= await _bRepository.Table.Where(c => c.Id == id).SingleOrDefaultAsync(cancellationToken);
-            if (book==null)
+            var book = await _bRepository.Table.Where(c => c.Id == id).SingleOrDefaultAsync(cancellationToken);
+            if (book == null)
             {
                 TempData["Error"] = "این کتاب در سیستم وجود ندارد";
                 return RedirectToAction(nameof(Index));
@@ -203,7 +207,7 @@ namespace Web.Areas.Admin.Controllers
                 throw;
             }
 
-          
+
 
         }
 
@@ -227,7 +231,7 @@ namespace Web.Areas.Admin.Controllers
             var exists = await _isbnRepository.TableNoTracking.Where(c => c.Value.Trim() == dto.ISBN.Trim()).FirstOrDefaultAsync(cancellationToken);
             var book = await _repository.TableNoTracking.Where(c => c.Id == dto.BookId).SingleOrDefaultAsync(cancellationToken);
 
-            if (exists!=null)
+            if (exists != null)
             {
                 TempData["Error"] = "شابک  وارد شده تکراری است";
                 return View(book);
@@ -244,14 +248,28 @@ namespace Web.Areas.Admin.Controllers
         public async Task<IActionResult> Search(CancellationToken cancellationToken, Language lan, int field, BookStatus bstatus, Pagable pagable)
         {
             var model = await _bookService.GetAllBookAsync(cancellationToken, bstatus, lan, field, pagable.Search);
-          
+
             return this.Json(new { data = model });
         }
 
-        public async Task<IActionResult> GetBooks4Add2Borrow(string userid,[FromHeader]CancellationToken cancellationToken)
+        public async Task<IActionResult> GetBooks4Add2Borrow(string userid, [FromHeader]CancellationToken cancellationToken)
         {
-            var model = await _bRepository.TableNoTracking.Where(c => c.ReserveBook.Where(a => a.BookStatus == BookStatus.Free || (a.UserId == userid && a.BookStatus == BookStatus.Reserved)).Any() == true).ToListAsync(cancellationToken);
+            var dtNow = DateTime.Now;
+            var setting = await _sRepository.GetByIdAsync(cancellationToken, 1);
 
+           // var result = await _bRepository.TableNoTracking.Include(a=>a.ReserveBook).Where(c => c.ReserveBook.Count > 0).ToListAsync(cancellationToken);
+         
+
+            var model = await _bRepository.TableNoTracking.Include(c => c.ISBNs).Include(c => c.ReserveBook)
+                .Where(c => (c.ReserveBook
+                .Where(a => a.UserId == userid &&
+                (a.BookStatus == BookStatus.Reserved && (((DateTime)a.ReserveDate).AddDays(setting.BDay4Reserve) <= dtNow)))
+                .Count()>0)
+
+                ||
+
+                c.ISBNs.Where(a=>a.IsDeleted==false).Count() > c.ReserveBook.Count
+                ).ToListAsync(cancellationToken);
             return View(model);
         }
 

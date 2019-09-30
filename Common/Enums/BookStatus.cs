@@ -8,17 +8,14 @@ namespace Common.Enums
     public enum BookStatus
     {
 
-        [Display(Name = "نامشخص")]
-        None=0,
-
         [Display(Name = "آزاد")]
-        Free = 1,
+        Free = 0,
 
         [Display(Name = "رزرو شده")]
-        Reserved = 2,
+        Reserved = 1,
 
         [Display(Name = "امانت داده شده")]
-        Borrowed = 3
+        Borrowed = 2
 
     }
 }
