@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Web.Controllers
 {
-    //[Authorize("User")]
     public class AccountController : Controller
     {
         private readonly SignInManager<Entities.User> _signInManager;

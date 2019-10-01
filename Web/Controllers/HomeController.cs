@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles ="Student")]
+    [Authorize]
 
     public class HomeController : Controller
     {

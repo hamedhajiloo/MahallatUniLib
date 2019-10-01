@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "Student")]
+    [Authorize]
     [Route("Book/[action]")]
     public class BookController : Controller
     {
