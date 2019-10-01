@@ -257,18 +257,18 @@ namespace Services
                                   p.Publisher.Contains(search) ||
                                   p.Name.Contains(search)) &&
                                   (language != Language.None ? p.Language == language : true) &&
-                                  (Field != 0 ? p.FieldId == Field : true) 
-                                  //&&
-                                  //(bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true)
+                                  (Field != 0 ? p.FieldId == Field : true)
+                                  &&
+                                  (p.ReserveBook.Where(c=>c.BookStatus==bookStatus).Count()>0)
                                   );
             }
             else if (search == null)
             {
                 models = models.Where(p => p.BookIsDeleted == false &&
                                   (language != Language.None ? p.Language == language : true) &&
-                                  (Field != 0? p.FieldId == Field : true) 
-                                  //&&
-                                  //(bookStatus != BookStatus.None ? p.BookStatus == bookStatus : true)
+                                  (Field != 0? p.FieldId == Field : true)
+                                   &&
+                                  (p.ReserveBook.Where(c => c.BookStatus == bookStatus).Count() > 0)
                                   );
             }
 
@@ -298,6 +298,15 @@ namespace Services
 
             return await models.OrderByDescending(c => c.Id).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
 
+        }
+
+        public async Task<List<BookSelectDto>> GetAllBookAsync(BookStatus bookStatus, CancellationToken cancellationToken)
+        {
+            List<BookSelectDto> result = await _Book.TableNoTracking.Include(c => c.ISBNs).Include(c=>c.ReserveBook)
+                .Where(c => c.BookIsDeleted == false && c.ISBNs.Where(d => d.IsDeleted == false).Count() > 0&&c.ReserveBook
+                .Where(a=>a.BookStatus==bookStatus).Count()>0)
+                .OrderByDescending(c => c.Id).ProjectTo<BookSelectDto>().ToListAsync(cancellationToken);
+            return result;
         }
     }
 }

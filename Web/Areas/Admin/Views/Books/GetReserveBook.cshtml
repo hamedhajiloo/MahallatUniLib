@@ -1,0 +1,197 @@
+﻿@model List<BookSelectDto>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+}
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+
+
+    <div class="panel panel-success col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+        <div class="panel-heading">
+            <h3 class="text-center">لیست کتاب های رزرو شده</h3>
+        </div>
+
+
+
+        <div class="panel-body">
+            <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+                <a class="btn btn-primary" asp-controller="Books" asp-action="Create">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    افزودن کتاب
+                </a>
+                <a class="btn btn-success" onclick="Search()">جستجو <i class="glyphicon glyphicon-search"></i></a>
+            </div>
+            <div class="form-row">
+                <div class="col-md-4 col-lg-4 col-sm-4">
+                    @* متن جستجو *@
+                    <div class="form-group">
+                        <label class="control-label">متن جستجو</label>
+                        <input type="text" name="search" value="" class="form-control circleInput search" onkeyup="Search()" />
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-4">
+                    @* زبان *@
+                    <div class="form-group">
+                        <label class="control-label">زبان</label>
+                        <select name="lan" class="form-control circleInput lan" onchange="Search()">
+                            <option value="0"> ___ </option>
+                            <option value="1">فارسی</option>
+                            <option value="2">انگلیسی</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-4">
+
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-4">
+                    @*رشته*@
+                    <div class="form-group">
+                        <label class="control-label">رشته</label>
+                        <select name="field" class="form-control circleInput field" onchange="Search()">
+                            <option value="0"> ___ </option>
+                            <option value="1"> عمومی </option>
+                            <option value="2">نرم افزار</option>
+                            <option value="3">علوم کامپیوتر</option>
+                            <option value="4"> صنایع</option>
+                            <option value="5"> مکانیک</option>
+                            <option value="6"> عمران</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="box table-responsive box-body no-padding">
+
+            <table class="table table-responsive  text-center books">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>@Html.DisplayNameFor(model => model[0].Name)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].AuthorName)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].Edition)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].Count)</td>
+                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].PublishYear)</td>
+                        <td class="hidden-xs">@Html.DisplayNameFor(model => model[0].Language)</td>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var isbn = item.Isbns.FirstOrDefault()?.Value ?? "";
+
+                        <tr>
+                            <td>
+                                <a class="btn btn-xs btn-info" asp-controller="Books" asp-action="Details" asp-route-id="@item.Id" style="margin-right:-10px;"><i class="glyphicon glyphicon-signal"></i> @(item.Name.Length > 10 ? item.Name.Remove(10) + "...." : item.Name) </a>
+                            </td>
+                            <td>@(item.AuthorName.Length > 10 ? item.AuthorName.Remove(10) + "...." : item.AuthorName)</td>
+                            <td>@item.Edition</td>
+                            <td>@item.Isbns.Count</td>
+                            <td class="hidden-xs">@item.PublishYear</td>
+                            <td class="hidden-xs">@item.Language</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+@section PanelScripts{
+    <script>
+
+        var Search = function () {
+
+            var search = $('.search').val();
+            var lan = $('.lan').val();
+            var ctype = $('.ctype').val();
+            var bstatus = $('.bstatus').val();
+            var field = $('.field').val();
+            var str = '';
+            var url = "/Admin/Books/Search?lan=" + lan + "&&search=" + search + "&&ctype=" + ctype + "&&bstatus=" + 1 + "&&field=" + field + "";
+            
+            $.ajax({
+                type: "POST",
+                url: url,
+                contentType: "application/json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                dataType: "json",
+                success: function (response) {
+                    var dvItems = $(".books tbody");
+                    dvItems.empty();
+
+                    $.each((response.data), function (i, item) {
+                        console.table(item);
+                        //console.log(item.Count);
+                        if (item.bookStatus == 0) {
+                            str += '<tr>' +
+                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                ' <td>' + parseInt(item.isbns.length) + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.language + '</td>' +
+                               
+                                '</tr>';
+                        }
+                        if (item.bookStatus == 1) {
+                            str += '<tr>' +
+                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                ' <td>' + parseInt(item.isbns.length) + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.language + '</td>' +
+                              
+                                '</tr>';
+                        }
+
+                        if (item.bookStatus == 2) {
+                            str += '<tr>' +
+                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                ' <td>' + parseInt(item.isbns.length) + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.language + '</td>' +
+                            
+                                '</tr>';
+                        }
+
+                        if (item.bookStatus == 3) {
+                            str += '<tr>' +
+                                '<td><a class="btn btn-xs btn-info" href="Details/' + item.id + '" style="margin-right:-10px;"><i class="glyphicon glyphicon-fullscreen"></i> ' + item.name + ' </a></td>' +
+                                '<td>' + item.authorName + '</td>' +
+                                '<td>' + item.edition + '</td>' +
+                                ' <td>' + parseInt(item.isbns.length) + '</td>' +
+                                '<td class="hidden-xs">' + item.publishYear + '</td>' +
+                                '<td class="hidden-xs">' + item.language + '</td>' +
+                               
+                                '</tr>';
+                        }
+
+
+
+
+
+                    });
+                    dvItems.html('').append(str);
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+        }
+
+    </script>
+}

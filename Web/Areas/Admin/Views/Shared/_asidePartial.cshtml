@@ -20,12 +20,7 @@
         <ul class="sidebar-menu" data-widget="tree">
             <!-- Optionally, you can add icons to the links -->
             <li class="treeview active">
-                <a href="#">
-                    <i class="fa fa-assistive-listening-systems"></i> <span>مدیریت سیستم</span>
-                    <span class="pull-left-container">
-                        <i class="fa fa-angle-right pull-left"></i>
-                    </span>
-                </a>
+               
                 <ul class="treeview-menu">
                     <li class="treeview active">
                         <a href="#">
@@ -40,7 +35,23 @@
                             <li><a asp-controller="Personel" asp-action="Index">  <i class="fa fa-university"></i>پرسنل </a></li>
                         </ul>
                     </li>
-                    <li><a asp-controller="Books" asp-action="Index"><i class="fa fa-book"></i> مدیریت کتاب ها</a></li>
+
+                
+                </ul>
+                <ul class="treeview-menu">
+                    <li class="treeview active">
+                        <a>
+                            <i class="fa fa-book"></i><span>مدیریت کتاب ها</span>
+                            <span class="pull-left-container">
+                                <i class="fa fa-angle-right pull-left"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a asp-controller="Books" asp-action="Index"><i class="ion ion-ios-book"></i> مدیریت کتاب ها</a></li>
+                            <li><a asp-controller="Books" asp-action="GetReserveBook">  <i class="fa fa-book"></i>کتاب های رزرو شده </a></li>
+                            <li><a asp-controller="Books" asp-action="GetBorrowBook">  <i class="fa fa-book"></i>کتاب های امانت داده شده </a></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li><a asp-controller="News" asp-action="Index"><i class="fa fa-newspaper-o"></i> <span>مدیریت اخبار</span></a></li>

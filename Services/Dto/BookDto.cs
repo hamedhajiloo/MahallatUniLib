@@ -128,6 +128,17 @@ namespace Services.Dto
         [Required(ErrorMessage = DataAnotations.EnterMessage)]
         public BookStatus BookStatus { get; set; }
 
+        [DisplayName("شناسه کاربری")]
+        public string UserId { get; set; }
+
+        [DisplayName("شماره دانشجویی")]
+        public string UserName { get; set; }
+
+        [DisplayName("نام و نام خانوادگی")]
+        public string FullName { get; set; }
+
+        [DisplayName("تاریخ امانت")]
+        public string BorrowDate { get; set; }
 
         //[DisplayName("وضعیت کتاب")]
         //[Required(ErrorMessage = DataAnotations.EnterMessage)]

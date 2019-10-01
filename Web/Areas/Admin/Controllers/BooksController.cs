@@ -1,7 +1,9 @@
 ﻿using Common;
 using Common.Enums;
+using Common.Utilities;
 using Data.Repositories;
 using Entities;
+using DNTPersianUtils.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +60,109 @@ namespace Web.Areas.Admin.Controllers
         {
             var models = await _bookService.GetAllBookAsync(cancellationToken);
             return View(models);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReserveBook(CancellationToken cancellationToken)
+        {
+            var models = await _rbRepository.TableNoTracking.Include(c => c.Book).ThenInclude(s=>s.ReserveBook).Include(c => c.Book).ThenInclude(s => s.ISBNs).Where(c => c.BookStatus == BookStatus.Reserved)
+                .Select(c => new BookSelectDto
+                {
+                    AuthorName = c.Book.AuthorName,
+                    BookStatus=c.BookStatus,
+                    Id=c.BookId,
+                    Edition=c.Book.Edition,
+                    UserId=c.UserId,
+                    Language=c.Book.Language.ToDisplay(DisplayProperty.Name),
+                    Name=c.Book.Name,
+                    ImageUrl= c.Book.ImageUrl,
+                    Publisher= c.Book.Publisher,
+                    PublishYear=c.Book.PublishYear,
+                    BorrowCount=c.Book.ReserveBook.Where(a=>a.BookStatus==BookStatus.Reserved).Count(),
+                    Isbns = c.Book.ISBNs
+                }).ToListAsync(cancellationToken);
+            return View(models);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBorrowBook(CancellationToken cancellationToken)
+        {
+            var models = await _rbRepository.TableNoTracking.Include(c=>c.User).Include(c => c.Book).ThenInclude(s => s.ReserveBook).Include(c=>c.Book).ThenInclude(s=>s.ISBNs).Where(c => c.BookStatus == BookStatus.Borrowed)
+                .Select(c => new BookSelectDto
+                {
+                    AuthorName = c.Book.AuthorName,
+                    BookStatus = c.BookStatus,
+                    Id = c.BookId,
+                    Edition = c.Book.Edition,
+                    UserId = c.UserId,
+                    Language = c.Book.Language.ToDisplay(DisplayProperty.Name),
+                    Name = c.Book.Name,
+                    ImageUrl = c.Book.ImageUrl,
+                    Publisher = c.Book.Publisher,
+                    PublishYear = c.Book.PublishYear,
+                    BorrowCount = c.Book.ReserveBook.Where(a => a.BookStatus == BookStatus.Borrowed).Count(),
+                    Isbns=c.Book.ISBNs,
+                    UserName = c.User.UserName,
+                    FullName = c.User.FullName,
+                    BorrowDate=c.BorrowDate.ToFriendlyPersianDateTextify()
+                }).ToListAsync(cancellationToken);
+            return View(models);
+        }
+
+        //
+
+        public async Task<IActionResult> SearchBorrowed(CancellationToken cancellationToken, Pagable pagable)
+        {
+            var model = new List<BookSelectDto>();
+
+            if (string.IsNullOrEmpty(pagable.Search))
+            {
+                model = await _rbRepository.TableNoTracking.Include(c=>c.User).Include(c => c.Book).ThenInclude(s => s.ReserveBook).Include(c => c.Book).ThenInclude(s => s.ISBNs).Where(c => c.BookStatus == BookStatus.Borrowed)
+                .Select(c => new BookSelectDto
+                {
+                    AuthorName = c.Book.AuthorName,
+                    BookStatus = c.BookStatus,
+                    Id = c.BookId,
+                    Edition = c.Book.Edition,
+                    UserId = c.UserId,
+                    Language = c.Book.Language.ToDisplay(DisplayProperty.Name),
+                    Name = c.Book.Name,
+                    ImageUrl = c.Book.ImageUrl,
+                    Publisher = c.Book.Publisher,
+                    PublishYear = c.Book.PublishYear,
+                    BorrowCount = c.Book.ReserveBook.Where(a => a.BookStatus == BookStatus.Borrowed).Count(),
+                    Isbns = c.Book.ISBNs,
+                    UserName = c.User.UserName,
+                    FullName = c.User.FullName,
+                    BorrowDate = c.BorrowDate.ToFriendlyPersianDateTextify()
+                }).ToListAsync(cancellationToken);
+
+            }
+            else
+            {
+                model = await _rbRepository.TableNoTracking.Include(c=>c.User).Include(c => c.Book).ThenInclude(s => s.ReserveBook).Include(c => c.Book).ThenInclude(s => s.ISBNs).Where(c => c.BookStatus == BookStatus.Borrowed &&(c.Book.Name.Contains(pagable.Search)|| c.Book.AuthorName.Contains(pagable.Search)|| c.User.UserName.Contains(pagable.Search)||c.User.FullName.Contains(pagable.Search)))
+                .Select(c => new BookSelectDto
+                {
+                    AuthorName = c.Book.AuthorName,
+                    BookStatus = c.BookStatus,
+                    Id = c.BookId,
+                    Edition = c.Book.Edition,
+                    UserId = c.UserId,
+                    Language = c.Book.Language.ToDisplay(DisplayProperty.Name),
+                    Name = c.Book.Name,
+                    ImageUrl = c.Book.ImageUrl,
+                    Publisher = c.Book.Publisher,
+                    PublishYear = c.Book.PublishYear,
+                    BorrowCount = c.Book.ReserveBook.Where(a => a.BookStatus == BookStatus.Borrowed).Count(),
+                    Isbns = c.Book.ISBNs,
+                    UserName=c.User.UserName,
+                    FullName=c.User.FullName
+                }).ToListAsync(cancellationToken);
+
+            }
+
+
+            return this.Json(new { data = model });
         }
 
         [HttpGet]
@@ -248,7 +353,7 @@ namespace Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
-        public async Task<IActionResult> Search(CancellationToken cancellationToken, Language lan, int field, BookStatus bstatus, Pagable pagable)
+        public async Task<IActionResult> Search(CancellationToken cancellationToken, Common.Language lan, int field, BookStatus bstatus, Pagable pagable)
         {
             var model = await _bookService.GetAllBookAsync(cancellationToken, bstatus, lan, field, pagable.Search);
 
@@ -314,6 +419,18 @@ namespace Web.Areas.Admin.Controllers
             TempData["Success"] = "عملیات با موفقیت انجام شد";
             return RedirectToAction(nameof(GetBooks4Add2Borrow));
         }
+
+        //UnBorrow
+        public async Task<IActionResult> UnBorrow(int bookid,string userid, [FromHeader]CancellationToken cancellationToken)
+        {
+            var rb = await _rbRepository.Table
+                .Where(c => c.BookId == bookid &&c.UserId==userid&& c.BookStatus == BookStatus.Borrowed).SingleOrDefaultAsync(cancellationToken);
+
+            await _rbRepository.DeleteAsync(rb, cancellationToken);
+            TempData["Success"] = "عملیات با موفقیت انجام شد";
+            return RedirectToAction(nameof(GetBorrowBook));
+        }
+
     }
     public class AddOneBookDto
     {
