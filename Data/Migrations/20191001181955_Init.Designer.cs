@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190925185359_Init")]
+    [Migration("20191001181955_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -206,6 +206,8 @@ namespace Data.Migrations
                     b.Property<decimal>("Amount_Of_Punishment_For_Reserving_The_Book");
 
                     b.Property<decimal>("Amount_Of_Punishment_For_Returning_The_Book");
+
+                    b.Property<int>("BDay4Reserve");
 
                     b.Property<int>("BorrowDay");
 
@@ -439,7 +441,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Entities.ReserveBook", b =>
                 {
                     b.HasOne("Entities.Book", "Book")
-                        .WithMany("StudentBook")
+                        .WithMany("ReserveBook")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict);
 

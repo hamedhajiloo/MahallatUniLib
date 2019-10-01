@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Web.Model;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
+using Common;
+using System.ComponentModel.DataAnnotations;
+using Services.Dto;
 
 namespace Web.Controllers
 {
@@ -29,20 +32,12 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult Login(string ReturnUrl=null)
         {
-            ////
-            // var user = new User
-            //    {
-            //        FullName = "Administrator",
-            //        UserName = "Administrator"
-            //    };
-            //    _userManager.CreateAsync(user, "Admin@12b#");
-            //    _userManager.AddToRoleAsync(user, "Admin");
+           
             if (User.Identity.IsAuthenticated)
             {
-                if (User.IsInRole("Admin"))
-                {
+                if (User.IsInRole("Admin")|| User.IsInRole("Personel"))
                     return RedirectToAction(actionName: "Index", controllerName: "Home", new { area = "Admin" });
-                }
+                
                 return LocalRedirect("/");
             }
             ReturnUrl = ReturnUrl ?? Url.Content("~/");
@@ -57,7 +52,7 @@ namespace Web.Controllers
             
             loginVM.ReturnUrl = loginVM.ReturnUrl ?? Url.Content("~/");
             ViewBag.ReturnUrl = loginVM.ReturnUrl;
-            var result = await _signInManager.PasswordSignInAsync(loginVM.UserName,loginVM.Password,true, lockoutOnFailure: true);
+            var result = await _signInManager.PasswordSignInAsync(loginVM.UserName,loginVM.Password,true, lockoutOnFailure: false);
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(loginVM.UserName);
@@ -71,7 +66,8 @@ namespace Web.Controllers
                 {
                     return RedirectToAction(actionName: "Index", controllerName: "Home", new { area = "Admin" });
                 }
-                return LocalRedirect(loginVM.ReturnUrl);
+
+                return RedirectToAction(actionName:"DashBoard",controllerName:"Home");
             }
             
             else
@@ -100,6 +96,26 @@ namespace Web.Controllers
             return RedirectToRoute(routeName: "Login");
         }
 
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(ChangePasswordVM vm)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var userId = User.Identity.GetUserId();
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, token, vm.Password);
+            return RedirectToAction("DashBoard", controllerName: "Home");
+        }
     }
+
 }

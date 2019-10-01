@@ -32,7 +32,10 @@
                         <ul class="treeview-menu">
                             <li><a asp-controller="Student" asp-action="Index">  <i class="ion ion-university"></i>دانشجو </a></li>
                             <li><a asp-controller="Teacher" asp-action="Index">  <i class="fa fa-university"></i>استاد </a></li>
-                            <li><a asp-controller="Personel" asp-action="Index">  <i class="fa fa-university"></i>پرسنل </a></li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li><a asp-controller="Personel" asp-action="Index">  <i class="fa fa-university"></i>پرسنل </a></li>
+                            }
                         </ul>
                     </li>
 

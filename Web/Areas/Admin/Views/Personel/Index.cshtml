@@ -55,6 +55,7 @@
                           
                             <td>
                                 <a class="btn btn-sm btn-warning" asp-controller="Personel" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
+                                <a class="btn btn-sm btn-info" asp-controller="UserAccount" asp-action="ChangeUserPassword" asp-area="Admin" asp-route-id="@item.Id"><i class="glyphicon glyphicon-log-in"></i> تغییر رمز عبور</a>
                                 <a class="btn btn-sm btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
                                 <input type="hidden" name="studentid" value=@item.Id id="r_@item.Id" />
                             </td>

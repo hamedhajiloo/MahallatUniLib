@@ -21,13 +21,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student,Teacher")]
 
     public class HomeController : Controller
     {
         private readonly IBookService _bookService;
         private readonly IRepository<Field> _fieldRepository;
         private readonly IRepository<News> _nRepository;
+        private readonly IRepository<User> _userRepository;
         private readonly IRepository<ReserveBook> _reserveBookRepository;
         private readonly IRepository<Book> _bookRepository;
         private readonly UserManager<User> _userManager;
@@ -35,6 +36,7 @@ namespace Web.Controllers
         public HomeController(IBookService bookService,
                               IRepository<Field> fieldRepository,
                               IRepository<News> nRepository,
+                              IRepository<User> userRepository,
                               IRepository<ReserveBook> reserveBookRepository,
                               IRepository<Book> bookRepository,
                               UserManager<User> userManager)
@@ -42,6 +44,7 @@ namespace Web.Controllers
             _bookService = bookService;
             _fieldRepository = fieldRepository ?? throw new ArgumentNullException(nameof(fieldRepository));
             this._nRepository = nRepository;
+            this._userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             this._reserveBookRepository = reserveBookRepository ?? throw new ArgumentNullException(nameof(reserveBookRepository));
             _bookRepository = bookRepository;
             this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -59,12 +62,12 @@ namespace Web.Controllers
             var vm = new HomeIndexVM();
 
             vm.Fields = await _fieldRepository.TableNoTracking.ToListAsync(cancellationToken);
-            vm.General = await _bookRepository.TableNoTracking.Where(c => c.FieldId==1 &&c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.General = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 1 && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
             vm.ComputerBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 2 && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
-            vm.UlomBooks = await _bookRepository.TableNoTracking.Where(c =>c.FieldId==3 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.SanayeBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 4 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.MechanickBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 5 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
-            vm.OmranBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 6 && c.BookIsDeleted==false).Take(10).ToListAsync(cancellationToken);
+            vm.UlomBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 3 && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
+            vm.SanayeBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 4 && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
+            vm.MechanickBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 5 && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
+            vm.OmranBooks = await _bookRepository.TableNoTracking.Where(c => c.FieldId == 6 && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
             vm.News = await _nRepository.TableNoTracking.Where(c => c.Deleted == false).OrderByDescending(c => c.InsertDate).Take(10).ToListAsync();
             foreach (var item in vm.News)
                 item.InserDateP = item.InsertDate.ToFriendlyPersianDateTextify(true);
@@ -75,7 +78,26 @@ namespace Web.Controllers
             return View(vm);
         }
 
-      
+        [AllowAnonymous]
+        public async Task Make()
+        {
+            var users = await _userRepository.TableNoTracking.ToListAsync();
+
+            //
+            if (users.Count==0)
+            {
+                var user = new User
+                {
+                    FullName = "Administrator",
+                    UserName = "Administrator"
+                };
+                await _userManager.CreateAsync(user, "Admin@12b#");
+                await _userManager.AddToRoleAsync(user, "Admin");
+
+            }
+
+        }
+
         public async Task<IActionResult> DashBoard(CancellationToken cancellationToken)
         {
             var model = new DashBoardModel();
@@ -85,7 +107,7 @@ namespace Web.Controllers
                 .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved).CountAsync();
 
             //Reserve Last Update DateTime
-            if (model.ReserveCount!=0)
+            if (model.ReserveCount != 0)
             {
                 var lastReserve = await _reserveBookRepository.TableNoTracking
                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved)
@@ -101,7 +123,7 @@ namespace Web.Controllers
                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Borrowed).CountAsync();
 
             //Borrow Last Update DateTime
-            if (model.BorrowCount!=0)
+            if (model.BorrowCount != 0)
             {
                 var lastBorrow = await _reserveBookRepository.TableNoTracking
                .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Borrowed)
@@ -117,6 +139,6 @@ namespace Web.Controllers
             ViewBag.FullName = user.FullName;
             return View(model);
         }
-       
+
     }
 }

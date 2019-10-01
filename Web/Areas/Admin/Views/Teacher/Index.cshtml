@@ -57,6 +57,7 @@
                                 <a class="btn btn-sm btn-warning" asp-controller="Teacher" asp-action="Edit" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> ویرایش</a>
                                 <a class="btn btn-sm btn-danger" onclick="DeleteAlarm('#r_@item.Id')" data-toggle="modal" data-target="#deletemodal"><i class="glyphicon glyphicon-trash"></i> حذف</a>
                                 <input type="hidden" name="studentid" value=@item.Id id="r_@item.Id" />
+                                <a asp-action="GetBooks4Add2Borrow" asp-controller="Books" asp-area="Admin" asp-route-userid="@item.UserId" class="btn btn-sm btn-success">امانت دادن کتاب</a>
                             </td>
                         </tr>
                     }
@@ -126,6 +127,7 @@
                                 '<a class="btn btn-sm btn-warning" href="Teacher/Edit/' + item["id"] + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
                                 '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item["id"] + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
                                 '<input type="hidden" name="studentid" value=' + item["id"] + ' id="r_' + item["id"] + '" />' +
+                                '<a href="/Admin/Books/GetBooks4Add2Borrow?userid=' + item["userId"] + '" class="btn btn-sm btn-success" >امانت دادن کتاب</a>' +
                                 '</td>' +
                                 '</tr>';
                        
