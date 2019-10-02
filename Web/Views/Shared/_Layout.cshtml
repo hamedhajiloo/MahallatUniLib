@@ -133,9 +133,9 @@
                             <nav>
                                 <ul>
                                     <li><a asp-action="Index" asp-controller="Book"><span>لیست کلیه کتاب ها</span></a></li>
-                                    <li><a href="#"><span>لیست رزرو من</span></a></li>
-                                    <li><a href="#"><span>لیست کتاب های آزاد</span></a></li>
-                                    <li><a href="#"><span>لیست کتاب های امانت من</span></a></li>
+                                    <li><a asp-action="GetReserve" asp-controller="Book"><span>لیست رزرو من</span></a></li>
+                                    <li><a asp-action="GetFree" asp-controller="Book"><span>لیست کتاب های آزاد</span></a></li>
+                                    <li><a asp-action="GetBorrow" asp-controller="Book"><span>لیست کتاب های امانت من</span></a></li>
 
                                     <li><a href="http://mahallat.ac.ir/"><span>سایت دانشگاه</span></a></li>
                                 </ul>
@@ -153,9 +153,10 @@
                             <div class="">
                                 <nav id="dropdown">
                                     <ul class="nav">
-                                        <li><a href="#"><span>لیست کلیه کتاب ها</span></a></li>
-                                        <li><a href="#"><span>لیست رزرو من</span></a></li>
-                                        <li><a href="#"><span>لیست کتاب های آزاد</span></a></li>
+                                        <li><a asp-action="Index" asp-controller="Book"><span>لیست کلیه کتاب ها</span></a></li>
+                                        <li><a asp-action="GetReserve" asp-controller="Book"><span>لیست رزرو من</span></a></li>
+                                        <li><a asp-action="GetFree" asp-controller="Book"><span>لیست کتاب های آزاد</span></a></li>
+                                        <li><a asp-action="GetBorrow" asp-controller="Book"><span>لیست کتاب های امانت من</span></a></li>
                                         <li><a href="mahallat.ac.ir"><span>سایت دانشگاه</span></a></li>
                                     </ul>
                                 </nav>

@@ -51,10 +51,37 @@ namespace Web.Controllers
                 PageSize = 10
             };
 
-            List<Book> books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
+            List<Book> books = new List<Book>();
+            if(id!=0)
+                books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
+            else
+                books= await _bookRepository.TableNoTracking.Where(c => c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
 
             return View(books);
         }
+
+        //GetFree
+        public async Task<ActionResult> GetFree(int id, CancellationToken cancellationToken)
+        {
+            var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
+            Pagable pagable = new Pagable
+            {
+                Desc = true,
+                Page = 1,
+                PageSize = 10
+            };
+
+            List<Book> books = new List<Book>();
+            if (id != 0)
+                books = await _bookRepository.TableNoTracking.Include(c=>c.ISBNs).Include(c=>c.ReserveBook).Where(c => c.FieldId == id && c.BookIsDeleted == false&&c.ISBNs.Count()>c.ReserveBook.Count()).Take(10).ToListAsync(cancellationToken);
+            else
+                books = await _bookRepository.TableNoTracking.Include(c => c.ISBNs).Include(c => c.ReserveBook).Where(c => c.BookIsDeleted == false && c.ISBNs.Count() > c.ReserveBook.Count()).Take(10).ToListAsync(cancellationToken);
+
+            return View(viewName:nameof(Index),books);
+        }
+
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Details(int id, [FromHeader]CancellationToken cancellationToken)
