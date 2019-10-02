@@ -15,5 +15,6 @@ namespace Services
         Task<string> EditAsync(CancellationToken cancellationToken, int penaltyId, PenaltyDto penaltyDto);
 
         Task<string> RemoveAsync(CancellationToken cancellationToken, int PenaltyId);
+        Task AddAsyncTask(CancellationToken stoppingToken, PenaltyType penaltyType);
     }
 }

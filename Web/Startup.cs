@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Services.CustomMapping;
+using Services.Task_Scheduling;
 using System;
 using System.Text;
 using WebFramework;
@@ -56,6 +57,11 @@ namespace Web
             services.AddDbContext(Configuration);
             services.AddCustomIdentity(_siteSetting.IdentitySettings);
             services.AddMyServicesAndRepositories();
+
+            //Task_Scheduling
+            services.AddHostedService<BorrowPunishment>();
+            services.AddHostedService<ReservePunishment>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpContextAccessor();
             services.AddAuthentication().AddCookie();
