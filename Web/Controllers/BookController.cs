@@ -3,6 +3,7 @@ using Common.Enums;
 using Data.Repositories;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services;
@@ -21,22 +22,28 @@ namespace Web.Controllers
         private readonly IBookService _bookService;
         private readonly IRepository<Field> _fieldRepository;
         private readonly IRepository<ReserveBook> _rbRepository;
+        private readonly UserManager<User> _userManager;
         private readonly IRepository<Book> _bookRepository;
 
         public BookController(IBookService bookService,
                               IRepository<Field> fieldRepository,
                               IRepository<ReserveBook> rbRepository,
+                              UserManager<User> userManager,
                               IRepository<Book> bookRepository)
         {
             _bookService = bookService;
             _fieldRepository = fieldRepository;
             _rbRepository = rbRepository ?? throw new System.ArgumentNullException(nameof(rbRepository));
+            this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _bookRepository = bookRepository;
         }
 
 
         public async Task<ActionResult> Index(int id, CancellationToken cancellationToken)
         {
+            var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
             Pagable pagable = new Pagable
             {
                 Desc = true,
@@ -52,6 +59,9 @@ namespace Web.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Details(int id, [FromHeader]CancellationToken cancellationToken)
         {
+            var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
             Services.Dto.BookSelectDto model = await _bookService.FindBookByIdAsync(id, cancellationToken);
             return View(model);
         }
@@ -59,7 +69,9 @@ namespace Web.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Reserve(int id, [FromHeader]CancellationToken cancellationToken)
         {
-            string userId = User.Identity.GetUserId();
+            var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
             Book book = await _bookRepository.TableNoTracking
                 .Where(c => c.Id == id && c.BookIsDeleted == false).SingleOrDefaultAsync(cancellationToken);
 
@@ -91,7 +103,9 @@ namespace Web.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> UnReserve(int id, [FromHeader]CancellationToken cancellationToken)
         {
-            string userId = User.Identity.GetUserId();
+            var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
             Book book = await _bookRepository.TableNoTracking
                 .Where(c => c.Id == id && c.BookIsDeleted == false)
                 .SingleOrDefaultAsync(cancellationToken);
@@ -115,6 +129,8 @@ namespace Web.Controllers
         public async Task<IActionResult> GetReserve(CancellationToken cancellationToken)
         {
             var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
             var books = await _rbRepository.TableNoTracking.Include(c=>c.Book)
                 .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Reserved).ToListAsync(cancellationToken);
             return View(books);
@@ -124,6 +140,8 @@ namespace Web.Controllers
         public async Task<IActionResult> GetBorrow(CancellationToken cancellationToken)
         {
             var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
             var books = await _rbRepository.TableNoTracking.Include(c=>c.Book)
                 .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Borrowed).ToListAsync(cancellationToken);
             return View(books);

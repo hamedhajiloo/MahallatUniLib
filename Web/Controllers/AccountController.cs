@@ -67,7 +67,7 @@ namespace Web.Controllers
                     return RedirectToAction(actionName: "Index", controllerName: "Home", new { area = "Admin" });
                 }
 
-                return RedirectToAction(actionName:"DashBoard",controllerName:"Home");
+                return RedirectToAction(actionName:"Index",controllerName:"Home");
             }
             
             else

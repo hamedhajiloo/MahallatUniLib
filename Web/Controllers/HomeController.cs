@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "Student,Teacher")]
+    [Authorize]
 
     public class HomeController : Controller
     {
@@ -29,6 +29,7 @@ namespace Web.Controllers
         private readonly IRepository<Field> _fieldRepository;
         private readonly IRepository<News> _nRepository;
         private readonly IRepository<User> _userRepository;
+        private readonly IRepository<Setting> _settingRepo;
         private readonly IRepository<ReserveBook> _reserveBookRepository;
         private readonly IRepository<Book> _bookRepository;
         private readonly UserManager<User> _userManager;
@@ -37,6 +38,7 @@ namespace Web.Controllers
                               IRepository<Field> fieldRepository,
                               IRepository<News> nRepository,
                               IRepository<User> userRepository,
+                              IRepository<Setting> settingRepo,
                               IRepository<ReserveBook> reserveBookRepository,
                               IRepository<Book> bookRepository,
                               UserManager<User> userManager)
@@ -45,6 +47,7 @@ namespace Web.Controllers
             _fieldRepository = fieldRepository ?? throw new ArgumentNullException(nameof(fieldRepository));
             this._nRepository = nRepository;
             this._userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            this._settingRepo = settingRepo ?? throw new ArgumentNullException(nameof(settingRepo));
             this._reserveBookRepository = reserveBookRepository ?? throw new ArgumentNullException(nameof(reserveBookRepository));
             _bookRepository = bookRepository;
             this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -58,7 +61,7 @@ namespace Web.Controllers
                 Page = 1,
                 PageSize = 10
             };
-
+            var setting = await _settingRepo.GetByIdAsync(cancellationToken, 1);
             var vm = new HomeIndexVM();
 
             vm.Fields = await _fieldRepository.TableNoTracking.ToListAsync(cancellationToken);
@@ -74,7 +77,7 @@ namespace Web.Controllers
             var userId = User.Identity.GetUserId();
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.FullName = user.FullName;
-
+            ViewBag.ReserveDay = setting.ReservDay;
             return View(vm);
         }
 
@@ -134,6 +137,21 @@ namespace Web.Controllers
             {
                 model.BorrowLastUpdate = "";
             }
+            var thisuser = await _userRepository.TableNoTracking.Include(c => c.Penalties)
+                .Where(c => c.Id == userId).SingleOrDefaultAsync(cancellationToken);
+
+            var reservePenalty = thisuser.Penalties.Where(c => c.PenaltyType == PenaltyType.Reserve).ToList();
+            var borrowPenalty = thisuser.Penalties.Where(c => c.PenaltyType == PenaltyType.Return).ToList();
+
+            if (reservePenalty.Count != 0)
+                model.ReservePunishAmount = reservePenalty.Sum(c => c.Amount);
+            else
+                model.ReservePunishAmount = 0;
+
+            if (borrowPenalty.Count != 0)
+                model.BorrowPunishAmount = borrowPenalty.Sum(c => c.Amount);
+            else
+                model.BorrowPunishAmount = 0;
 
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.FullName = user.FullName;
