@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using System;
+using DNTPersianUtils.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Web.Model;
 
 namespace Web.Controllers
 {
@@ -23,18 +25,21 @@ namespace Web.Controllers
         private readonly IRepository<Field> _fieldRepository;
         private readonly IRepository<ReserveBook> _rbRepository;
         private readonly UserManager<User> _userManager;
+        private readonly IRepository<Penalty> _penaltyRepo;
         private readonly IRepository<Book> _bookRepository;
 
         public BookController(IBookService bookService,
                               IRepository<Field> fieldRepository,
                               IRepository<ReserveBook> rbRepository,
                               UserManager<User> userManager,
+                              IRepository<Penalty> penaltyRepo,
                               IRepository<Book> bookRepository)
         {
             _bookService = bookService;
             _fieldRepository = fieldRepository;
             _rbRepository = rbRepository ?? throw new System.ArgumentNullException(nameof(rbRepository));
             this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this._penaltyRepo = penaltyRepo ?? throw new ArgumentNullException(nameof(penaltyRepo));
             _bookRepository = bookRepository;
         }
 
@@ -172,6 +177,60 @@ namespace Web.Controllers
             var books = await _rbRepository.TableNoTracking.Include(c=>c.Book)
                 .Where(c => c.UserId == userId && c.BookStatus == BookStatus.Borrowed).ToListAsync(cancellationToken);
             return View(books);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReservePenalty(CancellationToken cancellationToken)
+        {
+            var userId = User.Identity.GetUserId();
+            var model = await _penaltyRepo.TableNoTracking.Include(c => c.Book).Include(c => c.User).Where(c=>c.PenaltyType==PenaltyType.Reserve&&c.UserId==userId).Select(c => new PenaltySelectModel
+            {
+                BookAuthor = c.Book.AuthorName,
+                Amount=c.Amount,
+                BookId=c.BookId,
+                BookName=c.Book.Name,
+                FullName=c.User.FullName,
+                UserId=c.UserId,
+                UserName=c.User.UserName
+            }).ToListAsync(cancellationToken);
+
+
+            foreach (var item in model)
+                item.InsertDate = await _rbRepository.TableNoTracking.Where(c => c.BookId == item.BookId && c.UserId == item.UserId && c.BookStatus == BookStatus.Reserved)
+                    .Select(c => (DateTime)c.ReserveDate).FirstOrDefaultAsync(cancellationToken);
+
+
+
+            foreach (var item in model)
+                item.InsertDateP = item.InsertDate.ToFriendlyPersianDateTextify();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBorrowPenalty(CancellationToken cancellationToken)
+        {
+            var userId = User.Identity.GetUserId();
+            var model = await _penaltyRepo.TableNoTracking.Include(c => c.Book).Include(c => c.User).Where(c=>c.PenaltyType==PenaltyType.Return&&c.UserId==userId).Select(c => new PenaltySelectModel
+            {
+                BookAuthor = c.Book.AuthorName,
+                Amount = c.Amount,
+                BookId = c.BookId,
+                BookName = c.Book.Name,
+                FullName = c.User.FullName,
+                UserId = c.UserId,
+                UserName = c.User.UserName
+            }).ToListAsync(cancellationToken);
+
+            foreach (var item in model)
+                item.InsertDate = await _rbRepository.TableNoTracking.Where(c => c.BookId == item.BookId && c.UserId == item.UserId && c.BookStatus == BookStatus.Borrowed)
+                    .Select(c =>(DateTime)c.BorrowDate).SingleOrDefaultAsync(cancellationToken);
+
+
+            foreach (var item in model)
+                item.InsertDateP = item.InsertDate.ToFriendlyPersianDateTextify();
+
+            return View(model);
         }
     }
 }

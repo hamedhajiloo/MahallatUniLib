@@ -1,0 +1,56 @@
+﻿@using Entities;
+@using DNTPersianUtils.Core;
+@model List<PenaltySelectModel>
+@{
+    ViewData["Title"] = "لیست جریمه رزرو";
+    Layout = "~/Views/Shared/_UserPanel.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- #END# Basic Examples -->
+    <!-- #START# Table With State Save -->
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        <strong>لیست جریمه کتاب های رزرو شده</strong>
+                    </h2>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover save-stage dataTable"
+                               style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام کتاب</th>
+                                    <th>نام ناشر</th>
+                                    <th>تاریخ رزرو کردن</th>
+                                    <th>مبلغ جریمه</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>@Model[i].BookName</td>
+                                        <td>@Model[i].BookAuthor</td>
+                                        <td>@Model[i].InsertDateP</td>
+                                        <td>@Model[i].Amount</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #END# Table With State Save -->
+    <!-- #START# Add Rows -->
+
+</div>

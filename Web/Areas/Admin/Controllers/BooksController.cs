@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Filters;
+using Web.Model;
 
 namespace Web.Areas.Admin.Controllers
 {
@@ -32,6 +33,7 @@ namespace Web.Areas.Admin.Controllers
         private readonly IRepository<Isbn> _isbnRepository;
         private readonly IImageService _imageService;
         private readonly IRepository<Setting> _sRepository;
+        private readonly IRepository<Penalty> _penaltyRepo;
         private readonly IRepository<ReserveBook> _rbRepository;
         private readonly IRepository<Book> _repository;
         private readonly IRepository<Field> fRepository;
@@ -41,6 +43,7 @@ namespace Web.Areas.Admin.Controllers
                                IRepository<Isbn> isbnRepository,
                                IImageService imageService,
                                IRepository<Setting> sRepository,
+                               IRepository<Penalty> penaltyRepo,
                                IRepository<ReserveBook> rbRepository,
                                IRepository<Book> repository,
                                IRepository<Field> fRepository,
@@ -50,6 +53,7 @@ namespace Web.Areas.Admin.Controllers
             this._isbnRepository = isbnRepository ?? throw new System.ArgumentNullException(nameof(isbnRepository));
             _imageService = imageService ?? throw new System.ArgumentNullException(nameof(imageService));
             this._sRepository = sRepository ?? throw new ArgumentNullException(nameof(sRepository));
+            this._penaltyRepo = penaltyRepo ?? throw new ArgumentNullException(nameof(penaltyRepo));
             this._rbRepository = rbRepository ?? throw new ArgumentNullException(nameof(rbRepository));
             _repository = repository ?? throw new System.ArgumentNullException(nameof(repository));
             this.fRepository = fRepository;
@@ -429,6 +433,60 @@ namespace Web.Areas.Admin.Controllers
             await _rbRepository.DeleteAsync(rb, cancellationToken);
             TempData["Success"] = "عملیات با موفقیت انجام شد";
             return RedirectToAction(nameof(GetBorrowBook));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReservePenalty(CancellationToken cancellationToken)
+        {
+            var userId = User.Identity.GetUserId();
+            var model = await _penaltyRepo.TableNoTracking.Include(c => c.Book).Include(c => c.User).Where(c => c.PenaltyType == PenaltyType.Reserve).Select(c => new PenaltySelectModel
+            {
+                BookAuthor = c.Book.AuthorName,
+                Amount = c.Amount,
+                BookId = c.BookId,
+                BookName = c.Book.Name,
+                FullName = c.User.FullName,
+                UserId = c.UserId,
+                UserName = c.User.UserName
+            }).ToListAsync(cancellationToken);
+
+
+            foreach (var item in model)
+                item.InsertDate = await _rbRepository.TableNoTracking.Where(c => c.BookId == item.BookId && c.UserId == item.UserId && c.BookStatus == BookStatus.Reserved)
+                    .Select(c => (DateTime)c.ReserveDate).FirstOrDefaultAsync(cancellationToken);
+
+
+
+            foreach (var item in model)
+                item.InsertDateP = item.InsertDate.ToFriendlyPersianDateTextify();
+
+            return View(model.OrderByDescending(c=>c.InsertDate).ToList());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBorrowPenalty(CancellationToken cancellationToken)
+        {
+            var userId = User.Identity.GetUserId();
+            var model = await _penaltyRepo.TableNoTracking.Include(c => c.Book).Include(c => c.User).Where(c => c.PenaltyType == PenaltyType.Return).Select(c => new PenaltySelectModel
+            {
+                BookAuthor = c.Book.AuthorName,
+                Amount = c.Amount,
+                BookId = c.BookId,
+                BookName = c.Book.Name,
+                FullName = c.User.FullName,
+                UserId = c.UserId,
+                UserName = c.User.UserName
+            }).ToListAsync(cancellationToken);
+
+            foreach (var item in model)
+                item.InsertDate = await _rbRepository.TableNoTracking.Where(c => c.BookId == item.BookId && c.UserId == item.UserId && c.BookStatus == BookStatus.Borrowed)
+                    .Select(c => (DateTime)c.BorrowDate).SingleOrDefaultAsync(cancellationToken);
+
+
+            foreach (var item in model)
+                item.InsertDateP = item.InsertDate.ToFriendlyPersianDateTextify();
+
+            return View(model.OrderByDescending(c=>c.InsertDate).ToList());
         }
 
     }
