@@ -46,6 +46,15 @@ namespace Web.Controllers
 
         public async Task<ActionResult> Index(int id, CancellationToken cancellationToken)
         {
+            //3eee51e6c2f6436983b8ded8138309ff
+
+            //var list = new List<Book>();
+
+            //for (int i = 0; i < 100; i++)
+            //    list.Add(new Book { ImageUrl = "3eee51e6c2f6436983b8ded8138309ff.jpg", FieldId = 1, Name = "Test", Language = Common.Language.Persion,Publisher="Test Publisher",AuthorName="Test Author" });
+
+            //await _bookRepository.AddRangeAsync(list, cancellationToken);
+
             var userId = User.Identity.GetUserId();
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.FullName = user.FullName;
@@ -53,17 +62,36 @@ namespace Web.Controllers
             {
                 Desc = true,
                 Page = 1,
-                PageSize = 10
+                PageSize = 9
             };
 
             List<Book> books = new List<Book>();
             if(id!=0)
-                books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
+                books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false).Take(9).ToListAsync(cancellationToken);
             else
-                books= await _bookRepository.TableNoTracking.Where(c => c.BookIsDeleted == false).Take(10).ToListAsync(cancellationToken);
+                books= await _bookRepository.TableNoTracking.Where(c => c.BookIsDeleted == false).Take(9).ToListAsync(cancellationToken);
 
             return View(books);
         }
+
+        public async Task<ActionResult> PageIndex(int id,int page, CancellationToken cancellationToken)
+        {
+            var userId = User.Identity.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.FullName = user.FullName;
+           
+
+            List<Book> books = new List<Book>();
+            if (id != 0)
+                books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false)
+                    .Skip((page - 1) * 9).Take(9).ToListAsync(cancellationToken);
+            else
+                books = await _bookRepository.TableNoTracking.Where(c => c.BookIsDeleted == false)
+                    .Skip((page - 1) * 9).Take(9).ToListAsync(cancellationToken);
+
+            return View(books);
+        }
+
 
         //GetFree
         public async Task<ActionResult> GetFree(int id, CancellationToken cancellationToken)

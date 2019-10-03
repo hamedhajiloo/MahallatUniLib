@@ -9,35 +9,51 @@
 
 <div class="container">
 
+    <div id="productinfo">
+        <br />
+        <br />
+        @{ Html.RenderPartial("_ItemsList", Model); }
+    </div>
+    <div id="MoreInfoDiv">
+    </div>
+    <div align="center" style="margin-bottom: 9px;">
+        <span id="moreInfoButton" style="width: 90%;" class="btn btn-info">بیشتر</span>
+    </div>
+    <div id="ProgressDiv" align="center" style="display: none">
+        <br />
+        <img src="@Url.Content("~/Content/images/loadingAnimation.gif")" alt="loading..." />
+    </div>
 
-    <div id="my-tab-content" class="tab-content">
-        <!-- Start categori grid view -->
-        @foreach (var item in Model)
-        {
+    <!--##########################################################-->
 
-            <!-- Start featured item -->
-            <div class="col-xs-12 col-sm-6 col-md-4">
-                <div class="featured-inner">
-                    <div class="featured-image">
-                        <a asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">
-                            <img style="height:350px;width:350px" src="~/upload/image/book/normalimage/@item.ImageUrl" alt="">
-                        </a>
-                    </div>
-                    <br />
-                    <div class="featured-info">
-                        <a title="مشاهده" asp-action="Details" asp-controller="Book" asp-route-id="@item.Id">@item.Name</a>
-                        <br />
-                        <p>@item.AuthorName</p>
-                        <br />
-                        <div class="featured-button">
-                            <a href="#" class="add-to-card">رزرو کتاب</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End featured item -->
+</div>
+@section Script{
+    <script type="text/javascript">
+        var AddToReserve = function (id) {
+            var id = id;
+            $.ajax({
+                type: "Get",
+                url: "/Book/Reserve/" + id + "",
+                contentType: "application/json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response == "با موفقیت رزرو شد") {
+                        toastr.success(response);
+                    }
+                    else {
+                        toastr.error(response);
+                    }
+                },
+                failure: function (response) {
+                    toastr.error(response);
+                }
+            });
 
         }
+    </script>
 
-    </div>
-</div>
+}
