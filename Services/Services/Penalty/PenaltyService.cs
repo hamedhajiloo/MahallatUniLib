@@ -68,7 +68,8 @@ namespace Services
                             Amount = setting.Amount_Of_Punishment_For_Returning_The_Book,
                             BookId = item.BookId,
                             PenaltyType = PenaltyType.Return,
-                            UserId = item.UserId
+                            UserId = item.UserId,
+                            InsertDate=(DateTime)item.BorrowDate
                         };
                         await _repository.AddAsync(penalty, cancellationToken: stoppingToken);
                     }
@@ -92,7 +93,8 @@ namespace Services
                             Amount = setting.Amount_Of_Punishment_For_Reserving_The_Book,
                             BookId = item.BookId,
                             PenaltyType = PenaltyType.Reserve,
-                            UserId = item.UserId
+                            UserId = item.UserId,
+                            InsertDate = (DateTime)item.ReserveDate
                         };
                         await _repository.AddAsync(penalty2, cancellationToken: stoppingToken);
                     }

@@ -42,7 +42,7 @@
                             <td class="hidden-xs">@item.InsertDateP</td>
                             <td class="hidden-xs">@item.Amount</td>
                             <td>
-                                <form asp-action="PayPenalty" asp-controller="Books" asp-area="Admin" method="post">
+                                <form asp-action="PayReservePenalty" asp-controller="Books" asp-area="Admin" method="post">
                                     <input type="hidden" name="userid" value="@item.UserId" />
                                     <input type="hidden" name="bookid" value="@item.BookId" />
                                     <button type="submit" class="btn btn-xs btn-success">

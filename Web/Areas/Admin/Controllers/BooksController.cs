@@ -447,15 +447,9 @@ namespace Web.Areas.Admin.Controllers
                 BookName = c.Book.Name,
                 FullName = c.User.FullName,
                 UserId = c.UserId,
-                UserName = c.User.UserName
+                UserName = c.User.UserName,
+                InsertDate=c.InsertDate
             }).ToListAsync(cancellationToken);
-
-
-            foreach (var item in model)
-                item.InsertDate = await _rbRepository.TableNoTracking.Where(c => c.BookId == item.BookId && c.UserId == item.UserId && c.BookStatus == BookStatus.Reserved)
-                    .Select(c => (DateTime)c.ReserveDate).FirstOrDefaultAsync(cancellationToken);
-
-
 
             foreach (var item in model)
                 item.InsertDateP = item.InsertDate.ToFriendlyPersianDateTextify();
@@ -475,12 +469,9 @@ namespace Web.Areas.Admin.Controllers
                 BookName = c.Book.Name,
                 FullName = c.User.FullName,
                 UserId = c.UserId,
-                UserName = c.User.UserName
+                UserName = c.User.UserName,
+                InsertDate=c.InsertDate
             }).ToListAsync(cancellationToken);
-
-            foreach (var item in model)
-                item.InsertDate = await _rbRepository.TableNoTracking.Where(c => c.BookId == item.BookId && c.UserId == item.UserId && c.BookStatus == BookStatus.Borrowed)
-                    .Select(c => (DateTime)c.BorrowDate).SingleOrDefaultAsync(cancellationToken);
 
 
             foreach (var item in model)
@@ -489,6 +480,30 @@ namespace Web.Areas.Admin.Controllers
             return View(model.OrderByDescending(c=>c.InsertDate).ToList());
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> PayBorrowPenalty(string userid,int bookid,CancellationToken cancellationToken)
+        {
+            var penalty = await _penaltyRepo.Table
+                .Where(c => c.UserId == userid && c.BookId == bookid && c.PenaltyType == PenaltyType.Return).SingleOrDefaultAsync(cancellationToken);
+
+            await _penaltyRepo.DeleteAsync(penalty, cancellationToken);
+
+            TempData["Success"] = "عملیات با موفقیت انجام شد";
+            return RedirectToAction(nameof(GetBorrowPenalty));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PayReservePenalty(string userid, int bookid, CancellationToken cancellationToken)
+        {
+            var penalty = await _penaltyRepo.Table
+              .Where(c => c.UserId == userid && c.BookId == bookid && c.PenaltyType == PenaltyType.Reserve).SingleOrDefaultAsync(cancellationToken);
+
+            await _penaltyRepo.DeleteAsync(penalty, cancellationToken);
+
+            TempData["Success"] = "عملیات با موفقیت انجام شد";
+            return RedirectToAction(nameof(GetReservePenalty));
+        }
     }
     public class AddOneBookDto
     {

@@ -191,14 +191,9 @@ namespace Web.Controllers
                 BookName=c.Book.Name,
                 FullName=c.User.FullName,
                 UserId=c.UserId,
-                UserName=c.User.UserName
+                UserName=c.User.UserName,
+                InsertDate=c.InsertDate
             }).ToListAsync(cancellationToken);
-
-
-            foreach (var item in model)
-                item.InsertDate = await _rbRepository.TableNoTracking.Where(c => c.BookId == item.BookId && c.UserId == item.UserId && c.BookStatus == BookStatus.Reserved)
-                    .Select(c => (DateTime)c.ReserveDate).FirstOrDefaultAsync(cancellationToken);
-
 
 
             foreach (var item in model)
@@ -219,14 +214,11 @@ namespace Web.Controllers
                 BookName = c.Book.Name,
                 FullName = c.User.FullName,
                 UserId = c.UserId,
-                UserName = c.User.UserName
+                UserName = c.User.UserName,
+                InsertDate=c.InsertDate
             }).ToListAsync(cancellationToken);
 
-            foreach (var item in model)
-                item.InsertDate = await _rbRepository.TableNoTracking.Where(c => c.BookId == item.BookId && c.UserId == item.UserId && c.BookStatus == BookStatus.Borrowed)
-                    .Select(c =>(DateTime)c.BorrowDate).SingleOrDefaultAsync(cancellationToken);
-
-
+           
             foreach (var item in model)
                 item.InsertDateP = item.InsertDate.ToFriendlyPersianDateTextify();
 

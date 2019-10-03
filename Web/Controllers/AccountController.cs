@@ -40,14 +40,14 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult Login(string ReturnUrl=null)
         {
-            //var reserve = new ReserveBook { BookId = 1, UserId = "4f09ed64-00bc-4902-8b4b-cee5a0b81692", BookStatus = Common.Enums.BookStatus.Reserved, ReserveDate = DateTime.Now };
-            //var penalty = new Penalty { UserId = "4f09ed64-00bc-4902-8b4b-cee5a0b81692", Amount = 200m, PenaltyType = Common.Enums.PenaltyType.Reserve, BookId = 1 };
-            //_rbRepo.Add(reserve);
+          
+            //var penalty = new Penalty { UserId = "4f09ed64-00bc-4902-8b4b-cee5a0b81692", Amount = 200m, PenaltyType = Common.Enums.PenaltyType.Reserve, BookId = 1, InsertDate = DateTime.Now };
             //_pRepo.Add(penalty);
-            // var reserve2 = new ReserveBook { BookId = 2, UserId = "8809a0c5-d746-4cdc-acd1-751cd938d9b4", BookStatus = Common.Enums.BookStatus.Borrowed, BorrowDate = DateTime.Now };
-            //var penalty2 = new Penalty { UserId = "8809a0c5-d746-4cdc-acd1-751cd938d9b4", Amount = 300m, PenaltyType = Common.Enums.PenaltyType.Return, BookId = 2 };
-            //_rbRepo.Add(reserve2);
+
+
+            //var penalty2 = new Penalty { UserId = "8809a0c5-d746-4cdc-acd1-751cd938d9b4", Amount = 300m, PenaltyType = Common.Enums.PenaltyType.Return, BookId = 2,InsertDate=DateTime.Now };
             //_pRepo.Add(penalty2);
+
 
             if (User.Identity.IsAuthenticated)
             {
