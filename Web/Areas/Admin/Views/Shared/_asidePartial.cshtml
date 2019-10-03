@@ -20,7 +20,7 @@
         <ul class="sidebar-menu" data-widget="tree">
             <!-- Optionally, you can add icons to the links -->
             <li class="treeview active">
-               
+
                 <ul class="treeview-menu">
                     <li class="treeview active">
                         <a href="#">
@@ -39,7 +39,7 @@
                         </ul>
                     </li>
 
-                
+
                 </ul>
                 <ul class="treeview-menu">
                     <li class="treeview active">
@@ -53,6 +53,20 @@
                             <li><a asp-controller="Books" asp-action="Index"><i class="ion ion-ios-book"></i> مدیریت کتاب ها</a></li>
                             <li><a asp-controller="Books" asp-action="GetReserveBook">  <i class="fa fa-book"></i>کتاب های رزرو شده </a></li>
                             <li><a asp-controller="Books" asp-action="GetBorrowBook">  <i class="fa fa-book"></i>کتاب های امانت داده شده </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="treeview-menu">
+                    <li class="treeview active">
+                        <a>
+                            <i class="fa fa-book"></i><span>جریمه ها</span>
+                            <span class="pull-left-container">
+                                <i class="fa fa-angle-right pull-left"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a asp-controller="Books" asp-action="GetReservePenalty"><i class="ion ion-ios-book"></i> لیست جریمه رزرو ها</a></li>
+                            <li><a asp-controller="Books" asp-action="GetBorrowPenalty">  <i class="fa fa-book"></i>لیست جریمه امانت ها</a></li>
                         </ul>
                     </li>
                 </ul>

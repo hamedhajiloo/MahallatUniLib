@@ -11,17 +11,25 @@ using Microsoft.AspNetCore.Authorization;
 using Common;
 using System.ComponentModel.DataAnnotations;
 using Services.Dto;
+using Data.Repositories;
 
 namespace Web.Controllers
 {
     public class AccountController : Controller
     {
         private readonly SignInManager<Entities.User> _signInManager;
+        private readonly IRepository<ReserveBook> _rbRepo;
+        private readonly IRepository<Penalty> _pRepo;
         private readonly UserManager<User> _userManager;
 
-        public AccountController(SignInManager<Entities.User> signInManager, UserManager<User> userManager)
+        public AccountController(SignInManager<Entities.User> signInManager,
+                                 IRepository<ReserveBook> rbRepo,
+                                 IRepository<Penalty> pRepo,
+                                 UserManager<User> userManager)
         {
             this._signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            this._rbRepo = rbRepo ?? throw new ArgumentNullException(nameof(rbRepo));
+            this._pRepo = pRepo;
             this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
         public IActionResult Index()
@@ -32,7 +40,15 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult Login(string ReturnUrl=null)
         {
-           
+            //var reserve = new ReserveBook { BookId = 1, UserId = "4f09ed64-00bc-4902-8b4b-cee5a0b81692", BookStatus = Common.Enums.BookStatus.Reserved, ReserveDate = DateTime.Now };
+            //var penalty = new Penalty { UserId = "4f09ed64-00bc-4902-8b4b-cee5a0b81692", Amount = 200m, PenaltyType = Common.Enums.PenaltyType.Reserve, BookId = 1 };
+            //_rbRepo.Add(reserve);
+            //_pRepo.Add(penalty);
+            // var reserve2 = new ReserveBook { BookId = 2, UserId = "8809a0c5-d746-4cdc-acd1-751cd938d9b4", BookStatus = Common.Enums.BookStatus.Borrowed, BorrowDate = DateTime.Now };
+            //var penalty2 = new Penalty { UserId = "8809a0c5-d746-4cdc-acd1-751cd938d9b4", Amount = 300m, PenaltyType = Common.Enums.PenaltyType.Return, BookId = 2 };
+            //_rbRepo.Add(reserve2);
+            //_pRepo.Add(penalty2);
+
             if (User.Identity.IsAuthenticated)
             {
                 if (User.IsInRole("Admin")|| User.IsInRole("Personel"))

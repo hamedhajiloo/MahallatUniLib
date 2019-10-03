@@ -1,0 +1,64 @@
+﻿@using Web.Model
+@model  List<PenaltySelectModel>
+@{
+    ViewData["Title"] = "لیست جریمه رزرو ها";
+    Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
+}
+
+
+<div class="row center-block box box-success" style="box-shadow:2px 2px 7px 3px gray;">
+
+
+    <div class="panel panel-success col-md-10 col-md-offset-1" style="margin-top:25px; margin-bottom:25px;">
+        <div class="panel-heading">
+            <h3 class="text-center">لیست جریمه رزرو ها</h3>
+        </div>
+
+        <div class="box table-responsive box-body no-padding">
+
+            <table class="table table-responsive  text-center books">
+                <thead>
+                    <tr style="font-size:15px; font-weight:600;">
+                        <td>@Html.DisplayNameFor(model => model[0].BookName)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].BookAuthor)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].UserName)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].FullName)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].InsertDateP)</td>
+                        <td>@Html.DisplayNameFor(model => model[0].Amount)</td>
+                        <td style="min-width:250px" scope="col">عملیات</td>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+                            <td>
+                                <a class="btn btn-xs btn-info" asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" style="margin-right:-10px;"><i class="glyphicon glyphicon-signal"></i> @(item.BookName.Length > 10 ? item.BookName.Remove(10) + "...." : item.BookName) </a>
+                            </td>
+                            <td>@(item.BookAuthor.Length > 10 ? item.BookAuthor.Remove(10) + "...." : item.BookAuthor)</td>
+                            <td>@item.UserName</td>
+                            <td class="hidden-xs">@item.FullName</td>
+                            <td class="hidden-xs">@item.InsertDateP</td>
+                            <td class="hidden-xs">@item.Amount</td>
+                            <td>
+                                <form asp-action="PayPenalty" asp-controller="Books" asp-area="Admin" method="post">
+                                    <input type="hidden" name="userid" value="@item.UserId" />
+                                    <input type="hidden" name="bookid" value="@item.BookId" />
+                                    <button type="submit" class="btn btn-xs btn-success">
+                                        <i class="glyphicon glyphicon-plus"></i>تسویه حساب
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+
+

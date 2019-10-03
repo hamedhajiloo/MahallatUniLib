@@ -131,7 +131,7 @@ namespace Services.Dto
         [DisplayName("شناسه کاربری")]
         public string UserId { get; set; }
 
-        [DisplayName("شماره دانشجویی")]
+        [DisplayName("نام کاربری")]
         public string UserName { get; set; }
 
         [DisplayName("نام و نام خانوادگی")]

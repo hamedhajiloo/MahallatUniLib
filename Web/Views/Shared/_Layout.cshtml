@@ -98,7 +98,14 @@
                                 <div class="user-info">
                                     <p>
 
-                                        <a asp-action="DashBoard" asp-controller="Home"><i class="fa fa-user"></i> @User.Identity.Name</a>
+                                        @if (!User.IsInRole("Admin") && !User.IsInRole("Personel"))
+                                        {
+                                            <a asp-action="DashBoard" asp-controller="Home"><i class="fa fa-user"></i> @User.Identity.Name</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Index" asp-controller="Home" asp-area="Admin"><i class="fa fa-user"></i> @User.Identity.Name</a>
+                                        }
                                         <a asp-action="LogOut" asp-controller="Account"><i class="fa fa-key"></i> خروج</a>
 
                                     </p>
@@ -115,7 +122,15 @@
                                     </div>
                                     <br />
                                     <div class="shoping-cart">
-                                        <a asp-action="DashBoard" asp-controller="Home"><span>@ViewBag.FullName</span></a>
+                                        @if (!User.IsInRole("Admin") && !User.IsInRole("Personel"))
+                                        {
+                                            <a asp-action="DashBoard" asp-controller="Home"><span>@ViewBag.FullName</span></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Index" asp-controller="Home" asp-area="Admin"><span>@ViewBag.FullName</span></a>
+                                        }
+
                                     </div>
                                 </div>
                             </div>
