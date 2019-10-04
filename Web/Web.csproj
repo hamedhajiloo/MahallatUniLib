@@ -1790,6 +1790,7 @@
     <None Include="wwwroot\js\npm.js" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\js\site.min.js" />
+    <None Include="wwwroot\lib\InfiniteScroll\jquery.InfiniteScroll.js" />
     <None Include="wwwroot\lib\jstree\jstree.js" />
     <None Include="wwwroot\lib\jstree\jstree.min.js" />
     <None Include="wwwroot\lib\toastr\toastr.js.map" />

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var id = ViewBag.Id;
 }
 
 
@@ -21,7 +22,7 @@
     </div>
     <div id="ProgressDiv" align="center" style="display: none">
         <br />
-        <img src="@Url.Content("~/Content/images/loadingAnimation.gif")" alt="loading..." />
+        <img src="@Url.Content("~/images/loadingAnimation.gif")" alt="loading..." />
     </div>
 
     <!--##########################################################-->
@@ -54,6 +55,27 @@
             });
 
         }
+
+
+        $(document).ready(function () {
+            
+              jQuery("#moreInfoButton").InfiniteScroll({
+        moreInfoDiv: '#MoreInfoDiv',
+        progressDiv: '#ProgressDiv',
+        loginUrl: '/Account/Login',
+        id:@id,
+        errorHandler: function () {
+            alert('خطایی رخ داده است');
+        },
+        completeHandler: function () {
+            // اگر قرار است روی اطلاعات نمایش داده شده پردازش ثانوی صورت گیرد
+        },
+        noMoreInfoHandler: function () {
+            alert('اطلاعات بیشتری یافت نشد');
+        }
+    });
+        });        
+
     </script>
 
 }

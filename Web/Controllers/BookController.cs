@@ -55,6 +55,8 @@ namespace Web.Controllers
 
             //await _bookRepository.AddRangeAsync(list, cancellationToken);
 
+            ViewBag.Id = id;
+
             var userId = User.Identity.GetUserId();
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.FullName = user.FullName;
@@ -74,7 +76,9 @@ namespace Web.Controllers
             return View(books);
         }
 
-        public async Task<ActionResult> PageIndex(int id,int page, CancellationToken cancellationToken)
+
+        [HttpGet]
+        public async Task<ActionResult> PageIndex(int id, CancellationToken cancellationToken, int page)
         {
             var userId = User.Identity.GetUserId();
             var user = await _userManager.FindByIdAsync(userId);
@@ -89,7 +93,7 @@ namespace Web.Controllers
                 books = await _bookRepository.TableNoTracking.Where(c => c.BookIsDeleted == false)
                     .Skip((page - 1) * 9).Take(9).ToListAsync(cancellationToken);
 
-            return View(books);
+            return PartialView("_ItemsList", books);
         }
 
 
@@ -99,6 +103,7 @@ namespace Web.Controllers
             var userId = User.Identity.GetUserId();
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.FullName = user.FullName;
+            ViewBag.Id = id;
             Pagable pagable = new Pagable
             {
                 Desc = true,
