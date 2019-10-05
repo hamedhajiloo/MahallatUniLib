@@ -24,6 +24,13 @@ namespace Entities
         [Display(Name = "تعداد کتابی که هر نفر میتواند رزرو کند")]
         public int ReservCount { get; set; }
 
+
+        /// <summary>
+        /// تعداد کتابی که هر نفر می تواند امانت بگیرد
+        /// </summary>
+        [Display(Name = "تعداد کتابی که هر نفر میتواند امانت بگیرد")]
+        public int BorrowCount { get; set; }
+
         /// <summary>
         /// تعداد روز هایی که کتاب میتواند رزرو شود
         /// </summary>

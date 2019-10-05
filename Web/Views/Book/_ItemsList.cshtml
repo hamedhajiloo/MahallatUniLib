@@ -1,5 +1,8 @@
 ﻿@using Entities;
 @model List<Book>
+@{ 
+    var search =TempData["Search"];
+}
 
 <div id="my-tab-content" class="tab-content">
     <!-- Start categori grid view -->

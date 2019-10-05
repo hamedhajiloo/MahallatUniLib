@@ -4,6 +4,7 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var id = ViewBag.Id;
+    var search =TempData["Search"];
 }
 
 
@@ -22,7 +23,7 @@
     </div>
     <div id="ProgressDiv" align="center" style="display: none">
         <br />
-        <img src="@Url.Content("~/images/loadingAnimation.gif")" alt="loading..." />
+        <img src="@Url.Content(" ~/images/loadingAnimation.gif")" alt="loading..." />
     </div>
 
     <!--##########################################################-->
@@ -58,11 +59,12 @@
 
 
         $(document).ready(function () {
-            
-              jQuery("#moreInfoButton").InfiniteScroll({
+
+      jQuery("#moreInfoButton").InfiniteScroll({
         moreInfoDiv: '#MoreInfoDiv',
         progressDiv: '#ProgressDiv',
         loginUrl: '/Account/Login',
+        search:"@search",
         id:@id,
         errorHandler: function () {
             alert('خطایی رخ داده است');
@@ -74,7 +76,7 @@
             alert('اطلاعات بیشتری یافت نشد');
         }
     });
-        });        
+        });
 
     </script>
 

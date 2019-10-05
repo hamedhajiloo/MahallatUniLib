@@ -8,7 +8,8 @@
             errorHandler: null,
             completeHandler: null,
             noMoreInfoHandler: null,
-            id:0
+            id: 0,
+            search:""
         };
         var options = $.extend(defaults, options);
 
@@ -24,11 +25,12 @@
             var moreInfoButton = $(this);
             var page = 2;
             var id = options.id;
+            var search = options.search;
             $(moreInfoButton).click(function (event) {
                 showProgress();
                 $.ajax({
                     type: "GET",
-                    url: '/Book/PageIndex?id=' + options.id+ '&&page=' + page + '',
+                    url: '/Book/PageIndex?id=' + id + '&&page=' + page + '&&search=' + search + '',
                     contentType: "application/json",
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("XSRF-TOKEN",

@@ -1,4 +1,6 @@
-﻿<aside class="main-sidebar">
+﻿
+@using Common;
+<aside class="main-sidebar">
 
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -73,8 +75,10 @@
             </li>
             <li><a asp-controller="News" asp-action="Index"><i class="fa fa-newspaper-o"></i> <span>مدیریت اخبار</span></a></li>
             <li><a asp-controller="Setting" asp-action="Index"><i class="ion ion-settings"></i> <span>تنظیمات</span></a></li>
-            <li><a asp-controller="Account" asp-action="LogOut"><i class="ion ion-log-out"></i> <span>خروج</span></a></li>
+            <li><a asp-action="ChangeUserPassword" asp-controller="UserAccount" asp-area="Admin" asp-route-id="@User.Identity.GetUserId()"><i class="ion ion-key"></i> <span>تغییر رمز عبور</span></a></li>
             
+            <li><a asp-controller="Account" asp-action="LogOut"><i class="ion ion-log-out"></i> <span>خروج</span></a></li>
+
         </ul>
         <!-- /.sidebar-menu -->
     </section>

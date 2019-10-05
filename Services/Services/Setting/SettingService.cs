@@ -27,6 +27,7 @@ namespace Services
                 model.Amount_Of_Punishment_For_Returning_The_Book = setting.Amount_Of_Punishment_For_Returning_The_Book;
                 model.BorrowDay = setting.BorrowDay;
                 model.ReservCount = setting.ReservCount;
+                model.BorrowCount = setting.BorrowCount;
                 model.ReservDay = setting.ReservDay;
                 model.BDay4Reserve = setting.BDay4Reserve;
                 await _repository.UpdateAsync(model, cancellationToken);

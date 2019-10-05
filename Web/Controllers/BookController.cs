@@ -1,6 +1,7 @@
 ﻿using Common;
 using Common.Enums;
 using Data.Repositories;
+using DNTPersianUtils.Core;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using System;
-using DNTPersianUtils.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -24,6 +24,8 @@ namespace Web.Controllers
         private readonly IBookService _bookService;
         private readonly IRepository<Field> _fieldRepository;
         private readonly IRepository<ReserveBook> _rbRepository;
+        private readonly IRepository<User> _userRepo;
+        private readonly IRepository<Setting> _settingRepo;
         private readonly UserManager<User> _userManager;
         private readonly IRepository<Penalty> _penaltyRepo;
         private readonly IRepository<Book> _bookRepository;
@@ -31,6 +33,8 @@ namespace Web.Controllers
         public BookController(IBookService bookService,
                               IRepository<Field> fieldRepository,
                               IRepository<ReserveBook> rbRepository,
+                              IRepository<User> userRepo,
+                              IRepository<Setting> settingRepo,
                               UserManager<User> userManager,
                               IRepository<Penalty> penaltyRepo,
                               IRepository<Book> bookRepository)
@@ -38,13 +42,15 @@ namespace Web.Controllers
             _bookService = bookService;
             _fieldRepository = fieldRepository;
             _rbRepository = rbRepository ?? throw new System.ArgumentNullException(nameof(rbRepository));
+            this._userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
+            this._settingRepo = settingRepo ?? throw new ArgumentNullException(nameof(settingRepo));
             this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this._penaltyRepo = penaltyRepo ?? throw new ArgumentNullException(nameof(penaltyRepo));
             _bookRepository = bookRepository;
         }
 
 
-        public async Task<ActionResult> Index(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult> Index(int id, CancellationToken cancellationToken,string search="")
         {
             //3eee51e6c2f6436983b8ded8138309ff
 
@@ -54,7 +60,7 @@ namespace Web.Controllers
             //    list.Add(new Book { ImageUrl = "3eee51e6c2f6436983b8ded8138309ff.jpg", FieldId = 1, Name = "Test", Language = Common.Language.Persion,Publisher="Test Publisher",AuthorName="Test Author" });
 
             //await _bookRepository.AddRangeAsync(list, cancellationToken);
-
+            TempData["Search"] = search;
             ViewBag.Id = id;
 
             var userId = User.Identity.GetUserId();
@@ -69,28 +75,27 @@ namespace Web.Controllers
 
             List<Book> books = new List<Book>();
             if(id!=0)
-                books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false).Take(9).ToListAsync(cancellationToken);
+                books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false&&(c.Name.Contains(search)||c.AuthorName.Contains(search))).Take(9).ToListAsync(cancellationToken);
             else
-                books= await _bookRepository.TableNoTracking.Where(c => c.BookIsDeleted == false).Take(9).ToListAsync(cancellationToken);
+                books= await _bookRepository.TableNoTracking.Where(c => c.BookIsDeleted == false && (c.Name.Contains(search) || c.AuthorName.Contains(search))).Take(9).ToListAsync(cancellationToken);
 
             return View(books);
         }
 
 
         [HttpGet]
-        public async Task<ActionResult> PageIndex(int id, CancellationToken cancellationToken, int page)
+        public async Task<ActionResult> PageIndex(int id, CancellationToken cancellationToken, int page, string search = "")
         {
             var userId = User.Identity.GetUserId();
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.FullName = user.FullName;
-           
 
             List<Book> books = new List<Book>();
             if (id != 0)
-                books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false)
+                books = await _bookRepository.TableNoTracking.Where(c => c.FieldId == id && c.BookIsDeleted == false && (c.Name.Contains(search) || c.AuthorName.Contains(search)))
                     .Skip((page - 1) * 9).Take(9).ToListAsync(cancellationToken);
             else
-                books = await _bookRepository.TableNoTracking.Where(c => c.BookIsDeleted == false)
+                books = await _bookRepository.TableNoTracking.Where(c => c.BookIsDeleted == false && (c.Name.Contains(search) || c.AuthorName.Contains(search)))
                     .Skip((page - 1) * 9).Take(9).ToListAsync(cancellationToken);
 
             return PartialView("_ItemsList", books);
@@ -134,8 +139,9 @@ namespace Web.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> Reserve(int id, [FromHeader]CancellationToken cancellationToken)
         {
+            var setting = await _settingRepo.GetByIdAsync(cancellationToken, 1);
             var userId = User.Identity.GetUserId();
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userRepo.TableNoTracking.Include(c=>c.ReserveBooks).Where(c => c.Id == userId).SingleOrDefaultAsync(cancellationToken);
             ViewBag.FullName = user.FullName;
             Book book = await _bookRepository.TableNoTracking
                 .Where(c => c.Id == id && c.BookIsDeleted == false).SingleOrDefaultAsync(cancellationToken);
@@ -148,6 +154,11 @@ namespace Web.Controllers
             if (rb != null)
             {
                 return new JsonResult(message);
+            }
+
+            if (user.ReserveBooks.Where(c=>c.BookStatus==BookStatus.Reserved).Count()>=setting.ReservCount)
+            {
+                return new JsonResult($"شما نمی توانید بیشتر از {setting.ReservCount} کتاب رزرو کنید");
             }
 
             ReserveBook newrb = new ReserveBook

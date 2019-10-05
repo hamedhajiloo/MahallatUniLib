@@ -123,7 +123,8 @@
                                 '<td>' + item["fullName"] + '</td>' +
                                
                                 '<td>' +
-                                '<a class="btn btn-sm btn-warning" href="Personel/Edit/' + item["id"] + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
+                            '<a class="btn btn-sm btn-warning" href="Personel/Edit/' + item["id"] + '" ><i class="glyphicon glyphicon-pencil"></i>  ویرایش</a>' +
+                            '<a class="btn btn-sm btn-info" href="/Admin/UserAccount/ChangeUserPassword?id='+item["id"]+'"><i class="glyphicon glyphicon-log-in"></i> تغییر رمز عبور</a>'+
                                 '<a class="btn btn-sm btn-danger" onclick="DeleteAlarm("#r_' + item["id"] + '")" data-toggle="modal" data-target="#deletemodal" style="margin-right:5px;margin-left:14px;"><i class="glyphicon glyphicon-trash"></i> حذف</a>' +
                                 '<input type="hidden" name="studentid" value=' + item["id"] + ' id="r_' + item["id"] + '" />' +
                                 '</td>' +

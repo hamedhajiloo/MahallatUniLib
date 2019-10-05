@@ -114,24 +114,26 @@
                                 <div class="search-and-cart">
                                     <div class="search-categori">
                                         <div class="search-box">
-                                            <form action="#">
+                                            <form asp-action="Index" asp-controller="Book" method="get">
                                                 <button type="submit">جستجو</button>
-                                                <input type="text" class="form-control input-sm" maxlength="64" placeholder="نام کتاب یا ناشر  ..." />
-
+                                                <input type="text" class="form-control input-sm" maxlength="64" name="Search" placeholder="نام کتاب یا ناشر  ..." />
                                             </form>
                                         </div>
                                     </div>
                                     <br />
-                                    <div class="shoping-cart">
-                                        @if (!User.IsInRole("Admin") && !User.IsInRole("Personel"))
-                                        {
-                                            <a asp-action="DashBoard" asp-controller="Home"><span>@ViewBag.FullName</span></a>
-                                        }
-                                        else
-                                        {
-                                            <a asp-action="Index" asp-controller="Home" asp-area="Admin"><span>@ViewBag.FullName</span></a>
-                                        }
+                                    <div class="user-info">
+                                        <p>
+                                            @if (!User.IsInRole("Admin") && !User.IsInRole("Personel"))
+                                            {
+                                                <a asp-action="DashBoard" asp-controller="Home"><span><i class="fa fa-user"></i> @ViewBag.FullName</span></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Index" asp-controller="Home" asp-area="Admin"><span><i class="fa fa-user"></i> @ViewBag.FullName</span></a>
+                                            }
 
+                                            <a asp-action="Index" asp-controller="Home"><i class="fa fa-home"></i> صفحه اصلی</a>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
