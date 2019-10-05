@@ -1,5 +1,7 @@
 ﻿using Common;
 using Data;
+using ElmahCore.Mvc;
+using ElmahCore.Sql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -65,6 +67,11 @@ namespace Web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpContextAccessor();
             services.AddAuthentication().AddCookie();
+            services.AddElmah<SqlErrorLog>(opt=> {
+                opt.ApplicationName = "MahallatUniLib";
+                opt.ConnectionString = Configuration.GetConnectionString("Elmah");
+                opt.Path = "/error-logs-alaki";
+            });
             // services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
             //services.AddJwtAuthentication(_siteSetting.JwtSettings);
         }
@@ -88,7 +95,7 @@ namespace Web
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            app.UseElmah();
             app.UseMvc(routes =>
                 {
                     routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
