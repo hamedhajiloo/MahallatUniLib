@@ -66,7 +66,7 @@ namespace Entities
 
         #region Relations
 
-        public virtual List<ReserveBook> ReserveBook { get; set; }
+        public virtual List<ReserveBook> StudentBook { get; set; }
         public virtual List<Penalty> Penalties { get; set; }
 
         #endregion Relations
