@@ -81,6 +81,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             <!-- Main content -->
             <section class="content container-fluid">
+                <partial name="_Alert"/>
                 @RenderBody()
                 <!--------------------------
                 | Your Page Content Here |
@@ -109,20 +110,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
          $(function() {
 
              if ('@TempData["Error"]' != "") {
-                toastr.error('@TempData["Error"]');
+                 toastr.error('@TempData["Error"]');
+                 alert('error');
              }
 
 
              if ('@TempData["War"]' != "") {
                  toastr.warning('@TempData["War"]');
+                 alert('war');
+
              }
 
              if ('@TempData["Info"]' != "") {
                  toastr.info('@TempData["Info"]');
+                 alert('info');
+
              }
 
              if ('@TempData["Success"]' != "") {
                  toastr.success('@TempData["Success"]');
+                 alert('success ');
+
              }
         })
     </script>

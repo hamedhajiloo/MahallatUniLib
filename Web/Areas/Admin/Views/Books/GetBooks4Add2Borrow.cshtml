@@ -2,7 +2,7 @@
 @model List<Book>
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml";
-    var userid = ViewBag.UserId;
+    var userid = TempData["UserId"];
 }
 
 

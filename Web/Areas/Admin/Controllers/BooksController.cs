@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Filters;
 using Web.Model;
+using Web.Controllers;
 
 namespace Web.Areas.Admin.Controllers
 {
@@ -27,13 +28,14 @@ namespace Web.Areas.Admin.Controllers
     [Authorize(Roles = "Admin,Personel")]
     [Controller]
     //[ShowErrorPageType]
-    public class BooksController : Controller
+    public class BooksController : BaseController
     {
         private readonly IBookService _bookService;
         private readonly IRepository<Isbn> _isbnRepository;
         private readonly IImageService _imageService;
         private readonly IRepository<Setting> _sRepository;
         private readonly IRepository<Penalty> _penaltyRepo;
+        private readonly IRepository<User> _userRepo;
         private readonly IRepository<ReserveBook> _rbRepository;
         private readonly IRepository<Book> _repository;
         private readonly IRepository<Field> fRepository;
@@ -44,6 +46,7 @@ namespace Web.Areas.Admin.Controllers
                                IImageService imageService,
                                IRepository<Setting> sRepository,
                                IRepository<Penalty> penaltyRepo,
+                               IRepository<User> userRepo,
                                IRepository<ReserveBook> rbRepository,
                                IRepository<Book> repository,
                                IRepository<Field> fRepository,
@@ -54,6 +57,7 @@ namespace Web.Areas.Admin.Controllers
             _imageService = imageService ?? throw new System.ArgumentNullException(nameof(imageService));
             this._sRepository = sRepository ?? throw new ArgumentNullException(nameof(sRepository));
             this._penaltyRepo = penaltyRepo ?? throw new ArgumentNullException(nameof(penaltyRepo));
+            this._userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
             this._rbRepository = rbRepository ?? throw new ArgumentNullException(nameof(rbRepository));
             _repository = repository ?? throw new System.ArgumentNullException(nameof(repository));
             this.fRepository = fRepository;
@@ -205,6 +209,8 @@ namespace Web.Areas.Admin.Controllers
                 }
 
                 var res = await _bookService.AddBookAsync(bookDto, cancellationToken);
+               // Success("تبریک . کتاب با موفقیت ثبت شد", true);
+                //return View();
                 TempData["Success"] = "تبریک . کتاب با موفقیت ثبت شد";
                 return RedirectToAction(nameof(Index));
             }
@@ -390,38 +396,62 @@ namespace Web.Areas.Admin.Controllers
                 (c.ISBNs.Where(a => a.IsDeleted == false).Count() > c.ReserveBook.Count
                 && c.ReserveBook.Where(a => a.UserId == userid).Count() == 0))
                 ).ToListAsync(cancellationToken);
+
+
+           
             return View(model);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Borrow(string userid, int bookid, [FromHeader]CancellationToken cancellationToken)
+        public async Task<IActionResult> Borrow(string userId, int bookid, [FromHeader]CancellationToken cancellationToken)
         {
+
+            var setting = await _sRepository.GetByIdAsync(cancellationToken, 1);
+            var borrowCount = await _rbRepository.TableNoTracking
+                .Where(c=>c.BookStatus==BookStatus.Borrowed&&c.UserId==userId).CountAsync(cancellationToken);
             var rb = await _rbRepository.Table
-                .Where(c => c.UserId == userid && c.BookId == bookid).SingleOrDefaultAsync(cancellationToken);
+                .Where(c => c.UserId == userId && c.BookId == bookid&&c.BookStatus==BookStatus.Borrowed).SingleOrDefaultAsync(cancellationToken);
+
+            var rbreserve = await _rbRepository.Table
+               .Where(c => c.UserId == userId && c.BookId == bookid && c.BookStatus == BookStatus.Reserved).SingleOrDefaultAsync(cancellationToken);
+            if (rb!=null)
+            {
+                TempData["Error"] = "این کتاب قبلا توسط این کاربر امانت گرفته شده است";
+                return RedirectToAction("Index","Home");
+            }
 
             if (rb == null)
             {
-                rb = new ReserveBook
+                if (borrowCount >=setting.BorrowCount)
                 {
-                    BookId = bookid,
-                    BookStatus = BookStatus.Borrowed,
-                    BorrowDate = DateTime.Now,
-                    UserId = userid
-                };
-                await _rbRepository.AddAsync(rb, cancellationToken);
+                    TempData["Error"] = $"کاربر بیشتر از {setting.BorrowCount} عدد کتاب نمی تواند امانت بگیرد";
+                    return RedirectToAction("Index", "Home");
+                }
+                if (rbreserve==null)
+                {
+                    rbreserve = new ReserveBook
+                    {
+                        BookId = bookid,
+                        BookStatus = BookStatus.Borrowed,
+                        BorrowDate = DateTime.Now,
+                        UserId = userId
+                    };
+                    await _rbRepository.AddAsync(rbreserve, cancellationToken);
+                }
+                else
+                {
+                    rbreserve.BookStatus = BookStatus.Borrowed;
+                    rbreserve.BorrowDate = DateTime.Now;
+
+                    await _rbRepository.UpdateAsync(rbreserve, cancellationToken);
+
+                }
             }
 
-            else
-            {
-                rb.BookStatus = BookStatus.Borrowed;
-                rb.BorrowDate = DateTime.Now;
-
-                await _rbRepository.UpdateAsync(rb, cancellationToken);
-
-            }
+           
             TempData["Success"] = "عملیات با موفقیت انجام شد";
-            return RedirectToAction(nameof(GetBooks4Add2Borrow));
+            return RedirectToAction("Index", "Home");
         }
 
         //UnBorrow

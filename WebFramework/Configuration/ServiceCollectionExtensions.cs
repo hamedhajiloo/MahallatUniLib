@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -173,6 +174,7 @@ namespace WebFramework
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IDataInitializer, DataInitializer>();
             services.AddScoped<IStudentBookService, StudentBookService>();
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
         }
 
     }

@@ -63,8 +63,8 @@ namespace Web
             //Task_Scheduling
             services.AddHostedService<BorrowPunishment>();
             services.AddHostedService<ReservePunishment>();
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddSessionStateTempDataProvider();
+            services.AddSession();
             services.AddHttpContextAccessor();
             services.AddAuthentication().AddCookie();
             services.AddElmah<SqlErrorLog>(opt=> {
@@ -93,7 +93,7 @@ namespace Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseSession();
             app.UseAuthentication();
             app.UseElmah();
             app.UseMvc(routes =>
